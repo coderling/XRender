@@ -26,6 +26,7 @@ int main(int, char **)
         return 1;
     }
 
+    std::cout <<"SDL_CreateRenderer: " <<SDL_GetError() <<std::endl;
     SDL_SetRenderDrawColor(render, 45, 167, 227, 255);
     SDL_RenderClear(render);
     SDL_RenderPresent(render);

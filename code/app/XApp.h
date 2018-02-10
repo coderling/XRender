@@ -15,7 +15,7 @@ public:
     ~XApp();
 
     SDL_Window* GetWindowHandler();
-    SDL_Renderer* GetRendererHandler();
+    //SDL_Renderer* GetRendererHandler();
     SDL_Surface* GetRenderSurface();
     void GetWindowWH(int* w, int* h);
     void SetDrawColor(Uint8 r, Uint8 g, Uint8 b);
@@ -27,7 +27,7 @@ public:
     void Terminate();
 protected:
     SDL_Window* m_pWindow;
-    SDL_Renderer* m_pRender;
+    //SDL_Renderer* m_pRender;
     SDL_Surface* m_cacheSurface;
     SDL_Surface* m_windowSurface;
 

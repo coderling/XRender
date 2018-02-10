@@ -12,15 +12,9 @@ XApp::XApp(std::string title, int w, int h, Uint32 initOpt, Uint32 winOpt, Uint3
 void XApp::SDLEnvInit(std::string title, int w, int h, Uint32 initOpt, Uint32 winOpt, Uint32 renderOpt)
 {
     m_initStatus = true;
-    if(SDL_Init(initOpt) != 0)
-    {
-        std::cout <<"SDL_Init: " <<SDL_GetError() <<std::endl;
-        m_initStatus = false;
-        return;
-    }
-    
     m_pWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h,
                                             winOpt);
+                                            std::cout <<"SDL_CreateRenderer: finish int" <<SDL_GetError() <<std::endl;
     if(m_pWindow == nullptr)
     {
         std::cout <<"SDL_CreateWindow: " <<SDL_GetError() <<std::endl;
@@ -28,19 +22,27 @@ void XApp::SDLEnvInit(std::string title, int w, int h, Uint32 initOpt, Uint32 wi
         return;
     }
 
+    /* just use blit mode to update window, no need t create a render
+        if also create a render if will get error when SDL_GetWindowSurface()
     m_pRender = SDL_CreateRenderer(m_pWindow, -1,
                         renderOpt);
-    if(nullptr == m_pRender)
+                        std::cout <<"SDL_CreateRenderer: finish int" <<SDL_GetError() <<std::endl;
+    if(NULL == m_pRender)
     {
         std::cout <<"SDL_CreateRenderer: " <<SDL_GetError() <<std::endl;
         m_initStatus = false;
         return;
-    }
+    }*/
 
     SDL_GetWindowSize(m_pWindow, &m_screenW, &m_screenH);
+    std::cout <<"SDL_CreateRenderer: finish int1" <<SDL_GetError() <<std::endl;
     m_windowSurface = SDL_GetWindowSurface(m_pWindow);
+    while(m_windowSurface == nullptr)
+    {
+        m_windowSurface = SDL_GetWindowSurface(m_pWindow);
+    }
     Uint32 rmask, gmask, bmask, amask;
-
+std::cout <<"SDL_CreateRenderer: finish int2" <<SDL_GetError() <<std::endl;
     /* SDL interprets each pixel as a 32-bit number, so our masks must depend
        on the endianness (byte order) of the machine */
     #if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -55,6 +57,8 @@ void XApp::SDLEnvInit(std::string title, int w, int h, Uint32 initOpt, Uint32 wi
         amask = 0xff000000;
     #endif
     m_cacheSurface = SDL_CreateRGBSurface(0, m_screenW, m_screenH, 32, rmask, gmask, bmask, amask);
+
+    std::cout <<"SDL_CreateRenderer: finish int" <<SDL_GetError() <<std::endl;
 }
 
 //app循环
@@ -66,6 +70,7 @@ void XApp::AppLoop()
     }
 
     m_runing = true;
+    
     while(m_runing)
     {
         //std::cout <<"GameRunning... " <<SDL_GetError() <<std::endl;
@@ -129,7 +134,7 @@ void XApp::Terminate()
 
 void XApp::Release()
 {
-    SDL_DestroyRenderer(m_pRender);
+    //SDL_DestroyRenderer(m_pRender);
     SDL_DestroyWindow(m_pWindow);
     SDL_FreeSurface(m_cacheSurface);
     SDL_Quit();
@@ -137,7 +142,6 @@ void XApp::Release()
 
 
 XApp::~XApp() {
-    m_pRender = nullptr;
     m_pWindow = nullptr;
     m_cacheSurface = nullptr;
 }
@@ -145,11 +149,6 @@ XApp::~XApp() {
 SDL_Window* XApp::GetWindowHandler()
 {
     return m_pWindow;
-}
-
-SDL_Renderer* XApp::GetRendererHandler()
-{
-    return m_pRender;
 }
 
 //获取用于绘制的surface，所有绘制操作都必须绘制到这个surface

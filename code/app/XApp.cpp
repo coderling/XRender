@@ -97,11 +97,21 @@ void XApp::RemoveUpdateLogic(Update_Func func)
 
 void XApp::UpdateLogic()
 {
+     if(SDL_MUSTLOCK(m_cacheSurface))
+    {
+        SDL_LockSurface(m_cacheSurface);
+    } 
+
     std::list<Update_Func>::iterator it;
     
     for(it = m_updateFuncList.begin(); it != m_updateFuncList.end(); ++it)
     {
         (*(*it))();
+    }
+
+    if(SDL_MUSTLOCK(m_cacheSurface))
+    {
+        SDL_UnlockSurface(m_cacheSurface);
     }
 }
 

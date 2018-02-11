@@ -1,8 +1,11 @@
 
+#include <SDL.h>
+
 #include "XPoint.h"
+#include "../../app/XApp.h"
 
-void DrawPoint(XPoint p);
+void DrawPoint(const XPoint& p);
 
-void DrawPoints(XPoint pArr[]);
+void DrawPoints(XPoint const *pArr, int size);
 
-void DrawLine();
+void DrawLineDDA(const XPoint& st, const XPoint& ed);

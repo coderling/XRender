@@ -15,7 +15,7 @@ target_link_libraries(XApp XAppLib)
 # begin applib
 
 # begin mathlib
-set(MATH_DIR ../core/math/)
+set(MATH_DIR ../core/math)
 add_library(XMathLib
             ${MATH_DIR}/EulerAngles.cpp
             ${MATH_DIR}/MathUtil.cpp
@@ -24,3 +24,10 @@ add_library(XMathLib
             ${MATH_DIR}/RotationMatrix.cpp)
 target_link_libraries(XApp XMathLib)
 # begin mathlib
+
+# begin GraphicsLib
+set(MATH_DIR ../core/primitive)
+add_library(GraphicsLib
+            ${MATH_DIR}/PrimitiveUtil.cpp)
+target_link_libraries(XApp GraphicsLib)
+# end GraphicsLib

@@ -1,9 +1,10 @@
 #pragma once
 
 #include<SDL.h>
-#include <string>
-#include <queue>
-#include <list>
+
+#include<string>
+#include<queue>
+#include<list>
 
 typedef void (*Update_Func)();
 

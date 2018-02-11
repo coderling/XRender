@@ -10,3 +10,4 @@
 #include "../core/math/Vector3.h"
 #include "../core/primitive/PrimitiveUtil.h"
 
+#include "XApp.h"

@@ -1,12 +1,10 @@
-#include "XApp.h"
+#include "includes.h"
+#include <iostream>
 
 void DrawTest()
 {
     SDL_Surface* surface = pAppInstance->GetRenderSurface();
-    if(SDL_MUSTLOCK(surface))
-    {
-        SDL_LockSurface(surface);
-    } 
+   
     pAppInstance->SetDrawColor(255, 0, 0);
     Uint32 dc = pAppInstance->GetDrawColor();
     Uint32* pPixels = (Uint32*)surface->pixels;
@@ -18,15 +16,24 @@ void DrawTest()
             pPixels[ind] = dc;
         }
     }
-    if(SDL_MUSTLOCK(surface))
-    {
-        SDL_UnlockSurface(surface);
-    }
 }
 
 void TestUpdate()
 {
      DrawTest();
+     XPoint points[40 * 80];
+     for(int row = 0; row < 40; ++row)
+     {
+         for(int col = 0; col < 80; ++col)
+         {
+             points[row * 80 + col].x = row;
+             points[row * 80 + col].y = col;
+         }
+     }
+     pAppInstance->SetDrawColor(0, 255, 0);
+     DrawPoints(points, 40 * 80);
+     pAppInstance->SetDrawColor(0, 0, 255);
+     DrawLineDDA({0, 0}, {1280, 640});
 }
 
 int main(int, char **)

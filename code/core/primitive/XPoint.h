@@ -2,5 +2,5 @@
 struct XPoint
 {
 public:
-    int x, y;
+    float x, y;
 };

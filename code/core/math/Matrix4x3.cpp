@@ -87,7 +87,7 @@ void Matrix4x3::setupParentToLocal(const Vector3& pos, const RotationMatrix& ori
     //设置平移部分
     //直观上来说，从世界空间到惯性空间，只需要平移负向量
     //但变换的顺序是会影响到变换的最终结果，在这里我们假设先旋转再平移
-    //并旋转平移部分已达到效果，这和先创建一个平移矩阵T，再创建旋转矩阵R
+    //并旋转平移部分以达到效果，这和先创建一个平移矩阵T，再创建旋转矩阵R
     //然后链接两个矩阵TR的效果是一样的
     tx = -(pos.x * m11 + pos.y * m21 + pos.z * m31);
     ty = -(pos.x * m12 + pos.y * m22 + pos.z * m32);

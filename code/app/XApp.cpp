@@ -35,14 +35,12 @@ void XApp::SDLEnvInit(std::string title, int w, int h, Uint32 initOpt, Uint32 wi
     }*/
 
     SDL_GetWindowSize(m_pWindow, &m_screenW, &m_screenH);
-    std::cout <<"SDL_CreateRenderer: finish int1" <<SDL_GetError() <<std::endl;
     m_windowSurface = SDL_GetWindowSurface(m_pWindow);
     while(m_windowSurface == nullptr)
     {
         m_windowSurface = SDL_GetWindowSurface(m_pWindow);
     }
     Uint32 rmask, gmask, bmask, amask;
-std::cout <<"SDL_CreateRenderer: finish int2" <<SDL_GetError() <<std::endl;
     /* SDL interprets each pixel as a 32-bit number, so our masks must depend
        on the endianness (byte order) of the machine */
     #if SDL_BYTEORDER == SDL_BIG_ENDIAN

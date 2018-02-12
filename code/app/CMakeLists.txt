@@ -28,6 +28,7 @@ target_link_libraries(XApp XMathLib)
 # begin GraphicsLib
 set(MATH_DIR ../core/primitive)
 add_library(GraphicsLib
-            ${MATH_DIR}/PrimitiveUtil.cpp)
+            ${MATH_DIR}/DrawLine.cpp
+            ${MATH_DIR}/DrawPoint.cpp)
 target_link_libraries(XApp GraphicsLib)
 # end GraphicsLib

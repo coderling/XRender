@@ -95,7 +95,31 @@ void DrawLineDDA(const XPoint& st, const XPoint& ed)
     }
 }
 
+//对于直线y = mx + b分为四种情况, dx, dy 表示偏移量
+//1. 斜率 0 < m < 1, 决策参数p0 = 2dy - dx pk+1 = pk + 2dy - 2dx 或者 pk+1 = pk + 2dy，这取决于pk的符号
+//2. 斜率 m > 1，思路上相对于1，交换x, y的位置，采用一样的迭代规则
+//3. 斜率 -1 < m < 0, 决策参数p0 = 2dy + dx, pk+1 = pk + 2dy + 2dx 或者 pk+1 = pk + 2dy 这取决于pk的符号
+//4. 斜率 m < -1, 同理，相对于3，交换x, y的位置，采用一样的迭代规则
+//最后对比1，3的pk的计算，如果我们dx, dy 取绝对值，这两种情况可以合并成2一种.
+//ps: 边界处理,对于dx = 0 dy = 0, fabs(dx) = fabs(dy), 可以直接处理，不需要执行画线算法
+//最后的最后，这里定义的点结构提是float类型的坐标，需要先对端点坐标取整，这里接单调用samplingPoint()来取较近的整数点
 void DrawLineBresenham(const XPoint& st, const XPoint& ed)
 {
+    int sx, sy, ex, ey;
+    int dx, dy, p, towDy, twoDyMinusDx;
 
+    samplingPoint(st, &sx, &sy);
+    samplingPoint(ed, &ex, &ey);
+
+    dx = abs(ex - sx), dy = abs(ey - sy);
+
+    twoDy = 2 * dy, twoDyMinusDx = 2 * (dy - dx)
+    p = twoDy - dx;
+
+    int x, y;
+    //
+    if(sx > ex)
+    {
+
+    }
 }

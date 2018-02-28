@@ -52,25 +52,25 @@ public:
     }
 
     //加法运算！
-    Vector3 operator+(Vector3 &va) const
+    Vector3 operator+(const Vector3 &va) const
     {
         return Vector3(x + va.x, y + va.y, z + va.z);
     }
 
     //减法运算
-    Vector3 operator-(Vector3 &va) const
+    Vector3 operator-(const Vector3 &va) const
     {
         return Vector3(x - va.x, y - va.y, z - va.z);
     }
 
     //与标量相乘
-    Vector3 operator*(float va) const
+    Vector3 operator*(const float va) const
     {
         return Vector3(x * va, y * va, z * va);
     }
 
     //与标量相除,未对除零进行检查
-    Vector3 operator/(float va) const
+    Vector3 operator/(const float va) const
     {
         float mul = 1 / va;
         return Vector3(x * mul, y * mul, z * mul);
@@ -89,13 +89,13 @@ public:
         return *this;
     }
 
-    Vector3& operator*=(float va)
+    Vector3& operator*=(const float va)
     {
         x *= va; y *= va; z *= va;
         return *this;
     }
 
-    Vector3& operator/(float va)
+    Vector3& operator/(const float va)
     {
         x /= va; y /= va; z /=va;
         return *this;
@@ -146,7 +146,7 @@ inline Vector3 crossProduct(const Vector3 &va, const Vector3 &vb)
 }
 
 //左乘标量
-inline Vector3 operator*(float k, const Vector3 &va)
+inline Vector3 operator*(const float k, const Vector3 &va)
 {
     return Vector3(k * va.x, k * va.y, k * va.z);
 }

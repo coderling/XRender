@@ -8,8 +8,9 @@ install(TARGETS XApp RUNTIME DESTINATION ${BIN_DIR})
 # end include
 
 # begin applib
-
-add_library(XAppLib XApp.cpp)
+set(BASIC_DIR ../core/basic)
+add_library(XAppLib XApp.cpp
+            ${BASIC_DIR}/Camera.cpp)
 target_link_libraries(XAppLib ${SDL2_LIBRARY})
 target_link_libraries(XApp XAppLib)
 # begin applib

@@ -13,7 +13,7 @@ void LookAtMatrix(const Vector3& pos, const Vector3& lookPos, Vector3& up, Vecto
     //计算右向量，通过up view right三者是互相垂直的关系计算。
     view = lookPos - pos;
     up.normalize();
-    Vector3 right = crossProduct(up, view);
+    right = crossProduct(up, view);
     right.normalize();
     //修正view
     view = crossProduct(right, up);

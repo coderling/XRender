@@ -15,8 +15,10 @@ public:
     inline Vector3 GetRight() { return m_right; }
     inline Matrix4x3 GetCameraMatrix(){ return m_cMat; }
 
+    static void LookAtMatrix(const Vector3& pos, const Vector3& lookPos, const Vector3& up, 
+                            Vector3& rup, Vector3& view, Vector3& right, Matrix4x3& vmat);
 protected:
-    void LookAtMatrix(const Vector3& pos, const Vector3& lookPos, Vector3& up, Vector3& view, Vector3& right, Matrix4x3& vmat);
+    void CaculateProjectMatrix();
 private:
     Vector3 m_pos;
     Vector3 m_up;

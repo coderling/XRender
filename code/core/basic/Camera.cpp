@@ -3,17 +3,49 @@
 Camera::Camera(const Vector3& pos, const Vector3& up, const Vector3& lookPos)
 {
     m_pos = pos;
-    m_up = up;
-    LookAtMatrix(m_pos, lookPos, m_up, m_view, m_right, m_cMat);
+    LookAtMatrix(m_pos, lookPos, up, m_up, m_view, m_right, m_cMat);
+    CaculateProjectMatrix();
 }
 
-void LookAtMatrix(const Vector3& pos, const Vector3& lookPos, Vector3& up, Vector3& view, Vector3& right, Matrix4x3& vmat)
+void Camera::CaculateProjectMatrix()
+{
+    int screenW, screenH;
+    pAppInstance->GetWindowWH(&screenW, &screenH);
+    m_ratio = screenW * 1.0f / screenH;
+    //计算视锥体投影平面的宽
+    int rfov = m_fov * kPI / 360.0f;// 180.f / 2
+    float vw = 2 * m_near * tanf(rfov);
+    float vh = vw / m_ratio;
+
+    //支持特殊投影平面x、y方向都是居中的情况
+    float a = m_far / (m_far - m_near);
+    float b = m_far * m_near / (m_far - m_near);
+
+    m_pMat.m11 = 2 * m_near / vw;
+    m_pMat.m12 = 0.0f;
+    m_pMat.m13 = 0.0f;
+
+    m_pMat.m21 = 0.0f;
+    m_pMat.m22 = 2 * m_near / vh;
+    m_pMat.m23 = 0.0f;
+    
+    m_pMat.m31 = 0.0f;
+    m_pMat.m32 = 0.0f;
+    m_pMat.m33 = a;
+
+    m_pMat.tx = 0.0f;
+    m_pMat.ty = 0.0f;
+    m_pMat.tz = b;
+}
+
+void LookAtMatrix(const Vector3& pos, const Vector3& lookPos, const Vector3& up, Vector3& rup, Vector3& view, Vector3& right, Matrix4x3& vmat)
 
 {
     //计算右向量，通过up view right三者是互相垂直的关系计算。
     view = lookPos - pos;
-    up.normalize();
-    right = crossProduct(up, view);
+    rup = up;
+    rup.normalize();
+    right = crossProduct(rup, view);
     right.normalize();
     //修正view
     view = crossProduct(right, up);

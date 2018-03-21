@@ -1,12 +1,12 @@
 
 //三维世界的摄像机
-
-#include "../../includes.h"
+#include <SDL.h>
 
 class Camera
 {
 public:
-    Camera(const Vector3& pos, const Vector3& up, const Vector3& view);
+    Camera(const Uint32& screenW, const Uint32& screenH,
+            const Vector3& pos, const Vector3& up, const Vector3& view);
     ~Camera();
 
     inline Vector3 GetPosition(){ return m_pos; }
@@ -20,6 +20,8 @@ public:
 protected:
     void CaculateProjectMatrix();
 private:
+    Uint32 m_screenW;
+    Uint32 m_screenH;
     Vector3 m_pos;
     Vector3 m_up;
     Vector3 m_view;

@@ -1,7 +1,10 @@
 #include "Camera.h"
 
-Camera::Camera(const Vector3& pos, const Vector3& up, const Vector3& lookPos)
+Camera::Camera(const Uint32& screenW, const Uint32& screenH,
+                const Vector3& pos, const Vector3& up, const Vector3& lookPos)
 {
+    m_screenW = screenW;
+    m_screenH = screenH;
     m_pos = pos;
     LookAtMatrix(m_pos, lookPos, up, m_up, m_view, m_right, m_cMat);
     CaculateProjectMatrix();
@@ -9,9 +12,7 @@ Camera::Camera(const Vector3& pos, const Vector3& up, const Vector3& lookPos)
 
 void Camera::CaculateProjectMatrix()
 {
-    int screenW, screenH;
-    pAppInstance->GetWindowWH(&screenW, &screenH);
-    m_ratio = screenW * 1.0f / screenH;
+    m_ratio = m_screenW * 1.0f / m_screenH;
     //计算视锥体投影平面的宽
     int rfov = m_fov * kPI / 360.0f;// 180.f / 2
     float vw = 2 * m_near * tanf(rfov);

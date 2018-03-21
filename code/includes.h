@@ -9,5 +9,7 @@
 #include "core/math/RotationMatrix.h"
 #include "core/math/Vector3.h"
 #include "core/primitive/PrimitiveUtil.h"
+#include "core/basic/Camera.h"
+#include "core/basic/Vertex.h"
 
 #include "app/XApp.h"

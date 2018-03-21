@@ -53,12 +53,13 @@ void TestUpdate()
 
 int main(int, char **)
 {
-
-    XApp app = XApp("XApp_Alpha_0.1", 1280, 640, SDL_INIT_EVERYTHING, SDL_WINDOW_SHOWN
+    XApp::CreateAppSingleton("XApp_Alpha_0.1", 1280, 640, SDL_INIT_EVERYTHING, SDL_WINDOW_SHOWN
                     , SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    pAppInstance = &app;
-    
-    pAppInstance->AddUpdateLogic(TestUpdate);
-    pAppInstance->AppLoop();
+    if(pAppInstance != nullptr)
+    {
+
+        pAppInstance->AddUpdateLogic(TestUpdate);
+        pAppInstance->AppLoop();
+    }
     return 0;
 }

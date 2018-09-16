@@ -4,7 +4,7 @@
 
 
 //DDA(数字微波分析仪)划线算法
-void DrawLineDDA(const XPoint& st, const XPoint& ed)
+void DrawLineDDA(const SDL_Surface* pSurface, const XPoint& st, const XPoint& ed)
 {
     float dx = ed.x - st.x;
     float dy = ed.y - st.y;
@@ -23,7 +23,6 @@ void DrawLineDDA(const XPoint& st, const XPoint& ed)
 
     xInc = dx / steps;
     yInc = dy / steps;
-    SDL_Surface* pSurface = pAppInstance->GetRenderSurface();
     int samX, samY;
     samplingPoint(x, y, &samX, &samY);
     DrawPoint(pSurface, samX, samY);
@@ -54,7 +53,7 @@ inline void swap(int& a, int& b)
 }
 
 //分开两个函数主要想要减少是否切换了XY轴的判断，只需要判断一次
-void DrawLineBresenhamXY(const int& dx, const int&dy,
+void DrawLineBresenhamXY(const SDL_Surface* pSurface, const int& dx, const int&dy,
                          int& x, int& y,
                          const int& step, const int& ex)
 {
@@ -69,8 +68,6 @@ void DrawLineBresenhamXY(const int& dx, const int&dy,
     }
     */
     int p, twoDy, twoDyMinusDx;
-    SDL_Surface* pSurface = pAppInstance->GetRenderSurface();
-
     if(dy == 0)
     {
         for(int k = 0; k <= dx; ++k)
@@ -112,12 +109,11 @@ void DrawLineBresenhamXY(const int& dx, const int&dy,
     }
 }
 
-void DrawLineBresenhamYX(const int& dx, const int&dy,
+void DrawLineBresenhamYX(const SDL_Surface* pSurface, const int& dx, const int&dy,
                          int& x, int& y,
                          const int& step, const int& ex)
 {
     int p, twoDy, twoDyMinusDx;
-    SDL_Surface* pSurface = pAppInstance->GetRenderSurface();
 
     if(dy == 0)
     {
@@ -160,7 +156,7 @@ void DrawLineBresenhamYX(const int& dx, const int&dy,
     }
 }
 
-void DrawLineBresenham(const XPoint& st, const XPoint& ed)
+void DrawLineBresenham(const SDL_Surface* pSurface, const XPoint& st, const XPoint& ed)
 {
     int sx, sy, ex, ey;
     int dx, dy;
@@ -202,10 +198,10 @@ void DrawLineBresenham(const XPoint& st, const XPoint& ed)
 
     if(bSwitch)
     {
-        DrawLineBresenhamYX(dx, dy, x, y, step, ex);
+        DrawLineBresenhamYX(pSurface, dx, dy, x, y, step, ex);
     }
     else
     {
-        DrawLineBresenhamXY(dx, dy, x, y, step, ex);
+        DrawLineBresenhamXY(pSurface, dx, dy, x, y, step, ex);
     }
 }

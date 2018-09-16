@@ -7,6 +7,7 @@
 
 #pragma once
 #include <math.h>
+#include <string>
 
 class Vector3
 {
@@ -95,7 +96,7 @@ public:
         return *this;
     }
 
-    Vector3& operator/(const float va)
+    Vector3& operator/=(const float va)
     {
         x /= va; y /= va; z /=va;
         return *this;
@@ -120,6 +121,12 @@ public:
     {
         return x * va.x + y * va.y + z * va.z;
     }
+
+    std::string ToString()
+    {
+        
+        return " (" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")";
+    }
 };
 
 ////////
@@ -141,7 +148,7 @@ inline Vector3 crossProduct(const Vector3 &va, const Vector3 &vb)
     return Vector3(
         va.y * vb.z - va.z * vb.y,
         va.z * vb.x - va.x * vb.z,
-        va.x * va.y - va.y * vb.x
+        va.x * vb.y - va.y * vb.x
     );
 }
 
@@ -159,6 +166,8 @@ inline float distance(const Vector3 &va, const Vector3 &vb)
     float dz = va.z - vb.z;
     return sqrt(dx * dx + dy * dy + dz * dz);
 }
+
+
 
 
 ///全局0向量

@@ -33,28 +33,15 @@ void XApp::SDLEnvInit(std::string title, int w, int h, Uint32 initOpt, Uint32 wi
         m_initStatus = false;
         return;
     }*/
-
+    
     SDL_GetWindowSize(m_pWindow, &m_screenW, &m_screenH);
     m_windowSurface = SDL_GetWindowSurface(m_pWindow);
     while(m_windowSurface == nullptr)
     {
         m_windowSurface = SDL_GetWindowSurface(m_pWindow);
     }
-    Uint32 rmask, gmask, bmask, amask;
-    /* SDL interprets each pixel as a 32-bit number, so our masks must depend
-       on the endianness (byte order) of the machine */
-    #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-        rmask = 0xff000000;
-        gmask = 0x00ff0000;
-        bmask = 0x0000ff00;
-        amask = 0x000000ff;
-    #else
-        rmask = 0x000000ff;
-        gmask = 0x0000ff00;
-        bmask = 0x00ff0000;
-        amask = 0xff000000;
-    #endif
-    m_cacheSurface = SDL_CreateRGBSurface(0, m_screenW, m_screenH, 32, rmask, gmask, bmask, amask);
+
+    m_renderContext.Init(w, h);
 
     std::cout <<"SDL_CreateRenderer: finish int" <<SDL_GetError() <<std::endl;
 }
@@ -74,12 +61,42 @@ void XApp::AppLoop()
         //std::cout <<"GameRunning... " <<SDL_GetError() <<std::endl;
         CatchInput();
         UpdateLogic();
-        SDL_BlitSurface(m_cacheSurface, NULL, m_windowSurface, NULL);
+        Render();
+        SDL_BlitSurface(m_renderContext.GetSurface(), NULL, m_windowSurface, NULL);
         SDL_UpdateWindowSurface(m_pWindow);
         SDL_Delay(50);
     }
 
     Release();
+}
+
+void XApp::Render()
+{
+    if(m_pVerteices == nullptr
+    || m_pIndexData == nullptr)
+    {
+        return;
+    }
+
+    //变换
+    Matrix4x3 mvp = m_camera.GetVPMatrix();
+    for(int i = 0; i < m_index_count; i++)
+    {
+        int ind = *(m_pIndexData + i);
+        Vertex vert = *(m_pVerteices + ind);
+        //变换
+        Vector3 vec = m_camera.DoVertexTranslate(vert.pos);
+        
+        std::cout << " index: " << i << " vec: " << vec.x << " " << vec.y << " " << vec.z << std::endl;
+    }
+}
+
+void XApp::PushVerteices(Vertex* pVerteices, Uint32 vert_size, Uint32* pInedxData, int index_count)
+{
+    m_pVerteices = pVerteices;
+    m_vertex_count = vert_size;
+    m_pIndexData = pInedxData;
+    m_index_count = index_count;
 }
 
 //参数不能是成员函数，必须是普通非成员函数
@@ -95,10 +112,7 @@ void XApp::RemoveUpdateLogic(Update_Func func)
 
 void XApp::UpdateLogic()
 {
-     if(SDL_MUSTLOCK(m_cacheSurface))
-    {
-        SDL_LockSurface(m_cacheSurface);
-    } 
+    m_renderContext.Lock();
 
     std::list<Update_Func>::iterator it;
     
@@ -107,10 +121,7 @@ void XApp::UpdateLogic()
         (*(*it))();
     }
 
-    if(SDL_MUSTLOCK(m_cacheSurface))
-    {
-        SDL_UnlockSurface(m_cacheSurface);
-    }
+    m_renderContext.UnLock();
 }
 
 //获取输入
@@ -144,14 +155,23 @@ void XApp::Release()
 {
     //SDL_DestroyRenderer(m_pRender);
     SDL_DestroyWindow(m_pWindow);
-    SDL_FreeSurface(m_cacheSurface);
+    m_renderContext.Releae();
     SDL_Quit();
 }
 
 
 XApp::~XApp() {
     m_pWindow = nullptr;
-    m_cacheSurface = nullptr;
+}
+
+void XApp::SetCameraLookAt(const Vector3& pos, const Vector3& up, const Vector3& lookPos)
+{
+    m_camera.Init(m_screenW, m_screenH, pos, up, lookPos);
+}
+
+Camera& XApp::GetMainCamera()
+{
+    return m_camera;
 }
 
 SDL_Window* XApp::GetWindowHandler()
@@ -159,26 +179,14 @@ SDL_Window* XApp::GetWindowHandler()
     return m_pWindow;
 }
 
-//获取用于绘制的surface，所有绘制操作都必须绘制到这个surface
-//最后由XApp更新到窗口
 SDL_Surface* XApp::GetRenderSurface()
 {
-    return m_cacheSurface;
+    return m_renderContext.GetSurface();
 }
 
 void XApp::GetWindowWH(int* w, int* h)
 {
     w = &m_screenW; h = &m_screenH;
-}
-
-void XApp::SetDrawColor(Uint8 r, Uint8 g, Uint8 b)
-{
-    m_drawColor = SDL_MapRGBA(m_cacheSurface->format, r, g, b, 255);
-}
-
-Uint32 XApp::GetDrawColor()
-{
-    return m_drawColor;
 }
 
 //App全局句柄

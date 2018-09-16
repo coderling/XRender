@@ -21,7 +21,7 @@ public:
     //default constructor
     EulerAngles() {}
 
-    //by free pramas
+    //by free pramas h -- y p -- x b --- z
     EulerAngles(float h, float p, float b) :
     heading(h), pitch(p), bank(b) {}
 

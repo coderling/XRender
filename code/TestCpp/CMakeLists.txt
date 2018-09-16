@@ -1,0 +1,8 @@
+project(Test)
+add_executable(Test Test.cpp)
+target_link_libraries(Test ${SDL2_LIBRARY})
+target_link_libraries(Test BasicLib)
+target_link_libraries(Test GraphicsLib)
+target_link_libraries(Test XMathLib)
+set(LIBRARY_OUTPUT_PATH ${BIN_DIR}/lib)
+install(TARGETS Test RUNTIME DESTINATION ${BIN_DIR})

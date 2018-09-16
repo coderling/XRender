@@ -24,4 +24,5 @@ endif()
 # find the SDL2 package
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${XRender_SOURCE_DIR})
 add_subdirectory(code)

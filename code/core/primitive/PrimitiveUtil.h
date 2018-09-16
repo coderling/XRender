@@ -1,13 +1,14 @@
+#pragma once
 
 #include <SDL.h>
 
 #include "XPoint.h"
-#include "../../app/XApp.h"
+#include "code/core/basic/Util.h"
 
 
 inline bool IsPointInScreen(const SDL_Surface* pSurface, const int& x, const int& y)
 {
-    if(x < 0 || x >= pSurface->w || y < 0 || y >= pSurface->h)
+    if(x < 0 || x > pSurface->w || y < 0 || y > pSurface->h)
     {
         //不在屏幕内
         return false;
@@ -33,10 +34,10 @@ inline void samplingPoint(const float sx, const float sy, int *x, int *y)
 
 void DrawPoint(const SDL_Surface* pSurface, const int& x, const int& y);
 
-void DrawPoint(const XPoint& p);
+void DrawPoint(const SDL_Surface* pSurface, const XPoint& p);
 
-void DrawPoints(XPoint const *pArr, int size);
+void DrawPoints(const SDL_Surface* pSurface, XPoint const *pArr, int size);
 
-void DrawLineDDA(const XPoint& st, const XPoint& ed);
+void DrawLineDDA(const SDL_Surface* pSurface, const XPoint& st, const XPoint& ed);
 
-void DrawLineBresenham(const XPoint& st, const XPoint& ed);
+void DrawLineBresenham(const SDL_Surface* pSurface, const XPoint& st, const XPoint& ed);

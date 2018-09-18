@@ -11,6 +11,7 @@
 #pragma once
 
 #include "Object.h"
+#include "code/core/primitive/Vertex.h"
 
 class Cube : public Object
 {

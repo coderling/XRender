@@ -8,6 +8,7 @@
 #include "code/core/primitive/Vertex.h"
 #include "code/core/basic/Camera.h"
 #include "code/core/Render/RenderContext.h"
+#include "code/core/basic/Behavior.h"
 
 typedef void (*Update_Func)();
 
@@ -61,10 +62,11 @@ private:
     Camera m_camera;
     SDL_Event m_sdlEvent;
     std::queue<SDL_Event> m_frameEvents;
-
+    
     Uint32 m_drawColor;
 
     std::list<Update_Func> m_updateFuncList;
+    std::list<Behavior> m_behaviors;    
 
     //渲染数据，采用定点索引方式进行数据输入
     Vertex* m_pVerteices;

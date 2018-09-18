@@ -1,8 +1,10 @@
 #pragma once
-#include "code/includes.h"
+#include "code/core/basic/BaseObject.h"
+#include "code/core/math/Vector3.h"
+#include "code/core/math/Matrix4x3.h"
 //3d 对象
 
-class Object
+class Object : public BaseObject
 {
 public:
     Vector3 m_position;

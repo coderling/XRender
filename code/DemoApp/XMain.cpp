@@ -80,7 +80,6 @@ int main(int, char **)
     if(pAppInstance != nullptr)
     {
         pAppInstance->SetCameraLookAt(Vector3(0, 0, -1), Vector3(0, 1, 0), Vector3(0, 0, 1));
-        pAppInstance->AddUpdateLogic(TestUpdate);
         pAppInstance->AppLoop();
     }
     return 0;

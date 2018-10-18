@@ -99,26 +99,14 @@ void XApp::PushVerteices(Vertex* pVerteices, Uint32 vert_size, Uint32* pInedxDat
     m_index_count = index_count;
 }
 
-//参数不能是成员函数，必须是普通非成员函数
-void XApp::AddUpdateLogic(Update_Func func)
-{
-    m_updateFuncList.push_back(func);
-}
-
-void XApp::RemoveUpdateLogic(Update_Func func)
-{
-    m_updateFuncList.remove(func);
-}
-
 void XApp::UpdateLogic()
 {
     m_renderContext.Lock();
 
-    std::list<Update_Func>::iterator it;
-    
-    for(it = m_updateFuncList.begin(); it != m_updateFuncList.end(); ++it)
+    // beHavior update
+    for(auto it = m_behaviors.begin(); it != m_behaviors.end(); ++it)
     {
-        (*(*it))();
+        it->Update();
     }
 
     m_renderContext.UnLock();

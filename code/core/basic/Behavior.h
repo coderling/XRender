@@ -14,12 +14,28 @@ public:
         m_enable = false;
     }
 
-    void Enable();
-    void Disable();
+    virtual ~Behavior(){}
 
-    virtual void OnEnable() const;
-    virtual void Update() const;
-    virtual void OnDisable() const;
+    inline void Enable(){ 
+        if(!m_enable)
+        {
+            m_enable = true;
+            OnEnable();
+        }
+    }
+
+    void Disable()
+    {
+        if(m_enable)
+        {
+            m_enable = false;
+            OnDisable();
+        }
+    }
+
+    virtual void OnEnable(){}
+    virtual void Update(){}
+    virtual void OnDisable(){}
 
 protected:
     bool m_enable;

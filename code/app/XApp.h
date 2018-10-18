@@ -10,8 +10,6 @@
 #include "code/core/Render/RenderContext.h"
 #include "code/core/basic/Behavior.h"
 
-typedef void (*Update_Func)();
-
 class XApp;
 extern XApp* pAppInstance;
 
@@ -35,12 +33,12 @@ public:
     SDL_Window* GetWindowHandler();
     SDL_Surface* GetRenderSurface();
     void GetWindowWH(int* w, int* h);
-    void AddUpdateLogic(Update_Func func);
-    void RemoveUpdateLogic(Update_Func func);
 
     void AppLoop();
     void Terminate();
 
+    void AddBehavior(Behavior& behavior);
+    void RemoveBehavior(Behavior& behavior);
     //rener func
     void PushVerteices(Vertex* pVerteices, Uint32 vert_size, Uint32* pInedxData, int index_count);
 protected:
@@ -65,8 +63,7 @@ private:
     
     Uint32 m_drawColor;
 
-    std::list<Update_Func> m_updateFuncList;
-    std::list<Behavior> m_behaviors;    
+    std::vector<Behavior> m_behaviors;    
 
     //渲染数据，采用定点索引方式进行数据输入
     Vertex* m_pVerteices;

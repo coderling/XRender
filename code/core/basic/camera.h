@@ -1,16 +1,17 @@
 #pragma once
 //三维世界的摄像机
 #include <SDL.h>
-#include "../math/Vector3.h"
-#include "../math/MathUtil.h"
-#include "../math/Matrix4x3.h"
-#include "../math/RotationMatrix.h"
+#include "code/core/math/Vector3.h"
+#include "code/core/math/MathUtil.h"
+#include "code/core/math/Matrix4x3.h"
+#include "code/core/math/RotationMatrix.h"
+#include "code/core/basic/Behavior.h"
 
-class Camera
+class Camera : public Behavior
 {
 public:
     Camera(){}
-    ~Camera(){}
+    ~Camera() noexcept {}
 
     inline Vector3 GetPosition(){ return m_pos; }
     inline Vector3 GetUp(){ return m_up; }

@@ -22,7 +22,6 @@ public:
     inline Matrix4x3 GetVPMatrix(){ return m_vpMat; }
     void Init(const Uint32& screenW, const Uint32& screenH,
             const Vector3& pos, const Vector3& up, const Vector3& lookPos);
-    void Update();
 
     //执行变换，得到最后的屏幕坐标
     Vector3 DoVertexTranslate(const Vector3& vec);
@@ -40,7 +39,7 @@ private:
     float m_far = 100;
     float m_near = 0.3;
 
-    //水平视野
+    //垂直视野
     float m_fov = 60;
 
     //宽高比
@@ -59,4 +58,5 @@ private:
 
     void LookAtMatrix(const Vector3& pos, const Vector3& lookPos, const Vector3& up, 
                             Vector3& rup, Vector3& view, Vector3& right, Matrix4x3& vmat);
+    void Update();
 };

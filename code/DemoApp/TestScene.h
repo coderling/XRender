@@ -1,17 +1,15 @@
 #pragma once
 #include <vector>
 #include "code/core/basic/Behavior.h"
-#include "code/core/Object/Object.h"
+#include "code/core/basic/Object.h" 
 
-class TestScene : public Behavior
+class TestScene
 {
 public:
     TestScene()
     {
-        InitScenes();
     }
+    void Start();
 private:
     std::vector<Object> m_Objects;
-
-    void InitScenes();
 };

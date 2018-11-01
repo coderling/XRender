@@ -8,7 +8,7 @@
 #include "code/core/primitive/Vertex.h"
 #include "code/core/basic/Camera.h"
 #include "code/core/Render/RenderContext.h"
-#include "code/core/basic/Behavior.h"
+#include "code/core/basic/Object.h"
 
 class XApp;
 extern XApp* pAppInstance;
@@ -37,10 +37,8 @@ public:
     void AppLoop();
     void Terminate();
 
-    void AddBehavior(Behavior& behavior);
-    void RemoveBehavior(Behavior& behavior);
-    //rener func
-    void PushVerteices(Vertex* pVerteices, Uint32 vert_size, Uint32* pInedxData, int index_count);
+    void AddObject(Object* object);
+    void RemoveObject(Object* object);
 protected:
     SDL_Window* m_pWindow;
     RenderContext m_renderContext;
@@ -63,13 +61,8 @@ private:
     
     Uint32 m_drawColor;
 
-    std::vector<Behavior> m_behaviors;    
+    std::vector<Object*> m_objects;    
 
-    //渲染数据，采用定点索引方式进行数据输入
-    Vertex* m_pVerteices;
-    Uint32 m_vertex_count;
-    Uint32* m_pIndexData;
-    Uint32 m_index_count;
 
     virtual void SDLEnvInit(std::string title, int w, int h, Uint32 initOpt, Uint32 winOpt, Uint32 renderOpt);
     void Release();

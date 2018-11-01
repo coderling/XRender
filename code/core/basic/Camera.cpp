@@ -6,6 +6,8 @@ void Camera::Init(const Uint32& screenW, const Uint32& screenH,
     m_screenW = screenW;
     m_screenH = screenH;
     m_pos = pos;
+    m_cMat.identity();
+    m_pMat.identity();
     LookAtMatrix(m_pos, lookPos, up, m_up, m_view, m_right, m_cMat);
     CaculateProjectMatrix();
     m_vpMat = m_cMat * m_pMat;
@@ -13,6 +15,7 @@ void Camera::Init(const Uint32& screenW, const Uint32& screenH,
 
 void Camera::CaculateProjectMatrix()
 {
+    // 投影矩阵，cvv z[0, 1]
     m_ratio = m_screenW * 1.0f / m_screenH;
     //计算视锥体投影平面的宽
     float rfov = m_fov * kPI / 360.0f;// 180.f / 2
@@ -70,6 +73,7 @@ void Camera::LookAtMatrix(const Vector3& pos, const Vector3& lookPos, const Vect
 
     //旋转矩阵
     RotationMatrix rmat;
+    rmat.identity();
     rmat.m11 = right.x, rmat.m21 = right.y, rmat.m23 = right.z;
     rmat.m12 = up.x, rmat.m22 = up.y; rmat.m32 = up.z;
     rmat.m13 = view.x, rmat.m23 = view.y; rmat.m33 = view.z;

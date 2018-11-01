@@ -6,37 +6,20 @@
 
 #include "BaseObject.h"
 
+class Object;
+
 class Behavior : public BaseObject
 {
+    friend Object;
 public:
-    Behavior()
-    {
-        m_enable = false;
-    }
-
-    virtual ~Behavior(){}
-
-    inline void Enable(){ 
-        if(!m_enable)
-        {
-            m_enable = true;
-            OnEnable();
-        }
-    }
-
-    void Disable()
-    {
-        if(m_enable)
-        {
-            m_enable = false;
-            OnDisable();
-        }
-    }
-
-    virtual void OnEnable(){}
-    virtual void Update(){}
-    virtual void OnDisable(){}
+    Behavior();
+    virtual ~Behavior();
 
 protected:
-    bool m_enable;
+    Object* m_object;
+
+    virtual void Update();
+    virtual void OnEnable();
+    virtual void OnDisable();
+    virtual void Start();
 };

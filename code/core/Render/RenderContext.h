@@ -12,6 +12,7 @@
 #include <SDL.h>
 #include "code/core/basic/Util.h"
 #include "code/core/primitive/Vertex.h"
+#include "code/core/basic/Util.h"
 
 class RenderContext
 {
@@ -65,6 +66,17 @@ public:
 
     inline SDL_Surface* GetSurface(){ return m_renderSurface; }
 
+    inline void Clear()
+    {
+        SDL_FillRect(m_renderSurface, NULL, SDL_MapRGB(m_renderSurface->format, 0, 85, 255));
+    }
+
+    void DrawPixel(const int& x, const int& y, const Color& color)
+    {
+        auto pixels = (Uint32*)m_renderSurface->pixels;
+        auto ind = y * m_renderSurface->w + x;
+        pixels[ind] = HashColor(m_renderSurface->format, color.r, color.g, color.b, color.a);
+    }
 private:
     SDL_Surface* m_renderSurface;
 

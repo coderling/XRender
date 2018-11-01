@@ -1,5 +1,8 @@
 
 
+
+set(LIBRARY_OUTPUT_PATH ${BIN_DIR}/lib)
+
 # begin include 目录
 # end include
 
@@ -21,23 +24,30 @@ add_library(XMathLib
 
 # begin GraphicsLib
 set(G_DIR core/primitive)
-set(O_DIR core/Object)
+set(O_DIR core/Objects)
+set(R_DIR core/Render)
 add_library(GraphicsLib
             ${G_DIR}/DrawLine.cpp
             ${G_DIR}/DrawPoint.cpp
             ${O_DIR}/Cube.cpp
-            ${O_DIR}/Object.cpp)
+            ${O_DIR}/Triangle.cpp
+            ${R_DIR}/Renderer.cpp
+            ${R_DIR}/Shader.cpp)
 target_link_libraries(GraphicsLib BasicLib)
+target_link_libraries(GraphicsLib XMathLib)
 # end GraphicsLib
 
 # begin BasicLib
 set(BASIC_DIR core/basic)
 add_library(BasicLib
     ${BASIC_DIR}/Util.cpp
-    ${BASIC_DIR}/Camera.cpp)
+    ${BASIC_DIR}/Camera.cpp
+    ${BASIC_DIR}/BaseObject.cpp
+    ${BASIC_DIR}/Object.cpp
+    ${BASIC_DIR}/Behavior.cpp)
 # end BasicLib
 
 
 
-add_subdirectory(app)
-add_subdirectory(TestCpp)
+add_subdirectory(DemoApp)
+#add_subdirectory(TestCpp)

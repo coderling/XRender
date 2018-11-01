@@ -2,6 +2,10 @@
 #include<iostream>
 
 #include "XApp.h"
+#include "code/core/Render/Shader.h"
+#include "code/core/Render/Renderer.h"
+#include "code/core/Render/Rasterization.h"
+#include "code/core/primitive/PrimitiveUtil.h"
 
 XApp::XApp(std::string title, int w, int h, Uint32 initOpt, Uint32 winOpt, Uint32 renderOpt)
 {
@@ -46,6 +50,30 @@ void XApp::SDLEnvInit(std::string title, int w, int h, Uint32 initOpt, Uint32 wi
     std::cout <<"SDL_CreateRenderer: finish int" <<SDL_GetError() <<std::endl;
 }
 
+void XApp::AddObject(Object*  object)
+{
+    if(!object->IsEnable())
+    {
+        m_objects.push_back(object);
+        object->Start();
+        object->Enable();
+        object->StartBehaviors();
+    }
+}
+
+void XApp::RemoveObject(Object*  object)
+{
+    for(auto it = m_objects.begin(); it != m_objects.end(); ++it)
+    {
+        if((*object) == *(*it))
+        {
+            (*it)->Disable();
+            m_objects.erase(it);
+            break;
+        }
+    }
+}
+
 //app循环
 void XApp::AppLoop()
 {
@@ -72,31 +100,70 @@ void XApp::AppLoop()
 
 void XApp::Render()
 {
-    if(m_pVerteices == nullptr
-    || m_pIndexData == nullptr)
-    {
-        return;
-    }
-
+    m_renderContext.Clear();
+    m_renderContext.Lock();
     //变换
-    Matrix4x3 mvp = m_camera.GetVPMatrix();
-    for(int i = 0; i < m_index_count; i++)
-    {
-        int ind = *(m_pIndexData + i);
-        Vertex vert = *(m_pVerteices + ind);
-        //变换
-        Vector3 vec = m_camera.DoVertexTranslate(vert.pos);
+    Matrix4x3 vp = m_camera.GetVPMatrix();
+    Matrix4x3 vmat = m_camera.GetCameraMatrix();
+    for(auto ob : m_objects)
+    {   
+        auto mesh = ob->GetMesh();
+        auto verteies = mesh->GetVerteies();
+        int *pIndeies = nullptr;
+        auto count = mesh->GetIndeies(pIndeies);
+        int triangleCount = count / 3;
+        auto material = mesh->GetMat();
+        auto shader = material.GetShader();
         
-        std::cout << " index: " << i << " vec: " << vec.x << " " << vec.y << " " << vec.z << std::endl;
-    }
-}
+        shader->PreVert(ob->ModelMatrix(), vp);
 
-void XApp::PushVerteices(Vertex* pVerteices, Uint32 vert_size, Uint32* pInedxData, int index_count)
-{
-    m_pVerteices = pVerteices;
-    m_vertex_count = vert_size;
-    m_pIndexData = pInedxData;
-    m_index_count = index_count;
+        VertInput vin;
+        std::vector<VertOut> fragments;
+        std::vector<Trapezoidal_t> traps;
+        
+        for(int i = 0; i < triangleCount; ++i)
+        {
+            auto tri = verteies + i;
+            VertOut points[3];
+            //简单检查三角形是否在cvv内，只要一个点在cvv内都不做裁剪
+            int inc = 0;
+            for(int j = 0; j < 3; j++)
+            {
+                auto ver = *(tri + j);
+                vin.pos = ver.pos;
+                vin.color = ver.color;
+                points[j] = shader->Vert(vin);
+                float w = (ver.pos * vmat).z;
+                //这里有点不好理解，其实是因为计算出来的变换矩阵公式w = z, z 为摄像机空间下的z值
+                if(Check_CVV(points[j].pos, w))
+                {
+                    ++inc;
+                }
+                IdentityToDevice(m_renderContext, points[j].pos, w);
+            }
+
+            if(inc > 0)
+            {
+                traps.empty();
+                DivisionTriangle(points[0], points[1], points[2], traps);
+                fragments.empty();
+                for(int t = 0; t < traps.size(); ++t)
+                {
+                    ScanLineTrapezoidal(m_renderContext, traps[t], fragments);
+                    for(int f = 0; f < fragments.size(); ++f)
+                    {
+                        Color c = shader->Frag(fragments[f]);
+                        m_renderContext.DrawPixel(fragments[f].pos.x, fragments[f].pos.y, fragments[f].color);
+                    }
+                }
+            }
+            else
+            {
+                //std::cout << "tri out: " << points[0].pos.ToString() << points[1].pos.ToString() << points[2].pos.ToString() << std::endl;
+            }
+        }
+    }
+    m_renderContext.UnLock();
 }
 
 void XApp::UpdateLogic()
@@ -104,9 +171,9 @@ void XApp::UpdateLogic()
     m_renderContext.Lock();
 
     // beHavior update
-    for(auto it = m_behaviors.begin(); it != m_behaviors.end(); ++it)
+    for(auto it = m_objects.begin(); it != m_objects.end(); ++it)
     {
-        it->Update();
+        (*it)->UpdateBehaviors();
     }
 
     m_renderContext.UnLock();
@@ -124,7 +191,11 @@ void XApp::CatchInput()
         }
         else if(m_sdlEvent.type == SDL_KEYDOWN)
         {
-            std::cout <<"keyDown... " <<m_sdlEvent.key.keysym.scancode <<std::endl;
+            std::cout <<"keyDown... " <<m_sdlEvent.key.keysym.sym <<std::endl;
+            if(m_sdlEvent.key.keysym.sym == SDLK_ESCAPE)
+            {
+                this->Terminate();
+            }
         }
         else if(m_sdlEvent.type == SDL_MOUSEBUTTONDOWN)
         {

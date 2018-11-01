@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "Object.h"
+#include "code/core/basic/Object.h"
 #include "code/core/primitive/Vertex.h"
 
 class Cube : public Object
@@ -23,7 +23,7 @@ public:
 
     inline Vertex* GetVerteies(){ return m_verteies; }
 
-    inline const int* GetIndeies(){ return m_indeies; }
+    inline int GetIndeies(const int* pIndeies){  pIndeies = m_indeies; return 36; }
 
 protected:
     float m_length;

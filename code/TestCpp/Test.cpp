@@ -1,4 +1,4 @@
-#include "code/core/Object/Cube.h"
+#include "code/core/Objects/Cube.h"
 #include "code/core/basic/Camera.h"
 #include <iostream>
 
@@ -8,7 +8,7 @@ void TestCameraAPI()
     Camera ca;
     ca.Init(800, 600, Vector3(0, 0, -50), Vector3(0, 1, 0), Vector3(0, 0, 1));
 
-    Vector3 vec(0, 28.6, 0);
+    Vector3 vec(0, 0, 0);
     Vector3 afTr = vec * ca.GetCameraMatrix();
     std::cout << " afTr:" + afTr.ToString() << std::endl;
     Vector3 proVec = afTr * ca.GetProjectMatrix();
@@ -34,8 +34,8 @@ void TestCubeData()
 
 int main()
 {
-    TestCubeData();
-    //TestCameraAPI();
+    //TestCubeData();
+    TestCameraAPI();
     char a;
     std::cin >> a;
     return 0;

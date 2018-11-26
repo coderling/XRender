@@ -23,6 +23,20 @@ public:
     }
 };
 
+struct Texcoord
+{
+public:
+    Texcoord(){}
+    Texcoord(float _u, float _v)
+    {
+        u = _u;
+        v = _v;
+    }
+
+    float u;
+    float v;
+};
+
 class Vertex
 {
 public:
@@ -34,4 +48,5 @@ public:
     }
     Vector3 pos;
     Color color;
+    Texcoord uv;
 };

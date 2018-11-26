@@ -2,7 +2,7 @@
 project(XApp)
 add_executable(XApp XMain.cpp)
 target_sources(XApp PRIVATE TestScene.cpp)
-target_link_libraries(XApp ${SDL2_LIBRARY})
+target_link_libraries(XApp ${SDL2_LIBRARY} ${SDL_IMAGE_LIBRARY})
 target_link_libraries(XApp XAppLib)
 target_link_libraries(XApp XMathLib)
 target_link_libraries(XApp GraphicsLib)

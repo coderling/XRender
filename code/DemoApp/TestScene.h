@@ -10,6 +10,7 @@ public:
     {
     }
     void Start();
+    void Destory();
 private:
     std::vector<Object> m_Objects;
 };

@@ -8,6 +8,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${XRender_SOURCE_DIR}/cmake")
 set(BIN_DIR ${XRender_SOURCE_DIR}/bin)
 
 set(SDL2_PATH /usr/local/Cellar/sdl2/2.0.7)
+set(SDL2_IMAGE /usr/local/Cellar/sdl2_image/2.0.4)
 # set complier c++ flag for msvc or gnu&Clang
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11")
@@ -23,6 +24,8 @@ endif()
 
 # find the SDL2 package
 find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
+include_directories(${SDL2_IMAGE_INCLUDE_DIR})
 include_directories(${XRender_SOURCE_DIR})
 add_subdirectory(code)

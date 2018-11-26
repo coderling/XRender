@@ -10,6 +10,7 @@
 XApp::XApp(std::string title, int w, int h, Uint32 initOpt, Uint32 winOpt, Uint32 renderOpt)
 {
     SDLEnvInit(title, w, h, initOpt, winOpt, renderOpt);
+    m_eRenderMode = TEXTURE_MAPPING;
 }
 
 //SDL环境初始化
@@ -132,6 +133,7 @@ void XApp::Render()
                 auto ver = *(tri + j);
                 vin.pos = ver.pos;
                 vin.color = ver.color;
+                vin.tex = ver.uv;
                 points[j] = shader->Vert(vin);
                 float w = (ver.pos * vmat).z;
                 //这里有点不好理解，其实是因为计算出来的变换矩阵公式w = z, z 为摄像机空间下的z值
@@ -147,13 +149,18 @@ void XApp::Render()
                 traps.empty();
                 DivisionTriangle(points[0], points[1], points[2], traps);
                 fragments.empty();
+                Color c;
                 for(int t = 0; t < traps.size(); ++t)
                 {
                     ScanLineTrapezoidal(m_renderContext, traps[t], fragments);
                     for(int f = 0; f < fragments.size(); ++f)
                     {
-                        Color c = shader->Frag(fragments[f]);
-                        m_renderContext.DrawPixel(fragments[f].pos.x, fragments[f].pos.y, fragments[f].color);
+                        c = fragments[i].color;
+                        if(m_eRenderMode == TEXTURE_MAPPING)
+                        {
+                            c = shader->Frag(fragments[f]);
+                        }
+                        m_renderContext.DrawPixel(fragments[f].pos.x, fragments[f].pos.y, c);
                     }
                 }
             }
@@ -246,6 +253,11 @@ SDL_Surface* XApp::GetRenderSurface()
 void XApp::GetWindowWH(int* w, int* h)
 {
     w = &m_screenW; h = &m_screenH;
+}
+
+void XApp::SetRenderMode(XRENDER_MODE mode)
+{
+    m_eRenderMode = mode;
 }
 
 //App全局句柄

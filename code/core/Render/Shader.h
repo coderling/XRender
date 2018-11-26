@@ -9,11 +9,13 @@
 #include "code/core/math/Matrix4x3.h"
 #include "code/core/primitive/Vertex.h"
 
+
 struct VertInput
 {
 public:
     Vector3 pos;
     Color color;
+    Texcoord tex;
 };
 
 struct VertOut
@@ -21,7 +23,10 @@ struct VertOut
 public:
     Vector3 pos;
     Color color;
+    Texcoord tex;
 };
+
+
 
 class Shader
 {

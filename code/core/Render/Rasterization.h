@@ -40,6 +40,14 @@ static Color& LerpColor(const Color& c1, const Color& c2, float t)
     return r;
 }
 
+static Texcoord LerpTexcoord(const Texcoord &t1, const Texcoord &t2, float t)
+{
+    Texcoord rt;
+    rt.u = Lerp(t1.u, t2.u, t);
+    rt.v = Lerp(t1.v, t2.v, t);
+    return rt;
+}
+
 
 //sample cvv cull 
 bool Check_CVV(const Vector3& p, const float& w)
@@ -77,17 +85,17 @@ void DivisionTriangle(const VertOut& v1, const VertOut& v2, const VertOut& v3, s
     const VertOut* tp;
     if(p1->pos.y < p2->pos.y)
     {
-        tp = p2; p1 = p2; p2 = tp;
+        tp = p1; p1 = p2; p2 = tp;
     }
 
     if(p1->pos.y < p3->pos.y)
     {
-        tp = p3; p1 = p3; p3 = tp;
+        tp = p1; p1 = p3; p3 = tp;
     }
 
     if(p2->pos.y < p3->pos.y)
     {
-        tp = p3; p2 = p3; p3 = tp;
+        tp = p2; p2 = p3; p3 = tp;
     }
 
     //line
@@ -195,6 +203,7 @@ void ScanLineTrapezoidal(const RenderContext& renderContext, const Trapezoidal_t
     int ww = renderContext.m_width;
     float pxl, pxr, t, lz, rz;
     Color lc, rc;
+    Texcoord luv, ruv;
     int left, right, linew;
     for(; top < bottom; top++)
     {
@@ -204,11 +213,13 @@ void ScanLineTrapezoidal(const RenderContext& renderContext, const Trapezoidal_t
             pxl = Lerp(trap.left.start.pos.x, trap.left.end.pos.x, t);
             lz = Lerp(trap.left.start.pos.z, trap.left.end.pos.z, t);
             lc = LerpColor(trap.left.start.color, trap.left.end.color, t);
+            luv = LerpTexcoord(trap.left.start.tex, trap.left.end.tex, t);
 
             t = (top - trap.right.start.pos.y) / (trap.right.end.pos.y - trap.right.start.pos.y);
             pxr = Lerp(trap.right.start.pos.x, trap.right.end.pos.x, t);
             rz = Lerp(trap.right.start.pos.z, trap.right.end.pos.z, t);
             rc = LerpColor(trap.right.start.color, trap.right.end.color, t);
+            ruv = LerpTexcoord(trap.right.start.tex, trap.right.end.tex, t);
 
             left = (int)(pxl + 0.5f);
             right = (int)(pxr + 0.5f);
@@ -224,6 +235,7 @@ void ScanLineTrapezoidal(const RenderContext& renderContext, const Trapezoidal_t
                     vt.pos.y = top;
                     vt.pos.z = Lerp(lz, rz, t);
                     vt.color = LerpColor(lc, rc, t);
+                    vt.tex = LerpTexcoord(luv, ruv, t);
                     fragments.push_back(vt);
                 }
             }

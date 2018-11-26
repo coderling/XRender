@@ -1,7 +1,8 @@
 #pragma once
 
 #include <SDL.h>
-
+#include <string>
+#include <SDL_image.h>
 
 extern Uint32 m_wireframeDC;
 

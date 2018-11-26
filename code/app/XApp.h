@@ -9,6 +9,7 @@
 #include "code/core/basic/Camera.h"
 #include "code/core/Render/RenderContext.h"
 #include "code/core/basic/Object.h"
+#include "code/core/Render/Renderer.h"
 
 class XApp;
 extern XApp* pAppInstance;
@@ -39,6 +40,7 @@ public:
 
     void AddObject(Object* object);
     void RemoveObject(Object* object);
+    void SetRenderMode(XRENDER_MODE mode);
 protected:
     SDL_Window* m_pWindow;
     RenderContext m_renderContext;
@@ -63,6 +65,7 @@ private:
 
     std::vector<Object*> m_objects;    
 
+    XRENDER_MODE m_eRenderMode;
 
     virtual void SDLEnvInit(std::string title, int w, int h, Uint32 initOpt, Uint32 winOpt, Uint32 renderOpt);
     void Release();

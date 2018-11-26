@@ -32,7 +32,8 @@ add_library(GraphicsLib
             ${O_DIR}/Cube.cpp
             ${O_DIR}/Triangle.cpp
             ${R_DIR}/Renderer.cpp
-            ${R_DIR}/Shader.cpp)
+            ${R_DIR}/Shader.cpp
+            ${R_DIR}/RenderContext.cpp)
 target_link_libraries(GraphicsLib BasicLib)
 target_link_libraries(GraphicsLib XMathLib)
 # end GraphicsLib

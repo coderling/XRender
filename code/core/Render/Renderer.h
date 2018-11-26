@@ -6,6 +6,13 @@
 
 #pragma once
 
+enum XRENDER_MODE
+{
+    LINE_MODE,
+    SOILD_COLOR,
+    TEXTURE_MAPPING
+};
+
 class Renderer
 {
     //封装app渲染过程

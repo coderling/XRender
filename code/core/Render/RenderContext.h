@@ -29,74 +29,27 @@ public:
     {
     }
 
-    void Init(const int w, const int h)
-    {
-        if(m_renderSurface == nullptr)
-        {
-            m_width = w; m_height = h;
-            CreateRenderSurface();
-        }
-    }
+    void Init(const int w, const int h);
+    
+    void Releae();
 
-    void Releae()
-    {
-        if(m_renderSurface != nullptr)
-        {
-            SDL_FreeSurface(m_renderSurface);
-            m_renderSurface = nullptr;
-        }
-    }
+    void Lock();
 
-    void Lock()
-    {
-
-        if(SDL_MUSTLOCK(m_renderSurface))
-        {
-            SDL_LockSurface(m_renderSurface);
-        } 
-    }
-
-    void UnLock()
-    {
-        if(SDL_MUSTLOCK(m_renderSurface))
-        {
-            SDL_UnlockSurface(m_renderSurface);
-        }
-    }
-
+    void UnLock();
+    
     inline SDL_Surface* GetSurface(){ return m_renderSurface; }
+
+    static Color SampleDefaultTex(float u, float v);
 
     inline void Clear()
     {
         SDL_FillRect(m_renderSurface, NULL, SDL_MapRGB(m_renderSurface->format, 0, 85, 255));
     }
 
-    void DrawPixel(const int& x, const int& y, const Color& color)
-    {
-        auto pixels = (Uint32*)m_renderSurface->pixels;
-        auto ind = y * m_renderSurface->w + x;
-        pixels[ind] = HashColor(m_renderSurface->format, color.r, color.g, color.b, color.a);
-    }
+    void DrawPixel(const int& x, const int& y, const Color& color);
 private:
     SDL_Surface* m_renderSurface;
+    static SDL_Surface* m_defaultTex;
 
-    inline void CreateRenderSurface()
-    {
-        Uint32 rmask, gmask, bmask, amask;
-        /* SDL interprets each pixel as a 32-bit number, so our masks must depend
-        on the endianness (byte order) of the machine */
-        #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-            rmask = 0xff000000;
-            gmask = 0x00ff0000;
-            bmask = 0x0000ff00;
-            amask = 0x000000ff;
-        #else
-            rmask = 0x000000ff;
-            gmask = 0x0000ff00;
-            bmask = 0x00ff0000;
-            amask = 0xff000000;
-        #endif
-            m_renderSurface = SDL_CreateRGBSurface(0, m_width, m_height, 32, rmask,
-                                          gmask, bmask, amask);
-  }
+    SDL_Surface* CreateSurface(int w, int h);
 };

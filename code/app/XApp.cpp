@@ -222,7 +222,7 @@ void XApp::CatchInput()
             {
                 this->Terminate();
             }
-            else if(m_sdlEvent.key.keysym.sym == SDLK_0)
+            else if(m_sdlEvent.key.keysym.sym == SDLK_3)
             {
                 SetRenderMode(LINE_MODE);
             }

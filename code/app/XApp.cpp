@@ -48,6 +48,7 @@ void XApp::SDLEnvInit(std::string title, int w, int h, Uint32 initOpt, Uint32 wi
 
     m_renderContext.Init(w, h);
 
+
     std::cout <<"SDL_CreateRenderer: finish int" <<SDL_GetError() <<std::endl;
 }
 
@@ -99,10 +100,13 @@ void XApp::AppLoop()
     Release();
 }
 
+static float m_grotationX = 0;
+static float m_grotationY = 0;
+static float m_grotationZ = 0;
+
 void XApp::Render()
 {
-    static float rotatey = 0;
-    rotatey += 0.01f;
+    
     m_renderContext.Clear();
     m_renderContext.Lock();
     //变换
@@ -110,7 +114,9 @@ void XApp::Render()
     Matrix4x3 vmat = m_camera.GetCameraMatrix();
     for(auto ob : m_objects)
     {   
-        ob->m_rotation.y = rotatey;
+        ob->m_rotation.x = m_grotationX; 
+        ob->m_rotation.y = m_grotationY;
+        ob->m_rotation.z = m_grotationZ;
         auto mesh = ob->GetMesh();
         auto verteies = mesh->GetVerteies();
         int count;
@@ -151,20 +157,29 @@ void XApp::Render()
             if(inc > 0)
             {
                 traps.clear();
-                DivisionTriangle(points[0], points[1], points[2], traps);
-                fragments.empty();
-                Color c;
-                for(int t = 0; t < traps.size(); ++t)
+                if(m_eRenderMode == LINE_MODE)
                 {
-                    ScanLineTrapezoidal(m_renderContext, traps[t], fragments);
-                    for(int f = 0; f < fragments.size(); ++f)
+                    m_renderContext.DrawLine(points[0].pos.x, points[0].pos.y, points[1].pos.x, points[1].pos.y);
+                    m_renderContext.DrawLine(points[1].pos.x, points[1].pos.y, points[2].pos.x, points[2].pos.y);
+                    m_renderContext.DrawLine(points[0].pos.x, points[0].pos.y, points[2].pos.x, points[2].pos.y);
+                }
+                else
+                {
+                    DivisionTriangle(points[0], points[1], points[2], traps);
+                    fragments.empty();
+                    Color c;
+                    for(int t = 0; t < traps.size(); ++t)
                     {
-                        c = fragments[f].color;
-                        if(m_eRenderMode == TEXTURE_MAPPING)
+                        ScanLineTrapezoidal(m_renderContext, traps[t], fragments);
+                        for(int f = 0; f < fragments.size(); ++f)
                         {
-                            c = shader->Frag(fragments[f]);
+                            c = fragments[f].color;
+                            if(m_eRenderMode == TEXTURE_MAPPING)
+                            {
+                                c = shader->Frag(fragments[f]);
+                            }
+                            m_renderContext.DrawPixel(fragments[f].pos.x, fragments[f].pos.y, fragments[f].pos.z, c);
                         }
-                        m_renderContext.DrawPixel(fragments[f].pos.x, fragments[f].pos.y, fragments[f].pos.z, c);
                     }
                 }
             }
@@ -206,6 +221,38 @@ void XApp::CatchInput()
             if(m_sdlEvent.key.keysym.sym == SDLK_ESCAPE)
             {
                 this->Terminate();
+            }
+            else if(m_sdlEvent.key.keysym.sym == SDLK_0)
+            {
+                SetRenderMode(LINE_MODE);
+            }
+            else if(m_sdlEvent.key.keysym.sym == SDLK_1)
+            {
+                SetRenderMode(SOILD_COLOR);
+            }
+            else if(m_sdlEvent.key.keysym.sym == SDLK_2)
+            {
+                SetRenderMode(TEXTURE_MAPPING);
+            }
+
+            if(m_sdlEvent.key.keysym.sym == SDLK_RIGHT)
+            {
+                m_grotationY += 0.1;
+            }
+
+            if(m_sdlEvent.key.keysym.sym == SDLK_LEFT)
+            {
+                m_grotationY -= 0.1;
+            }
+
+            if(m_sdlEvent.key.keysym.sym == SDLK_UP)
+            {
+                m_grotationX += 0.1;
+            }
+
+            if(m_sdlEvent.key.keysym.sym == SDLK_DOWN)
+            {
+                m_grotationX -= 0.1;
             }
         }
         else if(m_sdlEvent.type == SDL_MOUSEBUTTONDOWN)

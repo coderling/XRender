@@ -44,6 +44,7 @@ public:
     void Clear();
 
     void DrawPixel(const int& x, const int& y, const float& depth, const Color& color);
+    void DrawLine(const int &x1, const int &y1, const int &x2, const int &y2);
 private:
     SDL_Surface* m_renderSurface;
     static SDL_Surface* m_defaultTex;

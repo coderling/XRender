@@ -1,6 +1,6 @@
 #include "RenderContext.h"
 #include <math.h>
-
+#include "code/core/primitive/PrimitiveUtil.h"
 
 void RenderContext::Lock()
 {
@@ -29,6 +29,14 @@ void RenderContext::DrawPixel(const int &x, const int &y, const float& depth, co
     pixels[ind] =
      HashColor(m_renderSurface->format, color.r, color.g, color.b, color.a);
      m_zbuffer[ind] = depth;
+}
+
+void RenderContext::DrawLine(const int &x1, const int &y1, const int &x2, const int &y2)
+{
+    XPoint p1, p2;
+    p1.x = x1, p1.y = y1;
+    p2.x = x2, p2.y = y2;
+    DrawLineBresenham(m_renderSurface, p1, p2);
 }
 
 void RenderContext::Init(const int w, const int h)
@@ -68,6 +76,8 @@ void RenderContext::Init(const int w, const int h)
     {
         m_zbuffer = new float[w*h]{99};
     }
+
+    SetWireDrawColor(m_renderSurface->format, 0, 0, 0, 255);
 }
 
 void RenderContext::Clear()

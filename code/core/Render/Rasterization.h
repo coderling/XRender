@@ -11,6 +11,7 @@
 #include "RenderContext.h"
 #include "code/core/math/RMath.h"
 #include <iostream>
+#include <math.h>
 
 struct Segment_t
 {
@@ -210,17 +211,21 @@ void ScanLineTrapezoidal(const RenderContext& renderContext, const Trapezoidal_t
         if(top >= 0 && top <= wh)
         {
             t = (top - trap.left.start.pos.y) / (trap.left.end.pos.y - trap.left.start.pos.y);
+            t = std::min(t, 1.0f);
+            t = std::max(0.0f, t);
             pxl = Lerp(trap.left.start.pos.x, trap.left.end.pos.x, t);
             lz = Lerp(trap.left.start.pos.z, trap.left.end.pos.z, t);
             lc = LerpColor(trap.left.start.color, trap.left.end.color, t);
             luv = LerpTexcoord(trap.left.start.tex, trap.left.end.tex, t);
 
             t = (top - trap.right.start.pos.y) / (trap.right.end.pos.y - trap.right.start.pos.y);
+            t = std::min(t, 1.0f);
+            t = std::max(0.0f, t);
             pxr = Lerp(trap.right.start.pos.x, trap.right.end.pos.x, t);
             rz = Lerp(trap.right.start.pos.z, trap.right.end.pos.z, t);
             rc = LerpColor(trap.right.start.color, trap.right.end.color, t);
             ruv = LerpTexcoord(trap.right.start.tex, trap.right.end.tex, t);
-
+         
             left = (int)(pxl + 0.5f);
             right = (int)(pxr + 0.5f);
 

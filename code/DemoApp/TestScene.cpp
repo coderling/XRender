@@ -41,30 +41,29 @@ static void AddTriangle()
     pAppInstance->AddObject(ob);
 }
 
-static SDL_Surface* gDefaultTex;
-static void CreateDefaultTexture()
-{
-
-}
 
 static void AddCube()
 {
     Cube* cubeMesh = new Cube(2, 2, 2);
-    Material mat;
+    auto verteies = cubeMesh->GetVerteies();
+    
 
+    Material mat;
+    Object *ob = new Object();
+    ob->AttachMesh(cubeMesh);
+    ob->m_rotation.y = 0;
+    pAppInstance->AddObject(ob);
 }
 
 
 
 void TestScene::Start()
 {
-    AddTriangle();
+    //AddTriangle();
+    AddCube();
 }
 
 void TestScene::Destory()
 {
-    if(gDefaultTex != nullptr)
-    {
-
-    }
+ 
 }

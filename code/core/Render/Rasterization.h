@@ -146,7 +146,7 @@ void DivisionTriangle(const VertOut& v1, const VertOut& v2, const VertOut& v3, s
     float t = (p2->pos.y - p3->pos.y) / (p1->pos.y - p3->pos.y);
     float px = t * (p1->pos.x - p3->pos.x) + p3->pos.x;
 
-    if(px > p2->pos.x)
+    if(px < p2->pos.x)
     {
         //p2 on right of line p1-p3
         Trapezoidal_t trap0;
@@ -163,8 +163,8 @@ void DivisionTriangle(const VertOut& v1, const VertOut& v2, const VertOut& v3, s
         trap1.bottom = p1->pos.y;
         trap1.left.start = *p3;
         trap1.left.end = *p1;
-        trap1.right.start = *p3;
-        trap1.right.end = *p2;
+        trap1.right.start = *p2;
+        trap1.right.end = *p1;
         traps.push_back(trap1);
         return;
     }
@@ -183,8 +183,8 @@ void DivisionTriangle(const VertOut& v1, const VertOut& v2, const VertOut& v3, s
         Trapezoidal_t trap1;
         trap1.top = p2->pos.y;
         trap1.bottom = p1->pos.y;
-        trap1.left.start = *p3;
-        trap1.left.end = *p2;
+        trap1.left.start = *p2;
+        trap1.left.end = *p1;
         trap1.right.start = *p3;
         trap1.right.end = *p1;
         traps.push_back(trap1);

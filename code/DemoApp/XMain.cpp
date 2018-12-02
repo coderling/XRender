@@ -12,6 +12,7 @@ int main(int, char **)
         pAppInstance->SetCameraLookAt(Vector3(0, 0, -5), Vector3(0, 1, 0), Vector3(0, 0, 1));
         TestScene ts;
         ts.Start();
+        //pAppInstance->SetRenderMode(SOILD_COLOR);
         pAppInstance->AppLoop();
     }
     return 0;

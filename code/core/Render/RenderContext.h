@@ -41,15 +41,13 @@ public:
 
     static Color SampleDefaultTex(float u, float v);
 
-    inline void Clear()
-    {
-        SDL_FillRect(m_renderSurface, NULL, SDL_MapRGB(m_renderSurface->format, 0, 85, 255));
-    }
+    void Clear();
 
-    void DrawPixel(const int& x, const int& y, const Color& color);
+    void DrawPixel(const int& x, const int& y, const float& depth, const Color& color);
 private:
     SDL_Surface* m_renderSurface;
     static SDL_Surface* m_defaultTex;
 
     SDL_Surface* CreateSurface(int w, int h);
+    float* m_zbuffer;
 };

@@ -13,7 +13,7 @@
 #include "code/core/basic/Object.h"
 #include "code/core/primitive/Vertex.h"
 
-class Cube : public Object
+class Cube : public Mesh 
 {
 public:
     Cube(float l, float w, float h): m_length(l), m_width(w), m_height(h)
@@ -23,7 +23,7 @@ public:
 
     inline Vertex* GetVerteies(){ return m_verteies; }
 
-    inline int GetIndeies(const int* pIndeies){  pIndeies = m_indeies; return 36; }
+    inline const int* GetIndeies(int *count){  *count = 36; return m_indeies; }
 
 protected:
     float m_length;

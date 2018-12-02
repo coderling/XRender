@@ -18,11 +18,17 @@ void RenderContext::UnLock()
     }
 }
 
-void RenderContext::DrawPixel(const int &x, const int &y, const Color &color) {
-    auto pixels = (Uint32 *)m_renderSurface->pixels;
+void RenderContext::DrawPixel(const int &x, const int &y, const float& depth, const Color &color) {
     auto ind = y * m_renderSurface->w + x;
+    if(m_zbuffer[ind] < depth)
+    {
+        return;
+    }
+
+    auto pixels = (Uint32 *)m_renderSurface->pixels;
     pixels[ind] =
      HashColor(m_renderSurface->format, color.r, color.g, color.b, color.a);
+     m_zbuffer[ind] = depth;
 }
 
 void RenderContext::Init(const int w, const int h)
@@ -39,13 +45,14 @@ void RenderContext::Init(const int w, const int h)
         auto pixels = (Uint32 *)m_defaultTex->pixels;
         Uint32 white = HashColor(m_defaultTex->format, 255, 255, 255, 255); 
         Uint32 black = HashColor(m_defaultTex->format, 0, 0, 0, 255);
+        
         for(int i = 0; i < 256; i++)
         {
             for(int j = 0; j < 256; j++)
             {
-                int flag = (i * 16 + j / 16) % 2;
-                int rf = i % 2;
-                if(flag == rf)
+                int f1 = (i / 16) % 2;
+                int f2 = (j / 16) % 2;
+                if(f1 == f2)
                 {
                     pixels[i * 256 + j] = white;
                 }
@@ -55,6 +62,21 @@ void RenderContext::Init(const int w, const int h)
                 }
             }
         }
+    }
+
+    if(m_zbuffer == nullptr)
+    {
+        m_zbuffer = new float[w*h]{99};
+    }
+}
+
+void RenderContext::Clear()
+{
+    SDL_FillRect(m_renderSurface, NULL, SDL_MapRGB(m_renderSurface->format, 0, 85, 255));
+    int maxI = m_renderSurface->w * m_renderSurface->h;
+    for(int i = 0; i < maxI; ++i)
+    {
+        m_zbuffer[i] = 99;
     }
 }
 
@@ -81,12 +103,12 @@ Color RenderContext::SampleDefaultTex(float u, float v)
 
     int x = u * tw + 0.5f;
     int y = v * th + 0.5f;
-    x = SuarateXY(x, 0, 256);
-    y = SuarateXY(y, 0, 256);
+    x = SuarateXY(x, 0, 255);
+    y = SuarateXY(y, 0, 255);
     
     auto pixels = (Uint32 *)m_defaultTex->pixels;
     Color c;
-    SDL_GetRGBA(pixels[x * tw + y], m_defaultTex->format, &c.r, &c.g, &c.b, &c.a);
+    SDL_GetRGBA(pixels[x * 256 + y], m_defaultTex->format, &c.r, &c.g, &c.b, &c.a);
     return c;
 }
 
@@ -102,6 +124,12 @@ void RenderContext::Releae()
     {
         SDL_FreeSurface(m_defaultTex);
         m_defaultTex = nullptr;
+    }
+
+    if(m_zbuffer != nullptr)
+    {
+        delete[] m_zbuffer;
+        m_zbuffer = nullptr;
     }
 }
 

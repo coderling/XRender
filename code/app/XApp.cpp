@@ -101,6 +101,8 @@ void XApp::AppLoop()
 
 void XApp::Render()
 {
+    static float rotatey = 0;
+    rotatey += 0.01f;
     m_renderContext.Clear();
     m_renderContext.Lock();
     //变换
@@ -108,15 +110,16 @@ void XApp::Render()
     Matrix4x3 vmat = m_camera.GetCameraMatrix();
     for(auto ob : m_objects)
     {   
+        ob->m_rotation.y = rotatey;
         auto mesh = ob->GetMesh();
         auto verteies = mesh->GetVerteies();
-        int *pIndeies = nullptr;
-        auto count = mesh->GetIndeies(pIndeies);
+        int count;
+        auto pIndeies = mesh->GetIndeies(&count);
         int triangleCount = count / 3;
         auto material = mesh->GetMat();
         auto shader = material.GetShader();
-        
-        shader->PreVert(ob->ModelMatrix(), vp);
+        auto modelMat = ob->ModelMatrix();
+        shader->PreVert(modelMat, vp);
 
         VertInput vin;
         std::vector<VertOut> fragments;
@@ -124,18 +127,19 @@ void XApp::Render()
         
         for(int i = 0; i < triangleCount; ++i)
         {
-            auto tri = verteies + i;
+            auto tri = pIndeies + i * 3;
             VertOut points[3];
             //简单检查三角形是否在cvv内，只要一个点在cvv内都不做裁剪
             int inc = 0;
             for(int j = 0; j < 3; j++)
             {
-                auto ver = *(tri + j);
+                auto vInd = *(tri + j);
+                auto ver = *(verteies + vInd);
                 vin.pos = ver.pos;
                 vin.color = ver.color;
                 vin.tex = ver.uv;
                 points[j] = shader->Vert(vin);
-                float w = (ver.pos * vmat).z;
+                float w = (ver.pos * modelMat * vmat).z;
                 //这里有点不好理解，其实是因为计算出来的变换矩阵公式w = z, z 为摄像机空间下的z值
                 if(Check_CVV(points[j].pos, w))
                 {
@@ -146,7 +150,7 @@ void XApp::Render()
 
             if(inc > 0)
             {
-                traps.empty();
+                traps.clear();
                 DivisionTriangle(points[0], points[1], points[2], traps);
                 fragments.empty();
                 Color c;
@@ -155,12 +159,12 @@ void XApp::Render()
                     ScanLineTrapezoidal(m_renderContext, traps[t], fragments);
                     for(int f = 0; f < fragments.size(); ++f)
                     {
-                        c = fragments[i].color;
+                        c = fragments[f].color;
                         if(m_eRenderMode == TEXTURE_MAPPING)
                         {
                             c = shader->Frag(fragments[f]);
                         }
-                        m_renderContext.DrawPixel(fragments[f].pos.x, fragments[f].pos.y, c);
+                        m_renderContext.DrawPixel(fragments[f].pos.x, fragments[f].pos.y, fragments[f].pos.z, c);
                     }
                 }
             }

@@ -8,7 +8,7 @@ class Mesh : public BaseObject
 public:
 
     virtual Vertex* GetVerteies() = 0;
-    virtual int GetIndeies(const int* pIndeies) = 0;
+    virtual const int* GetIndeies(int* c) = 0;
     inline void SetMat(const Material& mat){ m_mat = mat; }
     inline const Material& GetMat(){ return m_mat; }
     virtual void Start(){}

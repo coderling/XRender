@@ -17,7 +17,7 @@ public:
     
     inline Vertex* GetVerteies(){ return m_verteies; }
 
-    inline int GetIndeies(const int* pIndeies){ pIndeies = m_indeies; return 3; }
+    inline const int* GetIndeies(int* count){ *count = 3; return m_indeies; }
 
 private:
     

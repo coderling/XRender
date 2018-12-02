@@ -18,11 +18,31 @@ void Cube::InitVertexData()
     m_verteies[0].pos.x = m_verteies[1].pos.x = m_verteies[2].pos.x = m_verteies[3].pos.x = -hw;
     m_verteies[4].pos.x = m_verteies[5].pos.x = m_verteies[6].pos.x = m_verteies[7].pos.x = hw;
     
-    m_verteies[0].pos.y = m_verteies[3].pos.y = m_verteies[7].pos.y = m_verteies[4].pos.y = -hh;
-    m_verteies[1].pos.y = m_verteies[2].pos.y = m_verteies[6].pos.y = m_verteies[5].pos.y = hh;
+    m_verteies[0].pos.y = m_verteies[4].pos.y = m_verteies[5].pos.y = m_verteies[1].pos.y = -hh;
+    m_verteies[3].pos.y = m_verteies[7].pos.y = m_verteies[2].pos.y = m_verteies[6].pos.y = hh;
     
-    m_verteies[0].pos.z = m_verteies[1].pos.z = m_verteies[5].pos.z = m_verteies[4].pos.z = -hl;
-    m_verteies[3].pos.z = m_verteies[2].pos.z = m_verteies[6].pos.z = m_verteies[7].pos.z = hl;
+    m_verteies[0].pos.z = m_verteies[4].pos.z = m_verteies[3].pos.z = m_verteies[7].pos.z = -hl;
+    m_verteies[1].pos.z = m_verteies[5].pos.z = m_verteies[2].pos.z = m_verteies[6].pos.z = hl;
+
+    //uv
+    m_verteies[0].uv.u = 0, m_verteies[0].uv.v = 0;
+    m_verteies[1].uv.u = 0, m_verteies[1].uv.v = 1;
+    m_verteies[2].uv.u = 1, m_verteies[2].uv.v = 1;
+    m_verteies[3].uv.u = 1, m_verteies[3].uv.v = 0;
+
+    m_verteies[4].uv.u = 0, m_verteies[4].uv.v = 0;
+    m_verteies[5].uv.u = 0, m_verteies[5].uv.v = 1;
+    m_verteies[6].uv.u = 1, m_verteies[6].uv.v = 1;
+    m_verteies[7].uv.u = 1, m_verteies[7].uv.v = 0;
+
+    m_verteies[0].color = Color(0, 0, 0, 255);
+    m_verteies[1].color = Color(255, 0, 0, 255);
+    m_verteies[2].color = Color(255, 255, 0, 255);
+    m_verteies[3].color = Color(255, 255, 255, 255);
+    m_verteies[4].color = Color(0, 255, 0, 255);
+    m_verteies[5].color = Color(0, 255, 255, 255);
+    m_verteies[6].color = Color(0, 0, 255, 255);
+    m_verteies[7].color = Color(255, 0, 255, 255);
 }
 
 const int Cube::m_indeies[36] = {

@@ -1,6 +1,1 @@
-### 这是个软件渲染器，基于SDL2
-
-#### 屏幕坐标系
-左上角为(0,0),右下角为(screenW, screenH)
-
-#### 世界坐标系，采用左手坐标系
+# New SoftwareRenderer

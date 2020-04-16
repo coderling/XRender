@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 // Bresenham's line
-void bresenham(int x0, int y0, int x1, int y1, TGAImage &image, TGAColor color)
+void bresenham(int x0, int y0, int x1, int y1, TGAImage &image, const TGAColor &color)
 {
     bool steep = false;
     if(std::abs(x0 - x1) < std::abs(y0 - y1))
@@ -45,7 +45,7 @@ void bresenham(int x0, int y0, int x1, int y1, TGAImage &image, TGAColor color)
     }
 }
 
-void line(int x0, int y0, int x1, int y1, TGAImage &image, TGAColor color)
+void line(int x0, int y0, int x1, int y1, TGAImage &image, const TGAColor &color)
 {
     bresenham(x0, y0, x1, y1, image, color);
 }

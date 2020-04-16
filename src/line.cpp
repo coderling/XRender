@@ -18,8 +18,10 @@ void bresenham(int x0, int y0, int x1, int y1, TGAImage &image, TGAColor color)
         std::swap(y0, y1);
     }
 
-    float delta = std::(dy/float(dx));
-    float total = 0;
+    int dx = x1 - x0;
+    int dy = y1 - y0;
+    int delta = std::abs(dy);
+    int total = 0;
     int y = y0;
     int yd = y1 > y0 ? 1 : -1;
     for(int x = x0; x <= x1; x++)
@@ -35,10 +37,10 @@ void bresenham(int x0, int y0, int x1, int y1, TGAImage &image, TGAColor color)
 
         // 这样迭代省了四舍五入
         total += delta;
-        if(total > 0.5)
+        if(total > dx)
         {
             y += yd;
-            total -= 1.0;
+            total -= dx * 2;
         }
     }
 }

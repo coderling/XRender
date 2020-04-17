@@ -20,7 +20,7 @@ void bresenham(int x0, int y0, int x1, int y1, TGAImage &image, const TGAColor &
 
     int dx = x1 - x0;
     int dy = y1 - y0;
-    int delta = std::abs(dy);
+    int delta = std::abs(dy)*2;
     int total = 0;
     int y = y0;
     int yd = y1 > y0 ? 1 : -1;
@@ -35,7 +35,6 @@ void bresenham(int x0, int y0, int x1, int y1, TGAImage &image, const TGAColor &
             image.set(x, y, color);
         }
 
-        // 这样迭代省了四舍五入
         total += delta;
         if(total > dx)
         {

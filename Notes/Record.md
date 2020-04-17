@@ -6,4 +6,10 @@
 
 * 考虑clang-cl编译，vscode分析调试
 
-* Bresenham 优化，减少计算量，去浮点运算
+* Bresenham 优化
+
+    * 减少计算量
+
+    * 去浮点运算
+
+* 模型格式： [wavefront obj file](https://en.wikipedia.org/wiki/Wavefront_.obj_file)

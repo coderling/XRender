@@ -4,6 +4,7 @@
 #include "geometry.h"
 #include "tgaimage.h"
 #include <stdlib.h>
+#include <algorithm>
 
 const TGAColor twhite = TGAColor(255, 255, 255, 255);
 const TGAColor tred = TGAColor(255, 0, 0, 255);
@@ -52,7 +53,7 @@ void triangle(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage &image, const TGAColor &col
 Vec3f barycentric(Vec2i *points, Vec2i p)
 {
     Vec3f v1(points[2][0] - points[0][0], points[1][0] - points[0][0], points[0][0] - p[0]);
-    Vec3f v2(points[2][1] - points[0][1], points[1][1] - points[0][1], points[0][1] - p[0]);
+    Vec3f v2(points[2][1] - points[0][1], points[1][1] - points[0][1], points[0][1] - p[1]);
     Vec3f u = cross(v1, v2);
     // y < 0 说明，v1,v2，向量共线, 随便返回< 0 vec3
     if(std::abs(u[2]) < 1) return Vec3f(-1, 1, 1);
@@ -70,8 +71,8 @@ void triangleBoundingbox(Vec2i *points, TGAImage &image, TGAColor color)
     {
         for(int j = 0; j < 2; ++j)
         {
-            bboxmin[j] = std::max(0, std::max(bboxmin[i][j], points[i][j]));
-            bboxmax[j] = std::max(clamp[j], std::max(bboxmax[i][j], points[i][j]));
+            bboxmin[j] = std::max(0, std::min(bboxmin[j], points[i][j]));
+            bboxmax[j] = std::min(clamp[j], std::max(bboxmax[j], points[i][j]));
         }
     }
 
@@ -79,7 +80,7 @@ void triangleBoundingbox(Vec2i *points, TGAImage &image, TGAColor color)
     Vec2i p;
     for(p.y = bboxmin.y; p.y <= bboxmax.y; ++p.y)
     {
-        for(p.x = bboxmin.x; p.x <= bboxmax.y; ++p.x)
+        for(p.x = bboxmin.x; p.x <= bboxmax.x; ++p.x)
         {
             Vec3f bc = barycentric(points, p);
             if(bc.x < 0 || bc.y < 0 || bc.z < 0) continue;

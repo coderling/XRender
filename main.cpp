@@ -23,13 +23,8 @@ int main(int argc, char** argv)
     }
 
     TGAImage image(width, height, TGAImage::RGB);
-    Vec2i t1[3] = {Vec2i(10, 70), Vec2i(50, 160), Vec2i(70, 80)};
-    Vec2i t2[3] = {Vec2i(180, 50), Vec2i(150, 1), Vec2i(70, 180)};
-    Vec2i t3[3] = {Vec2i(180, 150), Vec2i(120, 160), Vec2i(130, 180)};
-    triangle(t1[0], t1[1], t1[2], image, red);    
-    triangle(t2[0], t2[1], t2[2], image, red);    
-    triangle(t3[0], t3[1], t3[2], image, red);    
-
+    Vec2i pts[3] = {Vec2i(10,10), Vec2i(100, 30), Vec2i(190, 160)}; 
+    triangleBoundingbox(pts, image, red)
     image.flip_vertically();
     image.write_tga_file("output.tga");
     delete model;

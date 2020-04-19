@@ -13,3 +13,7 @@
     * 去浮点运算
 
 * 模型格式： [wavefront obj file](https://en.wikipedia.org/wiki/Wavefront_.obj_file)
+
+* 通过扫描三角形包围盒进行三角形绘制
+
+    * 通过叉乘求某个点p得重心坐标

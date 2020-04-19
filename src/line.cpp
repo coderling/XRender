@@ -1,4 +1,5 @@
 #include "tgaimage.h"
+#include "geometry.h"
 #include <stdlib.h>
 
 // Bresenham's line
@@ -47,4 +48,9 @@ void bresenham(int x0, int y0, int x1, int y1, TGAImage &image, const TGAColor &
 void line(int x0, int y0, int x1, int y1, TGAImage &image, const TGAColor &color)
 {
     bresenham(x0, y0, x1, y1, image, color);
+}
+
+void line(Vec2i t1, Vec2i t2, TGAImage &image, const TGAColor &color)
+{
+    line(t1.x, t1.y, t2.x, t2.y, image, color);
 }

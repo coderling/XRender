@@ -50,42 +50,50 @@ void triangle(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage &image, const TGAColor &col
 }
 
 // 求重心坐标
-Vec3f barycentric(Vec2i *points, Vec2i p)
+Vec3f barycentric(Vec3f *points, Vec2f p)
 {
     Vec3f v1(points[2][0] - points[0][0], points[1][0] - points[0][0], points[0][0] - p[0]);
     Vec3f v2(points[2][1] - points[0][1], points[1][1] - points[0][1], points[0][1] - p[1]);
     Vec3f u = cross(v1, v2);
     // y < 0 说明，v1,v2，向量共线, 随便返回< 0 vec3
-    if(std::abs(u[2]) < 1) return Vec3f(-1, 1, 1);
-    return Vec3f(1.0f - (u.x + u.y)/u.z, u.y/u.z, u.x/ u.z);
+    if(std::abs(u[2]) < 1e-2) return Vec3f(-1, 1, 1);
+    return Vec3f(1.0f - (u.x + u.y)/u.z, u.y/u.z, u.x/u.z);
 }
 
-void triangleBoundingbox(Vec2i *points, TGAImage &image, TGAColor color)
+void triangleBoundingbox(Vec3f *points, float* zbuffer, TGAImage &image, TGAColor color)
 {
     int width = image.get_width();
     int height = image.get_height();
-    Vec2i bboxmax(0, 0);
-    Vec2i bboxmin(width - 1, height - 1);
-    Vec2i clamp(width - 1, height - 1);
+    float floatMax = std::numeric_limits<float>::max();
+    Vec2f bboxmax(-floatMax, -floatMax);
+    Vec2f bboxmin(floatMax, floatMax);
+    Vec2f clamp(float(width - 1), float(height - 1));
     for(int i = 0; i < 3; ++i)
     {
         for(int j = 0; j < 2; ++j)
         {
-            bboxmin[j] = std::max(0, std::min(bboxmin[j], points[i][j]));
+            bboxmin[j] = std::max(0.f, std::min(bboxmin[j], points[i][j]));
             bboxmax[j] = std::min(clamp[j], std::max(bboxmax[j], points[i][j]));
         }
     }
 
     //scan line
-    Vec2i p;
+    Vec2f p;
+    float z;
     for(p.y = bboxmin.y; p.y <= bboxmax.y; ++p.y)
     {
         for(p.x = bboxmin.x; p.x <= bboxmax.x; ++p.x)
         {
             Vec3f bc = barycentric(points, p);
             if(bc.x < 0 || bc.y < 0 || bc.z < 0) continue;
-
-            image.set(p.x, p.y, color);
+            z = 0;
+            // 这想法还是挺巧的，利用重心坐标比例关系计算深度
+            for(int i = 0; i < 3; i++) z += points[i][2] * bc[i];
+            if(zbuffer[int(p.x + p.y * width)] < z)
+            {
+                zbuffer[int(p.x + p.y * width)] = z;
+                image.set(p.x, p.y, color);
+            }
         }
     }
 }

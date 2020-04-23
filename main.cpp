@@ -37,11 +37,13 @@ int main(int argc, char** argv)
         std::vector<int> face = model->face(faceIndex);
         Vec3f screen_coords[3];
         Vec3f world_coords[3];
+		Vec2f tex_coords[3];
         for(int i = 0; i < 3; ++i)
         {
             Vec3f world_coord= model->vert(face[i]);
             screen_coords[i] = Vec3f(int((world_coord.x + 1.0f) * width / 2.0f + 0.5), int((world_coord.y + 1.0f) * height / 2.0f + 0.5), world_coord.z);
             world_coords[i] = world_coord;
+			tex_coords[i] = model->uv(faceIndex, i);
         }
 
         // cross
@@ -50,7 +52,7 @@ int main(int argc, char** argv)
         float intensity = n * light_dir;
         if(intensity > 0)
         {
-            triangleBoundingbox(screen_coords, zbuffer, image, TGAColor(intensity * 255, intensity * 255, intensity * 255, 255));
+            triangleBoundingbox(model, screen_coords, tex_coords, zbuffer, image);
         }
     } 
     image.flip_vertically();

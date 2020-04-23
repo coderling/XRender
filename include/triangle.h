@@ -60,7 +60,7 @@ Vec3f barycentric(Vec3f *points, Vec2f p)
     return Vec3f(1.0f - (u.x + u.y)/u.z, u.y/u.z, u.x/u.z);
 }
 
-void triangleBoundingbox(Vec3f *points, float* zbuffer, TGAImage &image, TGAColor color)
+void triangleBoundingbox(Model* model, Vec3f *points, Vec2f *tex_coords, float* zbuffer, TGAImage &image)
 {
     int width = image.get_width();
     int height = image.get_height();
@@ -80,6 +80,7 @@ void triangleBoundingbox(Vec3f *points, float* zbuffer, TGAImage &image, TGAColo
     //scan line
     Vec2f p;
     float z;
+	Vec2f uv;
     for(p.y = bboxmin.y; p.y <= bboxmax.y; ++p.y)
     {
         for(p.x = bboxmin.x; p.x <= bboxmax.x; ++p.x)
@@ -87,12 +88,19 @@ void triangleBoundingbox(Vec3f *points, float* zbuffer, TGAImage &image, TGAColo
             Vec3f bc = barycentric(points, p);
             if(bc.x < 0 || bc.y < 0 || bc.z < 0) continue;
             z = 0;
+			uv.x = uv.y = 0;
             // 这想法还是挺巧的，利用重心坐标比例关系计算深度
-            for(int i = 0; i < 3; i++) z += points[i][2] * bc[i];
+			for (int i = 0; i < 3; i++)
+			{
+				z += points[i][2] * bc[i];
+				uv.x += tex_coords[i].x * bc[i];
+				uv.y += tex_coords[i].y * bc[i];
+			}
+
             if(zbuffer[int(p.x + p.y * width)] < z)
             {
                 zbuffer[int(p.x + p.y * width)] = z;
-                image.set(p.x, p.y, color);
+                image.set(p.x, p.y, model->diffuse(uv));
             }
         }
     }

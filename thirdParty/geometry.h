@@ -137,6 +137,11 @@ public:
         assert(idx<DimCols);
         for (size_t i=DimRows; i--; rows[i][idx]=v[i]);
     }
+    
+	void set_row(size_t idx, vec<DimCols,T> v) {
+        assert(idx<DimRows);
+        for (size_t i=DimCols; i--; rows[idx][i]=v[i]);
+    }
 
     static mat<DimRows,DimCols,T> identity() {
         mat<DimRows,DimCols,T> ret;
@@ -217,4 +222,5 @@ typedef vec<3,  float> Vec3f;
 typedef vec<3,  int>   Vec3i;
 typedef vec<4,  float> Vec4f;
 typedef mat<4,4,float> Matrix;
+const float PI = 3.1415926535;
 #endif //__GEOMETRY_H__

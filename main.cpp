@@ -4,6 +4,7 @@
 #include <vector>
 #include "geometry.h"
 #include "triangle.h"
+#include "MVP.h"
 
 const TGAColor white = TGAColor(255, 255, 255, 255);
 const TGAColor red = TGAColor(255, 0, 0, 255);
@@ -11,6 +12,8 @@ const int width = 800;
 const int height = 800;
 Model* model = nullptr;
 float* zbuffer = nullptr;
+const Vec3f vec3f_one = Vec3f(1, 1, 1);
+const Vec3f vec3f_zero = Vec3f(0, 0, 0);
 
 int main(int argc, char** argv)
 {
@@ -32,6 +35,10 @@ int main(int argc, char** argv)
     }
 
     Vec3f light_dir(0, 0, -1);
+    Matrix modelM = ModelMatrix(Vec3f(0, 0, -2.f), vec3f_one, Vec3f(30, 30, -30));
+    Matrix viewM = CameraViewMatrixByLookAt(vec3f_zero, Vec3f(0, 1, 0), Vec3f(0, 0, -1));
+    Matrix projM = PerspectiveProjectionMatrix(60.f, width * 1.0f / height, -1.f, -100.f);
+    Matrix viewPortM = ViewPortMatrix(0, 0, width, height);
     for(int faceIndex = 0; faceIndex < model->nfaces(); faceIndex++)
     {
         std::vector<int> face = model->face(faceIndex);
@@ -40,9 +47,14 @@ int main(int argc, char** argv)
 		Vec2f tex_coords[3];
         for(int i = 0; i < 3; ++i)
         {
-            Vec3f world_coord= model->vert(face[i]);
-            screen_coords[i] = Vec3f(int((world_coord.x + 1.0f) * width / 2.0f + 0.5), int((world_coord.y + 1.0f) * height / 2.0f + 0.5), world_coord.z);
-            world_coords[i] = world_coord;
+            Vec3f v = model->vert(face[i]);
+			Vec4f v4 = embed<4>(v);
+            Vec4f world_coord= modelM * v4;
+            Vec4f spos = projM * viewM * world_coord;
+			spos[0] /= spos[3]; spos[1] /= spos[3]; spos[2] /= spos[3]; spos[3] = 1;
+			spos = viewPortM * spos;
+			screen_coords[i] = Vec3f((int)spos[0], (int)spos[1], (int)spos[2]);
+			world_coords[i] = embed<3>(world_coord);
 			tex_coords[i] = model->uv(faceIndex, i);
         }
 
@@ -55,7 +67,8 @@ int main(int argc, char** argv)
             triangleBoundingbox(model, screen_coords, tex_coords, zbuffer, image);
         }
     } 
-    image.flip_vertically();
+
+	image.flip_vertically();
     image.write_tga_file("output.tga");
     delete model;
     model = nullptr;

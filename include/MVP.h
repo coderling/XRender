@@ -102,7 +102,7 @@ Matrix OrthographicProjectionMatrix(float left, float right, float bottom, float
 
     float xscale = 2 / (right - left);
     float yscale = 2 / (top - bottom);
-    float zscale = 2 / (far - near);
+    float zscale = 2 / (near - far);
     
     Matrix scaleMatrix = Matrix::identity();
     scaleMatrix[0][0] = xscale;
@@ -127,10 +127,12 @@ Matrix PerspectiveProjectionMatrix(float left, float right, float bottom, float 
 
 Matrix PerspectiveProjectionMatrix(float fov, float aspect, float near, float far)
 {
-    float top = -near * tan(fov * PI / 2.0f / 180.0f);
+    float top = near * tan(fov * PI / 2.0f / 180.0f);
     float bottom = -top;
     float right = top * aspect;
     float left = -right;
+    near = -near;
+    far = -far;
     return PerspectiveProjectionMatrix(left, right, bottom, top, near, far);
 }
 

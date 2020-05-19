@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(XTiny)
-
+set(CMAKE_CXX_STANDARD 17)
 add_executable(XTiny main.cpp
                     thirdParty/tgaimage.cpp
                     thirdParty/model.cpp

@@ -64,27 +64,31 @@ void triangleBoundingbox(Model* model, Vec3f *points, Vec2f *tex_coords, float* 
 {
     int width = image.get_width();
     int height = image.get_height();
-    float floatMax = std::numeric_limits<float>::max();
-    Vec2f bboxmax(-floatMax, -floatMax);
-    Vec2f bboxmin(floatMax, floatMax);
-    Vec2f clamp(float(width - 1), float(height - 1));
+    Vec2i bboxmin(height, width);
+    Vec2i bboxmax(0, 0);
     for(int i = 0; i < 3; ++i)
     {
         for(int j = 0; j < 2; ++j)
         {
-            bboxmin[j] = std::max(0.f, std::min(bboxmin[j], points[i][j]));
-            bboxmax[j] = std::min(clamp[j], std::max(bboxmax[j], points[i][j]));
+            bboxmin[j] = std::floor(std::min((float)bboxmin[j], points[i][j])); 
+            bboxmax[j] = std::ceil(std::max((float)bboxmax[j], points[i][j])); 
         }
     }
+    bboxmin.x = std::clamp(bboxmin.x, 0, width);
+    bboxmin.y = std::clamp(bboxmin.y, 0, height);
+    bboxmax.x = std::clamp(bboxmax.x, 0, width);
+    bboxmax.y = std::clamp(bboxmax.y, 0, height);
 
     //scan line
     Vec2f p;
     float z;
 	Vec2f uv;
-    for(p.y = bboxmin.y; p.y <= bboxmax.y; ++p.y)
+    for(int x = bboxmin.x; x <= bboxmax.x; ++x)
     {
-        for(p.x = bboxmin.x; p.x <= bboxmax.x; ++p.x)
+        for(int y = bboxmin.y; y <= bboxmax.y; ++y)
         {
+            p.x = x + 0.5;
+            p.y = y + 0.5;
             Vec3f bc = barycentric(points, p);
             if(bc.x < 0 || bc.y < 0 || bc.z < 0) continue;
             z = 0;
@@ -96,11 +100,12 @@ void triangleBoundingbox(Model* model, Vec3f *points, Vec2f *tex_coords, float* 
 				uv.x += tex_coords[i].x * bc[i];
 				uv.y += tex_coords[i].y * bc[i];
 			}
-
-            if(zbuffer[int(p.x + p.y * width)] < z)
+			
+			z = -z;
+            if(zbuffer[int(x + y * width)] < z)
             {
-                zbuffer[int(p.x + p.y * width)] = z;
-                image.set(p.x, p.y, model->diffuse(uv));
+                zbuffer[int(x + y * width)] = z;
+                image.set(x, y, model->diffuse(uv));
             }
         }
     }

@@ -35,9 +35,9 @@ int main(int argc, char** argv)
     }
 
     Vec3f light_dir(0, 0, -1);
-    Matrix modelM = ModelMatrix(Vec3f(0, 0, -2.f), vec3f_one, Vec3f(30, 30, -30));
+    Matrix modelM = ModelMatrix(Vec3f(0, 0, -2.f), vec3f_one, Vec3f(0, 15, 0));
     Matrix viewM = CameraViewMatrixByLookAt(vec3f_zero, Vec3f(0, 1, 0), Vec3f(0, 0, -1));
-    Matrix projM = PerspectiveProjectionMatrix(60.f, width * 1.0f / height, -1.f, -100.f);
+    Matrix projM = PerspectiveProjectionMatrix(60.f, width * 1.0f / height, 0.1f, 100.f);
     Matrix viewPortM = ViewPortMatrix(0, 0, width, height);
     for(int faceIndex = 0; faceIndex < model->nfaces(); faceIndex++)
     {
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
             Vec4f spos = projM * viewM * world_coord;
 			spos[0] /= spos[3]; spos[1] /= spos[3]; spos[2] /= spos[3]; spos[3] = 1;
 			spos = viewPortM * spos;
-			screen_coords[i] = Vec3f((int)spos[0], (int)spos[1], (int)spos[2]);
+			screen_coords[i] = embed<3>(spos);
 			world_coords[i] = embed<3>(world_coord);
 			tex_coords[i] = model->uv(faceIndex, i);
         }

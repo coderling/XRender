@@ -1,0 +1,25 @@
+[
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\include -I..\\..\\thirdParty  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FoCMakeFiles\\XTiny.dir\\main.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\main.cpp",
+  "file": "C:/dev/MyGit/XRender/main.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\include -I..\\..\\thirdParty  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FoCMakeFiles\\XTiny.dir\\thirdParty\\tgaimage.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\thirdParty\\tgaimage.cpp",
+  "file": "C:/dev/MyGit/XRender/thirdParty/tgaimage.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\include -I..\\..\\thirdParty  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FoCMakeFiles\\XTiny.dir\\thirdParty\\model.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\thirdParty\\model.cpp",
+  "file": "C:/dev/MyGit/XRender/thirdParty/model.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\include -I..\\..\\thirdParty  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FoCMakeFiles\\XTiny.dir\\src\\line.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\line.cpp",
+  "file": "C:/dev/MyGit/XRender/src/line.cpp"
+}
+]

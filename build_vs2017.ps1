@@ -24,5 +24,5 @@ if(-not (Test-Path .\build\win))
 Set-Location -Path .\build\win
 cmake -G "Visual Studio 15 2017 Win64" ../../
 devenv XTiny.sln /Build Debug /Project ALL_BUILD /ProjectConfig Debug
-Move-Item -Path ./Debug/XTiny.exe -Destination ../../bin/XTiny.exe -Force
+devenv XTiny.sln /Build Debug /Project INSTALL /ProjectConfig Debug
 Set-Location -Path ..\..\

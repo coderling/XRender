@@ -2,6 +2,7 @@
 
 #include "line.h"
 #include "geometry.h"
+#include "model.h"
 #include "tgaimage.h"
 #include <stdlib.h>
 #include <algorithm>

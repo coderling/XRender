@@ -222,5 +222,5 @@ typedef vec<3,  float> Vec3f;
 typedef vec<3,  int>   Vec3i;
 typedef vec<4,  float> Vec4f;
 typedef mat<4,4,float> Matrix;
-const float PI = 3.1415926535;
+const float PI = 3.1415926535f;
 #endif //__GEOMETRY_H__

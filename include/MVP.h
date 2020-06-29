@@ -141,7 +141,7 @@ Matrix ViewPortMatrix(int x, int y, int w, int h)
 {
     Matrix vport = Matrix::identity();
     vport[0][3] = x + w / 2.0f;
-    vport[1][3] = x + h / 2.0f;
+    vport[1][3] = y + h / 2.0f;
     vport[2][3] = -255 / 2.0f;
     
     vport[0][0] = w / 2.0f;

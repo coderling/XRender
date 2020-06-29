@@ -2,18 +2,23 @@
 #include <functional>
 
 #include "Pipeline.h"
+#include "Camera.h"
 
-class XRender
+namespace XRender 
+{
+
+class XRender final
 {
 public:
     XRender();
     ~XRender();
-    void Initialize(Pipeline& pipeline, std::function<void()> const &tick);
+    void Initialize(const PipelineInitializeData& pipeline_data);
     void Loop();
     void Exit();
-
 private:
-    std::function<void()> tickFunc;
+    std::function<void()> tick_func;
     bool quit;
     Pipeline *pPipeline;
 };
+
+}

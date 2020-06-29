@@ -43,6 +43,17 @@ template <typename T> struct vec<3,T> {
 
 /////////////////////////////////////////////////////////////////////////////////
 
+template <typename T> struct vec<4,T> {
+    vec() : x(T()), y(T()), z(T()), w(T()) {}
+    vec(T X, T Y, T Z, T W) : x(X), y(Y), z(Z), w(W) {}
+    template <class U> vec<4,T>(const vec<4,U> &v);
+          T& operator[](const size_t i)       { assert(i<4); return i <= 0? x : (i == 1 ? y : (i == 2 ? z : w)); }
+    const T& operator[](const size_t i) const { assert(i<4); return i <= 0? x : (i == 1 ? y : (i == 2 ? z : w)); }
+    T x, y, z, w;
+};
+
+/////////////////////////////////////////////////////////////////////////////////
+
 template<size_t DIM,typename T> T operator*(const vec<DIM,T>& lhs, const vec<DIM,T>& rhs) {
     T ret = T();
     for (size_t i=DIM; i--; ret+=lhs[i]*rhs[i]);
@@ -223,4 +234,10 @@ typedef vec<3,  int>   Vec3i;
 typedef vec<4,  float> Vec4f;
 typedef mat<4,4,float> Matrix;
 const float PI = 3.1415926535f;
+
+const Vec2f Vec2f_Zero(0, 0);
+const Vec2i Vec2i_Zero(0, 0);
+const Vec3f Vec3f_Zero(0, 0, 0);
+const Vec3i Vec3i_Zero(0, 0, 0);
+
 #endif //__GEOMETRY_H__

@@ -5,10 +5,15 @@
 #include "Scene.h"
 #include "Renderer.h"
 
+namespace XRender
+{
+
 class Cull
 {
 public:
-    void CullRenderers(const Camera& cam, Scene* scenes);
+	static Cull& GlobalCull();
+    const std::vector<Renderer*>& CullRenderers(const Camera& cam, const Scene* scene);
 private:
-    std::vector<Renderer> renderers;
+    std::vector<Renderer*> renderers;
 };
+}

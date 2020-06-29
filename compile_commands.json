@@ -1,25 +1,157 @@
 [
 {
   "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\include -I..\\..\\thirdParty  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FoCMakeFiles\\XTiny.dir\\main.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\main.cpp",
-  "file": "C:/dev/MyGit/XRender/main.cpp"
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FoCMakeFiles\\XTiny.dir\\App.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\App.cpp",
+  "file": "C:/dev/MyGit/XRender/App.cpp"
 },
 
 {
   "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\include -I..\\..\\thirdParty  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FoCMakeFiles\\XTiny.dir\\thirdParty\\tgaimage.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\thirdParty\\tgaimage.cpp",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\math\\Math.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\math\\Math.cpp",
+  "file": "C:/dev/MyGit/XRender/src/math/Math.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\resources\\IO.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\resources\\IO.cpp",
+  "file": "C:/dev/MyGit/XRender/src/resources/IO.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\resources\\MeshLoader.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\resources\\MeshLoader.cpp",
+  "file": "C:/dev/MyGit/XRender/src/resources/MeshLoader.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\resources\\Resources.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\resources\\Resources.cpp",
+  "file": "C:/dev/MyGit/XRender/src/resources/Resources.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Camera.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Camera.cpp",
+  "file": "C:/dev/MyGit/XRender/src/Camera.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Cull.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Cull.cpp",
+  "file": "C:/dev/MyGit/XRender/src/Cull.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Graphics.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Graphics.cpp",
+  "file": "C:/dev/MyGit/XRender/src/Graphics.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\GraphicsGlobalData.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\GraphicsGlobalData.cpp",
+  "file": "C:/dev/MyGit/XRender/src/GraphicsGlobalData.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Matrial.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Matrial.cpp",
+  "file": "C:/dev/MyGit/XRender/src/Matrial.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Mesh.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Mesh.cpp",
+  "file": "C:/dev/MyGit/XRender/src/Mesh.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Object.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Object.cpp",
+  "file": "C:/dev/MyGit/XRender/src/Object.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Pipeline.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Pipeline.cpp",
+  "file": "C:/dev/MyGit/XRender/src/Pipeline.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\RenderContext.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\RenderContext.cpp",
+  "file": "C:/dev/MyGit/XRender/src/RenderContext.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Renderer.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Renderer.cpp",
+  "file": "C:/dev/MyGit/XRender/src/Renderer.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\RenderTarget.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\RenderTarget.cpp",
+  "file": "C:/dev/MyGit/XRender/src/RenderTarget.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Scene.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Scene.cpp",
+  "file": "C:/dev/MyGit/XRender/src/Scene.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Shader.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Shader.cpp",
+  "file": "C:/dev/MyGit/XRender/src/Shader.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Texture2D.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Texture2D.cpp",
+  "file": "C:/dev/MyGit/XRender/src/Texture2D.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\UniqueId.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\UniqueId.cpp",
+  "file": "C:/dev/MyGit/XRender/src/UniqueId.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\XRender.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\XRender.cpp",
+  "file": "C:/dev/MyGit/XRender/src/XRender.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Color.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Color.cpp",
+  "file": "C:/dev/MyGit/XRender/src/Color.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\platform\\image\\ImageRenderTarget.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\platform\\image\\ImageRenderTarget.cpp",
+  "file": "C:/dev/MyGit/XRender/src/platform/image/ImageRenderTarget.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\test\\..\\include -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fotest\\CMakeFiles\\XRenderTest.dir\\test_xrender_loop.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\test\\test_xrender_loop.cpp",
+  "file": "C:/dev/MyGit/XRender/test/test_xrender_loop.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FothirdParty\\CMakeFiles\\ThirdPartyLib.dir\\geometry.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\thirdParty\\geometry.cpp",
+  "file": "C:/dev/MyGit/XRender/thirdParty/geometry.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build/win",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FothirdParty\\CMakeFiles\\ThirdPartyLib.dir\\tgaimage.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\thirdParty\\tgaimage.cpp",
   "file": "C:/dev/MyGit/XRender/thirdParty/tgaimage.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\include -I..\\..\\thirdParty  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FoCMakeFiles\\XTiny.dir\\thirdParty\\model.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\thirdParty\\model.cpp",
-  "file": "C:/dev/MyGit/XRender/thirdParty/model.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\include -I..\\..\\thirdParty  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FoCMakeFiles\\XTiny.dir\\src\\line.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\line.cpp",
-  "file": "C:/dev/MyGit/XRender/src/line.cpp"
 }
 ]

@@ -16,4 +16,7 @@
 
 * 通过扫描三角形包围盒进行三角形绘制
 
-    * 通过叉乘求某个点p得重心坐标
+    * 通过叉乘求某个点p得重心坐标, 投影后的重心坐标不是线性的了，但是倒数是线性的，可以反推出view空间下中重心坐标，定点属性插值需要使用View空间下的重心坐标
+        * [1](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/rasterization-stage)
+        * [2](https://zhuanlan.zhihu.com/p/134912873)
+        * [3](https://zhuanlan.zhihu.com/p/65495373)

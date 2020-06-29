@@ -2,14 +2,28 @@
 
 #include "Pipeline.h"
 
-Pipeline::~Pipeline(){}
+XRender::Pipeline::~Pipeline(){}
 
-void Pipeline::PreRender(){}
+void XRender::Pipeline::PreRender(){}
 
-void Pipeline::Render()
+void XRender::Pipeline::Render()
 {
     std::cout << "On Pipeline Render" << std::endl;
+    // cull 
+    // drawRenders
 }
 
-void Pipeline::PostRender(){}
+void XRender::Pipeline::DrawRenderers(const std::vector<Renderer*>& renderers)
+{
+    for(auto renderer : renderers)
+    {
+        if(renderer->geometryDirty)
+        {
+            renderer->Batch();
+            renderer->geometryDirty = false;
+        }
+    }
+}
+
+void XRender::Pipeline::PostRender(){}
 

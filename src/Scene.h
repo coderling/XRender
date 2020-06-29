@@ -1,10 +1,19 @@
 #pragma once
 #include <vector>
 
-#include "Renderer.h"
+#include "Object.h"
 
-class Scene
+namespace XRender
 {
+
+class Scene final
+{
+public:
+    const std::vector<Renderer*>& GetActiveRenderers() const;
+    void AddObject(std::unique_ptr<Object> object);
 private:
-    std::vector<Renderer> renderers;
+    std::vector<Renderer*> renderers;
+    std::vector<std::unique_ptr<Object>> objects;
 };
+
+}

@@ -1,25 +1,36 @@
 #pragma once
 #include<geometry.h>
+#include <memory>
+
 #include "Mesh.h"
+#include "Semantic.h"
 
-class IShader
+namespace XRender
+{
+
+class Shader
 {
 public:
-    virtual ~IShader();
-    virtual void Shade(void* in, Vec3f& color) = 0;
-};
-
-template<class Output, class Input>
-class Shader: public IShader
-{
-public:
-    virtual ~Shader(){}
-    void Shade(void* in, Vec3f& color) override
+    template<class T>
+    static std::unique_ptr<Shader> CreateShader()
     {
-        Output out = Vertex(static_cast<Input> (*in));
-        Fragment(out, color);
+        return std::make_unique<T>();
     }
+
+    virtual ~Shader();
 protected:
-    Output Vertex(Input in) = 0; 
-    void Fragment(Output in, Vec3f &color) = 0;
+    uint32_t vertex_intput_semantic = 0;
+    uint32_t vertex_output_semantic = 0;
+    bool HasVertexInputSemantic(const SEMANTIC& semantic) const;
+    bool HasVertexOutputSemantic(const SEMANTIC& semantic) const;
+    virtual void Init() = 0;
+    virtual VertexOutput Vertex(const VertexInput& in) = 0; 
+    virtual void Fragment(const VertexOutput& in, Color& color) = 0;
+
+    std::map<SEMANTIC, std::function<void(VertexOutput& out, VertexOutput* triangle[], const SEMANTIC& semantic, const Vec3f& barycentric)>> propertory_interpolation_funcs;
+    
+    friend class Graphics;
+    private:
+        Shader();
 };
+}

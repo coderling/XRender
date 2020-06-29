@@ -1,9 +1,15 @@
 #pragma once
+#include <memory>
 
 #include "Shader.h"
 
+namespace XRender
+{
+
 class Matrial
 {
-private:
-    IShader* shader;
+public:
+    std::unique_ptr<Shader> shader;
 };
+
+}

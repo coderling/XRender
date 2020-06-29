@@ -1,17 +1,18 @@
-# include "XRender.h"
+#include "XRender.h"
+#include "Graphics.h"
 
-XRender::XRender()
+XRender::XRender::XRender()
 {
     quit = false;
-    tickFunc = nullptr;
+    tick_func = nullptr;
     pPipeline = nullptr;
 }
 
-XRender::~XRender()
+XRender::XRender::~XRender()
 {
-    if(tickFunc != nullptr)
+    if(tick_func != nullptr)
     {
-        tickFunc = nullptr;
+        tick_func = nullptr;
     }
 
     if(pPipeline != nullptr)
@@ -20,29 +21,35 @@ XRender::~XRender()
     }
 }
 
-void XRender::Initialize(Pipeline& pipeline, std::function<void()> const& tick)
+void XRender::XRender::Initialize(const PipelineInitializeData& pipeline_data)
 {
-    tickFunc = tick;
-    pPipeline = &pipeline;
+    assert(pipeline_data.pipeline != nullptr);
+    assert(pipeline_data.render_target != nullptr);
+    assert(pipeline_data.render_target->GetWidth() > 0 && pipeline_data.render_target->GetHeight() > 0);
+    tick_func = pipeline_data.tick_func;
+    if(tick_func == nullptr)
+    {
+        tick_func = [](){};
+    }
+
+    pPipeline = pipeline_data.pipeline;
+    Graphics::VirtualGraphic().InitRenderContext(pipeline_data.render_target->GetWidth(), pipeline_data.render_target->GetHeight());
+    Camera::MainCamera().SetRenderTarget(pipeline_data.render_target);
 }
 
-void XRender::Loop()
+void XRender::XRender::Loop()
 {
     while (!quit)
     {
-        if(tickFunc != nullptr)
-        {
-            tickFunc();
-        }
-    
-        if(pPipeline != nullptr)
-        {
-            pPipeline->Render();
-        }
+        tick_func();
+        Camera::MainCamera().Update();
+        pPipeline->Render();
+        Graphics::VirtualGraphic().Execute();
+        Camera::MainCamera().Present();
     }
 }
 
-void XRender::Exit()
+void XRender::XRender::Exit()
 {
     quit = true;
 }

@@ -13,7 +13,8 @@ namespace XRender
         void OnPresent(const Color* frame_buffer) override;
     private:
         void OnInit() override;
-        TGAImage* pRtImage = nullptr;
+        TGAColor ColorToTGAColor(const Color& color);
+        std::unique_ptr<TGAImage> pRtImage = nullptr;
     };
 
 }

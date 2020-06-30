@@ -1,5 +1,5 @@
-#include "Math.h"
 #include <algorithm>
+#include "Math.h"
 
 std::tuple<float, float, float> XRender::Math::TriangleBarycentric(const Vec2f& point1, const Vec2f& point2, const Vec2f& point3, Vec2f p)
 {

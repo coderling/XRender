@@ -9,6 +9,7 @@ namespace XRender
 class Scene final
 {
 public:
+    Scene();
     const std::vector<Renderer*>& GetActiveRenderers() const;
     void AddObject(std::unique_ptr<Object> object);
 private:

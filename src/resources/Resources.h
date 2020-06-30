@@ -13,12 +13,11 @@ namespace XRender::Res
 {
     class Resources
     {
+    private:
     public:
         template<class T>
         static std::unique_ptr<T> Load(const std::string& path)
         {
-            std::type_index type_index = std::type_index(typeid(T));
-            auto iter = loaders.find(type_index);
             ILoader<T>* loader = GetOrCreateLoader<T>();
 
             return loader->Load(path);
@@ -32,8 +31,10 @@ namespace XRender::Res
         }
     private:
         template<class T>
-        ILoader<T>* GetOrCreateLoader()
+        static ILoader<T>* GetOrCreateLoader()
         {
+            std::type_index type_index = std::type_index(typeid(T));
+            auto iter = loaders.find(type_index);
             ILoader<T>* loader = nullptr;
             if(iter != loaders.end())
             {
@@ -46,6 +47,7 @@ namespace XRender::Res
             }
             return loader;
         }
+        
         static std::unordered_map<std::type_index, std::any> loaders;
     };
 }

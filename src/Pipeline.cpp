@@ -2,6 +2,11 @@
 
 #include "Pipeline.h"
 
+XRender::Pipeline::Pipeline() 
+{
+    scene = std::make_unique<Scene>();
+}
+
 XRender::Pipeline::~Pipeline(){}
 
 void XRender::Pipeline::PreRender(){}

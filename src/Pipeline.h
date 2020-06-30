@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <functional>
+#include <stdint.h>
 
 #include "Scene.h"
 #include "RenderTarget.h"
@@ -11,6 +12,7 @@ namespace XRender
 class Pipeline
 {
 public:
+    Pipeline();
     virtual ~Pipeline();
     virtual void PreRender();
     virtual void Render();

@@ -11,5 +11,8 @@
 #include "../src/Semantic.h"
 #include "../src/Scene.h"
 #include "../src/resources/Resources.h"
+#include "../src/resources/MeshLoader.h"
+
+
 #include "../src/platform/image/ImageRenderTarget.h"
 #include "../thirdParty/include/geometry.h"

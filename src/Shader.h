@@ -18,6 +18,7 @@ public:
     }
 
     virtual ~Shader();
+     Shader();
 protected:
     uint32_t vertex_intput_semantic = 0;
     uint32_t vertex_output_semantic = 0;
@@ -30,7 +31,5 @@ protected:
     std::map<SEMANTIC, std::function<void(VertexOutput& out, VertexOutput* triangle[], const SEMANTIC& semantic, const Vec3f& barycentric)>> propertory_interpolation_funcs;
     
     friend class Graphics;
-    private:
-        Shader();
 };
 }

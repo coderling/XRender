@@ -4,6 +4,7 @@
 XRender::RenderContext::RenderContext()
 {
     frame_buffer = nullptr;
+    depth_buffer = nullptr;
 }
 
 XRender::RenderContext::~RenderContext()
@@ -21,7 +22,6 @@ XRender::RenderContext::~RenderContext()
 
 void XRender::RenderContext::Init(const uint32_t& w, const uint32_t& h)
 {
-    assert(frame_buffer != nullptr);
     width = w;
     height = h;
     frame_buffer = new Color[width * height];

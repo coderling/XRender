@@ -15,12 +15,20 @@ namespace XRender::Res
     public:
         std::unique_ptr<T> Load(const std::string& path)
         {
-             throw "loader ot type: " + typeid(T).name() + " is not implementation!";
+            std::string msg;
+            msg.append("loader of type: ");
+            msg.append(typeid(T).name());
+            msg.append("is not implementation");
+             throw msg;
         }
 
         void Unload(std::unique_ptr<T> res)
         {
-             throw "loader ot type: " + typeid(T).name() + " is not implementation!";
+            std::string msg;
+            msg.append("loader of type: ");
+            msg.append(typeid(T).name());
+            msg.append("is not implementation");
+             throw msg;
         }
 
     };

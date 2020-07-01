@@ -14,5 +14,6 @@ void XRender::Scene::AddObject(std::unique_ptr<Object> object)
     {
         renderers.emplace_back(object->renderer.get());
     }
+    object->SetPosition(Vec3f_Zero);
     objects.emplace_back(std::move(object));
 }

@@ -11,14 +11,15 @@ XRender::Graphics::~Graphics(){}
 
 uint32_t XRender::Graphics::CreateVBO(const uint32_t &count)
 {
-    uint32_t vbo_id = ++vbo_id_source;
     VertexBuffer buffer;
+    buffer.id = ++vbo_id_source;
     Vertex* vbo = new Vertex[count];
     buffer.vertex_buffer = vbo;
     buffer.vertex_count = count;
     buffer.index_buffer = nullptr;
     buffer.index_count = 0;
-    return vbo_id;
+    buffers.emplace(buffer.id, buffer);
+    return buffer.id;
 }
 
 void XRender::Graphics::CreateVIO(const uint32_t& buffer_id, const uint32_t& count)
@@ -41,6 +42,12 @@ void XRender::Graphics::LoadVertexBuffer(const uint32_t &buffer_id, const Vertex
     {
         vbo[index] = vertex_buffer[index]; 
     }
+}
+
+void XRender::Graphics::LoadVertex(const uint32_t& buffer_id, const uint32_t& index, const Vertex& vertex)
+{
+    assert(buffers.count(buffer_id) && index < buffers[buffer_id].vertex_count);
+    buffers[buffer_id].vertex_buffer[index] = vertex;
 }
 
 void XRender::Graphics::LoadIndexBuffer(const uint32_t &buffer_id, const uint32_t *index_buffer)

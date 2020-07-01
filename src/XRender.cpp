@@ -25,7 +25,9 @@ void XRender::XRender::Initialize(const PipelineInitializeData& pipeline_data)
 {
     assert(pipeline_data.pipeline != nullptr);
     assert(pipeline_data.render_target != nullptr);
-    assert(pipeline_data.render_target->GetWidth() > 0 && pipeline_data.render_target->GetHeight() > 0);
+    assert(pipeline_data.width > 0 && pipeline_data.height > 0);
+
+    pipeline_data.render_target->Init(pipeline_data.width, pipeline_data.height);
     tick_func = pipeline_data.tick_func;
     if(tick_func == nullptr)
     {

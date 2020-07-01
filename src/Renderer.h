@@ -26,7 +26,6 @@ public:
     
 private:
     Matrix model_matrix;
-    Vertex* GetVerteies();
     Vertex* verteies;
     uint32_t vbo_id;
 };

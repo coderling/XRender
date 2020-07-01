@@ -81,6 +81,7 @@ void XRender::Res::ILoader<XRender::Mesh>::ObjFileLoad(XRender::Mesh* mesh, cons
         }
     }
 
+    mesh->vertex_count = indeies.size();
     mesh->uv.emplace(std::vector<Vec2f>());
     mesh->normals.emplace(std::vector<Vec3f>());
     for(uint32_t t = 0; t < indeies.size(); ++t)

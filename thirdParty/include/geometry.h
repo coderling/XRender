@@ -240,4 +240,9 @@ const Vec2i Vec2i_Zero(0, 0);
 const Vec3f Vec3f_Zero(0, 0, 0);
 const Vec3i Vec3i_Zero(0, 0, 0);
 
+const Vec2f Vec2f_One(1, 1);
+const Vec2i Vec2i_One(1, 1);
+const Vec3f Vec3f_One(1, 1, 1);
+const Vec3i Vec3i_One(1, 1, 1);
+
 #endif //__GEOMETRY_H__

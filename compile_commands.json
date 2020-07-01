@@ -1,157 +1,132 @@
 [
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FoCMakeFiles\\XTiny.dir\\App.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\App.cpp",
-  "file": "C:/dev/MyGit/XRender/App.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\math\\Math.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\math\\Math.cpp",
-  "file": "C:/dev/MyGit/XRender/src/math/Math.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\resources\\IO.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\resources\\IO.cpp",
-  "file": "C:/dev/MyGit/XRender/src/resources/IO.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\resources\\MeshLoader.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\resources\\MeshLoader.cpp",
-  "file": "C:/dev/MyGit/XRender/src/resources/MeshLoader.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\resources\\Resources.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\resources\\Resources.cpp",
-  "file": "C:/dev/MyGit/XRender/src/resources/Resources.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Camera.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Camera.cpp",
-  "file": "C:/dev/MyGit/XRender/src/Camera.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Cull.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Cull.cpp",
-  "file": "C:/dev/MyGit/XRender/src/Cull.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Graphics.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Graphics.cpp",
-  "file": "C:/dev/MyGit/XRender/src/Graphics.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\GraphicsGlobalData.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\GraphicsGlobalData.cpp",
-  "file": "C:/dev/MyGit/XRender/src/GraphicsGlobalData.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Matrial.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Matrial.cpp",
-  "file": "C:/dev/MyGit/XRender/src/Matrial.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Mesh.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Mesh.cpp",
-  "file": "C:/dev/MyGit/XRender/src/Mesh.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Object.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Object.cpp",
-  "file": "C:/dev/MyGit/XRender/src/Object.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Pipeline.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Pipeline.cpp",
-  "file": "C:/dev/MyGit/XRender/src/Pipeline.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\RenderContext.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\RenderContext.cpp",
-  "file": "C:/dev/MyGit/XRender/src/RenderContext.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Renderer.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Renderer.cpp",
-  "file": "C:/dev/MyGit/XRender/src/Renderer.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\RenderTarget.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\RenderTarget.cpp",
-  "file": "C:/dev/MyGit/XRender/src/RenderTarget.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Scene.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Scene.cpp",
-  "file": "C:/dev/MyGit/XRender/src/Scene.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Shader.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Shader.cpp",
-  "file": "C:/dev/MyGit/XRender/src/Shader.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Texture2D.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Texture2D.cpp",
-  "file": "C:/dev/MyGit/XRender/src/Texture2D.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\UniqueId.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\UniqueId.cpp",
-  "file": "C:/dev/MyGit/XRender/src/UniqueId.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\XRender.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\XRender.cpp",
-  "file": "C:/dev/MyGit/XRender/src/XRender.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Color.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Color.cpp",
-  "file": "C:/dev/MyGit/XRender/src/Color.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\platform\\image\\ImageRenderTarget.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\platform\\image\\ImageRenderTarget.cpp",
-  "file": "C:/dev/MyGit/XRender/src/platform/image/ImageRenderTarget.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\test\\..\\include -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fotest\\CMakeFiles\\XRenderTest.dir\\test_xrender_loop.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\test\\test_xrender_loop.cpp",
-  "file": "C:/dev/MyGit/XRender/test/test_xrender_loop.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FothirdParty\\CMakeFiles\\ThirdPartyLib.dir\\geometry.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\thirdParty\\geometry.cpp",
-  "file": "C:/dev/MyGit/XRender/thirdParty/geometry.cpp"
-},
-
-{
-  "directory": "C:/dev/MyGit/XRender/build/win",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FothirdParty\\CMakeFiles\\ThirdPartyLib.dir\\tgaimage.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\thirdParty\\tgaimage.cpp",
-  "file": "C:/dev/MyGit/XRender/thirdParty/tgaimage.cpp"
-}
-]
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XTiny.dir/App.cpp.o -c /Users/coderling/Documents/Graphics/XRender/App.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/App.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/math/Math.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/math/Math.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/math/Math.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/resources/IO.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/resources/IO.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/resources/IO.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/resources/MeshLoader.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/resources/MeshLoader.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/resources/MeshLoader.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/resources/Resources.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/resources/Resources.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/resources/Resources.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/Camera.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/Camera.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/Camera.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/Cull.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/Cull.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/Cull.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/Graphics.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/Graphics.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/Graphics.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/GraphicsGlobalData.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/GraphicsGlobalData.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/GraphicsGlobalData.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/Matrial.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/Matrial.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/Matrial.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/Mesh.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/Mesh.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/Mesh.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/Object.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/Object.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/Object.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/Pipeline.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/Pipeline.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/Pipeline.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/RenderContext.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/RenderContext.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/RenderContext.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/Renderer.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/Renderer.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/Renderer.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/RenderTarget.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/RenderTarget.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/RenderTarget.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/Scene.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/Scene.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/Scene.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/Shader.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/Shader.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/Shader.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/Texture2D.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/Texture2D.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/Texture2D.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/UniqueId.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/UniqueId.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/UniqueId.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/XRender.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/XRender.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/XRender.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/Color.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/Color.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/Color.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/src",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderLib.dir/platform/image/ImageRenderTarget.cpp.o -c /Users/coderling/Documents/Graphics/XRender/src/platform/image/ImageRenderTarget.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/src/platform/image/ImageRenderTarget.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/test",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/test/../include -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/XRenderTest.dir/test_xrender_loop.cpp.o -c /Users/coderling/Documents/Graphics/XRender/test/test_xrender_loop.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/test/test_xrender_loop.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/thirdParty",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/ThirdPartyLib.dir/geometry.cpp.o -c /Users/coderling/Documents/Graphics/XRender/thirdParty/geometry.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/thirdParty/geometry.cpp"
+  },
+  {
+    "directory": "/Users/coderling/Documents/Graphics/XRender/build/thirdParty",
+    "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -I/Users/coderling/Documents/Graphics/XRender/thirdParty/include  -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=gnu++1z -o CMakeFiles/ThirdPartyLib.dir/tgaimage.cpp.o -c /Users/coderling/Documents/Graphics/XRender/thirdParty/tgaimage.cpp",
+    "file": "/Users/coderling/Documents/Graphics/XRender/thirdParty/tgaimage.cpp"
+  }
+  ]

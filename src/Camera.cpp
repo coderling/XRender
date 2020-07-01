@@ -83,14 +83,14 @@ void XRender::Camera::SetFieldOfView(const float& angle)
     CaculatePerspective();
 }
 
-void XRender::Camera::SetPerspective(const float &angle, const float &aspect, const float &near, const float &far)
+void XRender::Camera::SetPerspective(const float &angle, const float &near, const float &far)
 {
     this->angle = angle;
-    this->aspect = aspect;
     this->near = -near;
     this->far = -far;
     is_perspective = true;
-    CaculatePerspective();
+    if (render_target != nullptr)
+      CaculatePerspective();
 }
 
 void XRender::Camera::CaculatePerspective()

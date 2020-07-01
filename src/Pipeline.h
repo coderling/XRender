@@ -25,6 +25,8 @@ public:
 struct PipelineInitializeData
 {
 public:
+    uint32_t width;
+    uint32_t height;
     RenderTarget* render_target = nullptr;
     std::function<void()> tick_func = nullptr;
     Pipeline* pipeline = nullptr;

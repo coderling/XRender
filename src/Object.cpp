@@ -1,7 +1,8 @@
 #include "Object.h"
 #include "./resources/Resources.h"
 
-XRender::Object::Object(){
+XRender::Object::Object():position(Vec3f_Zero), scale(Vec3f_One), rotation(Vec3f_Zero)
+{
 }
 
 XRender::Object::~Object()

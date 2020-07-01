@@ -14,4 +14,9 @@ namespace XRender::Test
         scene->AddObject(std::move(obj));
     }
 
+    void InitSetCamera(Camera& camera)
+    {
+        camera.SetPerspective(60.f, 0.1f, 1000.f);
+    }
+        
 }

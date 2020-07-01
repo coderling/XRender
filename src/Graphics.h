@@ -39,6 +39,7 @@ public:
     ~Graphics();
     uint32_t CreateVBO(const uint32_t& count);
     void LoadVertexBuffer(const uint32_t& buffer_id, const Vertex* source_data);
+    void LoadVertex(const uint32_t& buffer_id, const uint32_t& index, const Vertex& vertex);
     void CreateVIO(const uint32_t& buffer_id, const uint32_t& count);
     void LoadIndexBuffer(const uint32_t& buffer_id, const uint32_t* source_data);
     void BindShader(const uint32_t& buffer_id, Shader* shader);

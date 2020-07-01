@@ -19,5 +19,5 @@ const uint32_t& XRender::RenderTarget::GetWidth() const
 
 const uint32_t& XRender::RenderTarget::GetHeight() const
 {
-    return width;
+    return height;
 }

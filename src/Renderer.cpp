@@ -8,11 +8,11 @@
 
 XRender::Renderer::~Renderer(){}
 
-XRender::Renderer::Renderer(): vbo_id(0) {}
+XRender::Renderer::Renderer(): vbo_id(0), active(true), geometryDirty(true), verteies(nullptr) {}
 
 void XRender::Renderer::Batch() 
 {
-    auto virtual_graphics = Graphics::VirtualGraphic();
+    auto& virtual_graphics = Graphics::VirtualGraphic();
     if (vbo_id > 0)
     {
         virtual_graphics.ReleaseVBOANDVIO(vbo_id);
@@ -23,13 +23,12 @@ void XRender::Renderer::Batch()
     if(vertex_count == 0) return;
     
     vbo_id = virtual_graphics.CreateVBO(vertex_count); 
-	Vertex* verteies = new Vertex[vertex_count];
     for(uint32_t index = 0; index < vertex_count; ++index)
     {
-        mesh->GetVertexByIndex(verteies[index], index);
+        Vertex vertex;
+        mesh->GetVertexByIndex(vertex, index);
+        virtual_graphics.LoadVertex(vbo_id, index, vertex);
     }
-    virtual_graphics.LoadVertexBuffer(vbo_id, &(verteies[0]));
-	delete[] verteies;
 
     const std::vector<uint32_t>& indeies = mesh->GetIndeies();
     virtual_graphics.CreateVIO(vbo_id, indeies.size()); 
@@ -39,14 +38,10 @@ void XRender::Renderer::Batch()
     virtual_graphics.BindShader(vbo_id, mat->shader.get());
 }
 
-XRender::Vertex* XRender::Renderer::GetVerteies()
-{
-    return verteies;
-}
-
 void XRender::Renderer::UpdateMatrix(const Matrix& matrix)
 {
     auto virtual_graphics = Graphics::VirtualGraphic();
-    virtual_graphics.LoadModelMatrix(vbo_id, model_matrix);
+    if (vbo_id > 0)
+      virtual_graphics.LoadModelMatrix(vbo_id, model_matrix);
 }
 

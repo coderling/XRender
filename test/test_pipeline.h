@@ -11,7 +11,6 @@ namespace XRender::Test
         void Render() override
         {
             std::vector<Renderer*> renderers = Cull::GlobalCull().CullRenderers(Camera::MainCamera(), scene.get());
-            renderers.clear();
             DrawRenderers(renderers);
         }
 

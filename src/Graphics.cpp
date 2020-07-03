@@ -246,7 +246,6 @@ void XRender::Graphics::RasterizerTriangle(const uint32_t& index)
         cached_vertex_out[t_index].y = screen_pos.y;
         v.w = w;
         FILL_SHADER_STRUCT((cached_vertex_out[t_index]), SEMANTIC::SV_POSITION, v);
-        std::cout << t_index << " : (" << screen_pos.x << ", " << screen_pos.y << ")" << std::endl;
     }
 
     auto [lb, rt] = Math::TriangleBoundingBox(embed<3>(triangle[0]), embed<3>(triangle[1]), embed<3>(triangle[2]));

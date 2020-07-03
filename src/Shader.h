@@ -29,7 +29,6 @@ protected:
     virtual void Fragment(const VertexOutput& in, Color& color) = 0;
 
     std::map<SEMANTIC, std::function<void(VertexOutput& out, VertexOutput* triangle[], const SEMANTIC& semantic, const Vec3f& barycentric)>> propertory_interpolation_funcs;
-    
     friend class Graphics;
 };
 }

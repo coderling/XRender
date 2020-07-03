@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cassert>
 #include <any>
+#include <iostream>
 
 #include "Graphics.h"
 #include "GraphicsGlobalData.h"
@@ -63,6 +64,7 @@ void XRender::Graphics::LoadIndexBuffer(const uint32_t &buffer_id, const uint32_
 void XRender::Graphics::BindShader(const uint32_t& buffer_id, Shader *shader)
 {
     assert(buffers.count(buffer_id) == 1);
+    shader->Init();
     shader_map.emplace(buffer_id, shader);
 }
 
@@ -141,6 +143,8 @@ const XRender::RenderContext& XRender::Graphics::GetRenderContext() const
 
 void XRender::Graphics::Execute()
 {
+    render_context.ClearFrameBuffer(render_context.clear_color);
+    render_context.ClearDepthBuffer(render_context.clear_depth);
     for(const auto& kv : shader_map)
     {
         current_execute_vbo_id = kv.first;
@@ -155,7 +159,7 @@ void XRender::Graphics::Execute()
 void XRender::Graphics::SetupGlobalData()
 {
     GraphicsGlobalData::matrix_m = model_matries[current_execute_vbo_id];
-    GraphicsGlobalData::matrix_mv = GraphicsGlobalData::matrix_p * GraphicsGlobalData::matrix_m;
+    GraphicsGlobalData::matrix_mv = GraphicsGlobalData::matrix_v * GraphicsGlobalData::matrix_m;
     GraphicsGlobalData::matrix_mvp = GraphicsGlobalData::matrix_p * GraphicsGlobalData::matrix_mv;
 }
 
@@ -180,7 +184,7 @@ void XRender::Graphics::FillSemanticToVertexInput(const uint32_t& index, const S
     switch (st) 
     {
         case SEMANTIC::POSITION: 
-            FILL_SHADER_STRUCT(bind_vertex_input, st, vertex.pos);
+            FILL_SHADER_STRUCT(bind_vertex_input, st, embed<4>(vertex.pos));
         break;
         case SEMANTIC::COLOR:
             FILL_SHADER_STRUCT(bind_vertex_input, st, vertex.color);
@@ -230,17 +234,19 @@ void XRender::Graphics::RasterizerTriangle(const uint32_t& index)
     Vec4f* triangle = cached_triangle.points;
     for(uint32_t sub_index = 0; sub_index < 3; ++sub_index)
     {
-        cached_triangle.vertex_outs[sub_index] = &cached_vertex_out[index + sub_index];
+        uint32_t t_index = index * 3 + sub_index;
+        cached_triangle.vertex_outs[sub_index] = &cached_vertex_out[t_index];
 		Vec4f v;
-		auto the_struct = *cached_triangle.vertex_outs[sub_index];
-    {\
-    auto it = the_struct.data.find(SEMANTIC::SV_POSITION);\
-    if(it != the_struct.data.end()) v = std::any_cast<Vec4f>(it->second);\
-	}
-		//GET_DATA_BY_SEMATIC(v, (*(cached_triangle.vertex_outs[sub_index])), SEMANTIC::SV_POSITION, Vec4f);
-        v[0] /= v[3]; v[1] /= v[3]; v[2] /= v[3];
-        FILL_SHADER_STRUCT((*(cached_triangle.vertex_outs[sub_index])), SEMANTIC::SV_POSITION, v);
-        triangle[sub_index] = v;
+		GET_DATA_BY_SEMATIC(v, (*(cached_triangle.vertex_outs[sub_index])), SEMANTIC::SV_POSITION, Vec4f);
+        float w = v.w;
+        v.x /= w; v.y /= w; v.z /= w; v.w = 1;
+        auto screen_pos = GraphicsGlobalData::matrix_viewport * v;
+        triangle[sub_index] = screen_pos;
+        cached_vertex_out[t_index].x = screen_pos.x;
+        cached_vertex_out[t_index].y = screen_pos.y;
+        v.w = w;
+        FILL_SHADER_STRUCT((cached_vertex_out[t_index]), SEMANTIC::SV_POSITION, v);
+        std::cout << t_index << " : (" << screen_pos.x << ", " << screen_pos.y << ")" << std::endl;
     }
 
     auto [lb, rt] = Math::TriangleBoundingBox(embed<3>(triangle[0]), embed<3>(triangle[1]), embed<3>(triangle[2]));
@@ -270,7 +276,7 @@ void XRender::Graphics::PropertyBarycentricInterpolation(const Vec2i& point, con
 {
     Vec4f* triangle = cached_triangle.points;
     Shader* shader = shader_map[current_execute_vbo_id];
-    float viewZ = 1.f / (barycentric.x / triangle[0][3] + barycentric.y / triangle[1][3] + barycentric.z / triangle[2][3]);
+    float viewZ = 1.f / (barycentric.x / triangle[0].w + barycentric.y / triangle[1].w + barycentric.z / triangle[2].w);
     float A = barycentric.x / (triangle[0].w * viewZ);
     float B = barycentric.y / (triangle[1].w * viewZ);
     float G = barycentric.z / (triangle[2].w * viewZ);

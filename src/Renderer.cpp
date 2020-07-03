@@ -4,11 +4,12 @@
 
 #include "Renderer.h"
 #include "Graphics.h"
-#include "geometry.h"
 
 XRender::Renderer::~Renderer(){}
 
-XRender::Renderer::Renderer(): vbo_id(0), active(true), geometryDirty(true), verteies(nullptr) {}
+XRender::Renderer::Renderer(): active(true), geometryDirty(true), vbo_id(0), model_matrix(Matrix::identity())
+{
+}
 
 void XRender::Renderer::Batch() 
 {
@@ -40,7 +41,8 @@ void XRender::Renderer::Batch()
 
 void XRender::Renderer::UpdateMatrix(const Matrix& matrix)
 {
-    auto virtual_graphics = Graphics::VirtualGraphic();
+    model_matrix = matrix;
+    auto& virtual_graphics = Graphics::VirtualGraphic();
     if (vbo_id > 0)
       virtual_graphics.LoadModelMatrix(vbo_id, model_matrix);
 }

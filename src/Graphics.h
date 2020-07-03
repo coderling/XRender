@@ -9,11 +9,12 @@
 #include "Shader.h"
 #include "geometry.h"
 #include "RenderContext.h"
+#include "NoCopyable.h"
 
 namespace XRender
 {
 
-class Graphics final
+class Graphics final : NoCopyable
 {
 private:
     struct VertexBuffer

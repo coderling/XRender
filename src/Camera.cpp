@@ -13,8 +13,8 @@ XRender::Camera::Camera()
     render_target = nullptr;
     is_perspective = true;
     angle = 60;
-    near = 0.1f;
-    far = 1000.f;
+    near_plane = 0.1f;
+    far_plane = 1000.f;
 }
 
 const Matrix& XRender::Camera::GetViewMatrix() const
@@ -73,7 +73,7 @@ void XRender::Camera::ReCaculateProjectMatrix()
     float right = -left;
     float top = height * 1.f / 2;
     float bottom = -top;
-    proj = CaculateOrthgraphic(left, right, top, bottom, near, far);
+    proj = CaculateOrthgraphic(left, right, top, bottom, -near_plane, -far_plane);
 }
 
 void XRender::Camera::SetFieldOfView(const float& angle)
@@ -86,8 +86,8 @@ void XRender::Camera::SetFieldOfView(const float& angle)
 void XRender::Camera::SetPerspective(const float &angle, const float &near, const float &far)
 {
     this->angle = angle;
-    this->near = -near;
-    this->far = -far;
+    this->near_plane = near;
+    this->far_plane = far;
     is_perspective = true;
     if (render_target != nullptr)
       CaculatePerspective();
@@ -95,16 +95,18 @@ void XRender::Camera::SetPerspective(const float &angle, const float &near, cons
 
 void XRender::Camera::CaculatePerspective()
 {
-    float top = near * tan(angle * PI / 2.0f / 180.0f);
+    float top = near_plane * tan(angle * PI / 2.0f / 180.0f);
     float bottom = -top;
     float right = top * aspect;
     float left = -right;
-
+    
+    float near = -near_plane;
+    float far = -far_plane;
     // 挤压到正交的视锥体, 再进行正交投影
     Matrix persToOrthMatrix = Matrix::identity();
     persToOrthMatrix[0][0] = near;
     persToOrthMatrix[1][1] = near;
-    persToOrthMatrix[2][2] = near + far;
+    persToOrthMatrix[2][2] = near+ far;
     persToOrthMatrix[2][3] = -near * far;
 	persToOrthMatrix[3][2] = 1;
 	persToOrthMatrix[3][3] = 0;
@@ -116,8 +118,8 @@ void XRender::Camera::CaculatePerspective()
 
 void XRender::Camera::SetOrthgraphic(const float &near, const float &far)
 {
-    this->near = -near;
-    this->far = -far;
+    this->near_plane = near;
+    this->far_plane = far;
     is_perspective = false;
     ReCaculateProjectMatrix();
 }

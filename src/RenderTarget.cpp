@@ -1,5 +1,7 @@
 #include "RenderTarget.h"
 
+XRender::RenderTarget::RenderTarget(const std::string& name):name(name), width(0), height(0) {}
+
 XRender::RenderTarget::~RenderTarget()
 {
 

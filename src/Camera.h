@@ -34,8 +34,8 @@ private:
     Matrix view_port;
     float angle;
     float aspect;
-    float near;
-    float far;
+    float near_plane;
+    float far_plane;
     RenderTarget* render_target; 
 };
 }

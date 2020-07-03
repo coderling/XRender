@@ -20,6 +20,10 @@ public:
     const uint32_t& GetHeight() const;
     void ClearFrameBuffer(const XRender::Color& color);
     void ClearDepthBuffer(const float& depth);
+
+public:
+    Color clear_color = XRender::CColor::BLUE;
+    float clear_depth = 0;
 private:
     uint32_t GetIndex(const uint32_t& x, const uint32_t& y) const;
 

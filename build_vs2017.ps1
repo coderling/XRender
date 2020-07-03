@@ -23,6 +23,6 @@ if(-not (Test-Path .\build\win))
 
 Set-Location -Path .\build\win
 cmake -G "Visual Studio 16 2019" ../../
-devenv XTiny.sln /Build Debug /Project ALL_BUILD /ProjectConfig Debug
-devenv XTiny.sln /Build Debug /Project INSTALL /ProjectConfig Debug
+# devenv XTiny.sln /Build Debug /Project ALL_BUILD /ProjectConfig Debug
+# devenv XTiny.sln /Build Debug /Project INSTALL /ProjectConfig Debug
 Set-Location -Path ..\..\

@@ -3,9 +3,23 @@
 
 #include "ImageRenderTarget.h"
 
+XRender::ImageRenderTarget::ImageRenderTarget(const std::string& name):XRender::RenderTarget::RenderTarget(name)
+{
+    out_path = "";
+    out_path.append("ImageOut/");
+    out_path.append(name);
+    out_path.append(".tga");
+}
+
 XRender::ImageRenderTarget::~ImageRenderTarget()
 {
 
+}
+
+void XRender::ImageRenderTarget::Save()
+{
+	pRtImage->flip_vertically();
+    pRtImage->write_tga_file(out_path.c_str());
 }
 
 void XRender::ImageRenderTarget::OnPresent(const Color *frame_buffer)
@@ -20,6 +34,7 @@ void XRender::ImageRenderTarget::OnPresent(const Color *frame_buffer)
             pRtImage->set(x, y, ColorToTGAColor(frame_buffer[index]));
         }
     }
+    Save();
 }
 
 void XRender::ImageRenderTarget::OnInit()

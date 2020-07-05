@@ -1,14 +1,8 @@
-
 #include "Pipeline.h"
 
 namespace XRender::Test
 {
-    #define BeginShader(type_name)\
-        class type_name : public Shader\
-        {\
-
-
-    class ColorShader : public Shader
+    class ModelShader : public Shader
     {
         void Init() override
         {

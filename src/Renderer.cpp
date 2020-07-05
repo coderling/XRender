@@ -4,8 +4,12 @@
 
 #include "Renderer.h"
 #include "Graphics.h"
+#include "./resources/Resources.h"
 
-XRender::Renderer::~Renderer(){}
+XRender::Renderer::~Renderer()
+{
+    XRender::Res::Resources::UnLoad<Mesh>(std::move(mesh));
+}
 
 XRender::Renderer::Renderer(): active(true), geometryDirty(true), vbo_id(0), model_matrix(Matrix::identity())
 {

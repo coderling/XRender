@@ -4,26 +4,27 @@
 
 XRender::Res::ILoader<XRender::Mesh>::ILoader()
 {
-    auto obj_loader = std::bind(&ILoader<Mesh>::ObjFileLoad, this, std::placeholders::_1, std::placeholders::_2);
+    const auto& obj_loader = std::bind(&ILoader<Mesh>::ObjFileLoad, this, std::placeholders::_1, std::placeholders::_2);
     meshLoaders.emplace("obj", obj_loader);
 }
 
 std::unique_ptr<XRender::Mesh> XRender::Res::ILoader<XRender::Mesh>::Load(const std::string& path)
 {
-    std::unique_ptr<XRender::Mesh> ret = std::make_unique<XRender::Mesh>();
     std::string ext = XRender::Res::FileExtendName(path);
     auto iter = meshLoaders.find(ext);
     if(iter != meshLoaders.end())
     {
+        std::unique_ptr<XRender::Mesh> ret = std::make_unique<XRender::Mesh>();
         iter->second(ret.get(), path);
+        return ret;
     }
 
-    return ret;
+    return nullptr;
 }
 
 void XRender::Res::ILoader<XRender::Mesh>::Unload(std::unique_ptr<XRender::Mesh> res)
 {
-
+    
 }
 
 void XRender::Res::ILoader<XRender::Mesh>::ObjFileLoad(XRender::Mesh* mesh, const std::string& path)

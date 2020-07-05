@@ -1,12 +1,14 @@
 #pragma once
 #include<geometry.h>
 #include <memory>
+#include <string>
 
 #include "Mesh.h"
 #include "Semantic.h"
 
 namespace XRender
 {
+
 
 class Shader
 {
@@ -19,6 +21,12 @@ public:
 
     virtual ~Shader();
      Shader();
+
+    template<typename T>
+     void SetUniform(const std::string& field_name, const T& value)
+     {
+
+     }
 protected:
     uint32_t vertex_intput_semantic = 0;
     uint32_t vertex_output_semantic = 0;

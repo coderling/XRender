@@ -21,7 +21,7 @@ public:
     void SetPerspective(const float& angle, const float& near, const float& far);
     void SetOrthgraphic(const float& near, const float& far);
     void SetViewPort(const float& x, const float& y, const float& w, const float& h);
-    void SetRenderTarget(RenderTarget* target);
+    void SetRenderTarget(std::unique_ptr<RenderTarget> target);
     void Update();
     void Present();
 private:
@@ -36,6 +36,6 @@ private:
     float aspect;
     float near_plane;
     float far_plane;
-    RenderTarget* render_target; 
+    std::unique_ptr<RenderTarget> render_target; 
 };
 }

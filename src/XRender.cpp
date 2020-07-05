@@ -21,7 +21,7 @@ XRender::XRender::~XRender()
     }
 }
 
-void XRender::XRender::Initialize(const PipelineInitializeData& pipeline_data)
+void XRender::XRender::Initialize(PipelineInitializeData& pipeline_data)
 {
     assert(pipeline_data.pipeline != nullptr);
     assert(pipeline_data.render_target != nullptr);
@@ -36,7 +36,7 @@ void XRender::XRender::Initialize(const PipelineInitializeData& pipeline_data)
 
     pPipeline = pipeline_data.pipeline;
     Graphics::VirtualGraphic().InitRenderContext(pipeline_data.render_target->GetWidth(), pipeline_data.render_target->GetHeight());
-    Camera::MainCamera().SetRenderTarget(pipeline_data.render_target);
+    Camera::MainCamera().SetRenderTarget(std::move(pipeline_data.render_target));
 }
 
 void XRender::XRender::Loop()

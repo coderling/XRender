@@ -164,9 +164,9 @@ void XRender::Camera::SetViewPort(const float &x, const float &y, const float &w
     view_port[2][2] = 1;
 }
 
-void XRender::Camera::SetRenderTarget(RenderTarget *target)
+void XRender::Camera::SetRenderTarget(std::unique_ptr<RenderTarget> target)
 {
-    render_target = target;
+    render_target = std::move(target);
     SetViewPort(0, 0, 1, 1);
     aspect = render_target->GetWidth() * 1.f / render_target->GetHeight();
     ReCaculateProjectMatrix();

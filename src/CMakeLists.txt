@@ -24,7 +24,15 @@ ${CMAKE_CURRENT_SOURCE_DIR}/Texture2D.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UniqueId.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/XRender.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Color.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/platform/image/ImageRenderTarget.cpp)
+${CMAKE_CURRENT_SOURCE_DIR}/platform/common/Platform.cpp)
+
+if(WIN32)
+target_sources(XRenderLib PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/win/WindowsRenderTarget.cpp)
+else()
+target_sources(XRenderLib PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/image/ImageRenderTarget.cpp)
+endif()
 
 target_include_directories(XRenderLib PUBLIC ${CMAKE_SOURCE_DIR}/thirdParty/include)
 

@@ -12,12 +12,11 @@ int main(int argc, char**argv)
     XRender::Test::TestPipeline pipeline;
     XRender::Test::LoadObjModelAsObject(pipeline.scene.get());
     XRender::Test::InitSetCamera(XRender::Camera::MainCamera());
-    XRender::ImageRenderTarget render_context("SampleTriangle");
     pipeline_data.pipeline = &pipeline;
     pipeline_data.tick_func = [](){
         std::cout<< "on test tick" << std::endl;
     };
-    pipeline_data.render_target = &render_context;
+    pipeline_data.render_target = CreateRenderTarget("TestXRenderLoop");
     XRender::XRender render;
     render.Initialize(pipeline_data);
     render.Loop();

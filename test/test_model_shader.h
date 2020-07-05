@@ -14,18 +14,18 @@ namespace XRender::Test
         {
             VertexOutput out;
             Vec4f position;
-            GET_DATA_BY_SEMATIC(position, in, SEMANTIC::POSITION, Vec4f);
+            GET_DATA_BY_SEMATIC(position, in, SEMANTIC::POSITION);
             Vec4f view_pos = GraphicsGlobalData::matrix_mvp * position;
             FILL_SHADER_STRUCT(out, SEMANTIC::SV_POSITION, view_pos);
             Color color;
-            GET_DATA_BY_SEMATIC(color, in, SEMANTIC::COLOR, Color);
+            GET_DATA_BY_SEMATIC(color, in, SEMANTIC::COLOR);
             FILL_SHADER_STRUCT(out, SEMANTIC::COLOR, color);
             return out;
         }
 
         void Fragment(const VertexOutput& in, Color& color) override
         {
-            GET_DATA_BY_SEMATIC(color, in, SEMANTIC::COLOR, Color);
+            GET_DATA_BY_SEMATIC(color, in, SEMANTIC::COLOR);
         }
     };
 }

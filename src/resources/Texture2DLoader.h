@@ -12,11 +12,11 @@ namespace XRender::Res
     class ILoader<Texture2D>
     {
     public:
-        ILoader<Texture2D>();
+        ILoader();
 
         std::unique_ptr<Texture2D> Load(const std::string& path);
 
-        void Unload(std::unique_ptr<Texture2D> res);
+        void UnLoad(std::unique_ptr<Texture2D> res);
 
     private:
         void TGALoad(Texture2D* texture, const std::string& path);

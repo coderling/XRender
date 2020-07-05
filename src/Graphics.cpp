@@ -237,7 +237,7 @@ void XRender::Graphics::RasterizerTriangle(const uint32_t& index)
         uint32_t t_index = index * 3 + sub_index;
         cached_triangle.vertex_outs[sub_index] = &cached_vertex_out[t_index];
 		Vec4f v;
-		GET_DATA_BY_SEMATIC(v, (*(cached_triangle.vertex_outs[sub_index])), SEMANTIC::SV_POSITION, Vec4f);
+		GET_DATA_BY_SEMATIC(v, (*(cached_triangle.vertex_outs[sub_index])), SEMANTIC::SV_POSITION);
         float w = v.w;
         v.x /= w; v.y /= w; v.z /= w; v.w = 1;
         auto screen_pos = GraphicsGlobalData::matrix_viewport * v;
@@ -246,7 +246,6 @@ void XRender::Graphics::RasterizerTriangle(const uint32_t& index)
         cached_vertex_out[t_index].y = screen_pos.y;
         v.w = w;
         FILL_SHADER_STRUCT((cached_vertex_out[t_index]), SEMANTIC::SV_POSITION, v);
-        std::cout << t_index << " : (" << screen_pos.x << ", " << screen_pos.y << ")" << std::endl;
     }
 
     auto [lb, rt] = Math::TriangleBoundingBox(embed<3>(triangle[0]), embed<3>(triangle[1]), embed<3>(triangle[2]));

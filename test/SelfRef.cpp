@@ -7,8 +7,9 @@
 
 #include "../thirdParty/include/geometry.h"
 
-    #define REGISTER_UNIFORM(field_name)\
-        uniforms.insert_or_assign(#field_name, &::field_name)\
+    #define REGISTER_UNIFORM(T, field_name)\
+        auto field_address = static_cast<T BaseStruct::*>(&std::remove_pointer<decltype(this)>::type::field_name);\
+        uniforms.insert_or_assign(#field_name, field_address)\
 
 class BaseStruct
 {
@@ -32,8 +33,7 @@ class FiledStruct: public BaseStruct
 {
     public:
     FiledStruct(){
-        auto field = &(vec);
-        uniforms.insert_or_assign("vec" , (&::vec));
+        REGISTER_UNIFORM(Vec3f, vec);
     }
 
     Vec3f vec;
@@ -41,5 +41,16 @@ class FiledStruct: public BaseStruct
 
 int main()
 {
-    auto vec_field = &FiledStruct::vec;
+    FiledStruct ft;
+    ft.vec.x = 1;
+    ft.vec.y = 2;
+    ft.vec.z = 3;
+    ft.SetUniform("vec", Vec3f(2, 2, 2));
+
+    auto iter = ft.uniforms.find("vec");
+    if(iter != ft.uniforms.end())
+    {
+        auto field_address = std::any_cast<Vec3f BaseStruct::*>(iter->second);
+        std::cout << ft.*(field_address) << std::endl;
+    }
 }

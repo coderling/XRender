@@ -8,9 +8,10 @@ namespace XRender
     class Sampler2D
     {
     public:
-        Sampler2D(const Texture2D* texture);
+        Sampler2D() = default;
+        void AttachTexture(Texture2D* texture);
         Color Point(const float& u, const float& v); 
     private:
-        const Texture2D* texture;
+        Texture2D* texture;
     };
 }

@@ -27,7 +27,7 @@ namespace XRender::Res
         static void UnLoad(std::unique_ptr<T> res)
         {
             ILoader<T>* loader = GetOrCreateLoader<T>();
-            loader->UnLoad(res);
+            loader->UnLoad(std::move(res));
         }
     private:
         template<class T>

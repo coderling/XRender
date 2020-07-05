@@ -3,8 +3,9 @@
 #include "Sampler2D.h"
 
 
-XRender::Sampler2D::Sampler2D(const Texture2D* texture): texture(texture)
+void XRender::Sampler2D::AttachTexture(Texture2D * texture)
 {
+    this->texture = texture;
 }
         
 XRender::Color XRender::Sampler2D::Point(const float& u, const float& v)

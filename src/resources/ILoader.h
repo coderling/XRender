@@ -22,7 +22,7 @@ namespace XRender::Res
              throw msg;
         }
 
-        void Unload(std::unique_ptr<T> res)
+        void UnLoad(std::unique_ptr<T> res)
         {
             std::string msg;
             msg.append("loader of type: ");

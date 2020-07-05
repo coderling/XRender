@@ -24,7 +24,7 @@ std::unique_ptr<XRender::Texture2D> XRender::Res::ILoader<XRender::Texture2D>::L
     return nullptr;
 }
 
-void XRender::Res::ILoader<XRender::Texture2D>::Unload(std::unique_ptr<Texture2D> res)
+void XRender::Res::ILoader<XRender::Texture2D>::UnLoad(std::unique_ptr<Texture2D> res)
 {
 
 }

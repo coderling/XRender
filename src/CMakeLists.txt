@@ -6,6 +6,7 @@ target_sources(XRenderLib PRIVATE
 ${CMAKE_CURRENT_SOURCE_DIR}/math/Math.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/resources/IO.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/resources/MeshLoader.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/resources/Texture2DLoader.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/resources/Resources.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Camera.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Cull.cpp
@@ -25,7 +26,15 @@ ${CMAKE_CURRENT_SOURCE_DIR}/Texture.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/UniqueId.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/XRender.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Color.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/platform/image/ImageRenderTarget.cpp)
+${CMAKE_CURRENT_SOURCE_DIR}/platform/common/Platform.cpp)
+
+if(WIN32)
+target_sources(XRenderLib PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/win/WindowsRenderTarget.cpp)
+else()
+target_sources(XRenderLib PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/image/ImageRenderTarget.cpp)
+endif()
 
 target_include_directories(XRenderLib PUBLIC ${CMAKE_SOURCE_DIR}/thirdParty/include)
 

@@ -10,7 +10,8 @@
 namespace XRender
 {
     #define REGISTER_UNIFORM(T, field_name)\
-        T.uniforms.insert_or_assign(#field_name, &T::field_name)\
+        auto field_address = static_cast<T Shader::*>(&std::remove_pointer<decltype(this)>::type::field_name);\
+        uniforms.insert_or_assign(#field_name, field_address)\
 
     class Shader
     {
@@ -24,13 +25,13 @@ namespace XRender
         template<typename T>
         void SetUniform(const std::string& field_name, const T& value)
         {
-            const auto& iter = uniforms.find(field_name);
-            if(iter != uniforms.end())
+            const auto &iter = uniforms.find(field_name);
+            if (iter != uniforms.end()) 
             {
-                this->*(iter->second) = value; 
+              this->*(std::any_cast<T Shader::*>(iter->second)) = value;
             }
         }
-
+        
         virtual ~Shader();
          Shader();
     protected:

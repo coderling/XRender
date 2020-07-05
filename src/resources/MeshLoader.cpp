@@ -22,7 +22,7 @@ std::unique_ptr<XRender::Mesh> XRender::Res::ILoader<XRender::Mesh>::Load(const 
     return nullptr;
 }
 
-void XRender::Res::ILoader<XRender::Mesh>::Unload(std::unique_ptr<XRender::Mesh> res)
+void XRender::Res::ILoader<XRender::Mesh>::UnLoad(std::unique_ptr<XRender::Mesh> res)
 {
     
 }

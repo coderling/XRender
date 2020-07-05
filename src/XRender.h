@@ -12,7 +12,7 @@ class XRender final
 public:
     XRender();
     ~XRender();
-    void Initialize(const PipelineInitializeData& pipeline_data);
+    void Initialize(PipelineInitializeData& pipeline_data);
     void Loop();
     void Exit();
 private:

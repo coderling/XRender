@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(XRenderTest 
 test_xrender_loop.cpp
 test_color_shader.h
+test_random_color_shader.h
 test_create_scene.h
 test_pipeline.h
 )

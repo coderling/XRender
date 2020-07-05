@@ -41,10 +41,10 @@ namespace XRender
     #define FILL_SHADER_STRUCT(the_struct, semantic, value)\
     the_struct.data.insert_or_assign(semantic, value)
 
-    #define GET_DATA_BY_SEMATIC(ret, the_struct, semantic, T)\
+    #define GET_DATA_BY_SEMATIC(ret, the_struct, semantic)\
     {\
-    auto it = the_struct.data.find(semantic);\
-    if(it != the_struct.data.end()) ret = std::any_cast<T>(it->second);\
+       auto it = the_struct.data.find(semantic);\
+       if(it != the_struct.data.end()) ret = std::any_cast<std::decay_t<decltype(ret)>>(it->second);\
 	}
 
     #define BIND_VERTEXINPUT_SEMANTIC(semantic)\
@@ -56,9 +56,9 @@ namespace XRender
     this->propertory_interpolation_funcs.insert_or_assign(semantic,\
     [](VertexOutput& out, VertexOutput* triangle[], const SEMANTIC& tsemantic, const Vec3f& barycentric)\
         {\
-            T property1; GET_DATA_BY_SEMATIC(property1, (*(triangle[0])), tsemantic, T);\
-            T property2; GET_DATA_BY_SEMATIC(property2, (*(triangle[1])), tsemantic, T);\
-            T property3; GET_DATA_BY_SEMATIC(property3, (*(triangle[2])), tsemantic, T);\
+            T property1; GET_DATA_BY_SEMATIC(property1, (*(triangle[0])), tsemantic);\
+            T property2; GET_DATA_BY_SEMATIC(property2, (*(triangle[1])), tsemantic);\
+            T property3; GET_DATA_BY_SEMATIC(property3, (*(triangle[2])), tsemantic);\
             T ret = Math::BarycentricInterpolation<T>(property1, property2, property3, barycentric);\
             FILL_SHADER_STRUCT(out, tsemantic, ret);\
         }\

@@ -20,7 +20,7 @@ namespace XRender::Res
 
         std::unique_ptr<Mesh> Load(const std::string& path);
 
-        void Unload(std::unique_ptr<Mesh> res);
+        void UnLoad(std::unique_ptr<Mesh> res);
     private:
         void ObjFileLoad(Mesh* mesh, const std::string& path);
     private:

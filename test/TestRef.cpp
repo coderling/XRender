@@ -70,8 +70,6 @@ inline constexpr void ForEachField(T&& value, Fn&& fn) {
 
 #endif  // STATIC_REFLECTION_H_
 
-// clang++ static_iostream.cc -std=c++14 -Wall -o s_iostream && ./s_iostream
-
 #include <iostream>
 #include <string>
 

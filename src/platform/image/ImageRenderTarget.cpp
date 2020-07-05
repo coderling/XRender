@@ -18,7 +18,6 @@ XRender::ImageRenderTarget::~ImageRenderTarget()
 
 void XRender::ImageRenderTarget::Save()
 {
-	pRtImage->flip_vertically();
     pRtImage->write_tga_file(out_path.c_str());
 }
 

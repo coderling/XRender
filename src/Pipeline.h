@@ -2,6 +2,7 @@
 #include <vector>
 #include <functional>
 #include <stdint.h>
+#include <memory>
 
 #include "Scene.h"
 #include "RenderTarget.h"
@@ -27,7 +28,7 @@ struct PipelineInitializeData
 public:
     uint32_t width;
     uint32_t height;
-    RenderTarget* render_target = nullptr;
+    std::unique_ptr<RenderTarget> render_target = nullptr;
     std::function<void()> tick_func = nullptr;
     Pipeline* pipeline = nullptr;
 };

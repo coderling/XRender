@@ -1,5 +1,6 @@
 #include "Pipeline.h"
 #include "test_color_shader.h"
+#include "test_random_color_shader.h"
 
 namespace XRender::Test
 {
@@ -10,7 +11,8 @@ namespace XRender::Test
         obj->renderer = std::make_unique<Renderer>();
         obj->renderer->mesh = std::move(mesh);
         obj->renderer->mat = std::make_unique<Matrial>();
-        obj->renderer->mat->shader = Shader::CreateShader<ColorShader>();
+        obj->renderer->mat->shader = Shader::CreateShader<RandomColor>();
+        obj->SetPosition(Vec3f(0, 0, -2));
         scene->AddObject(std::move(obj));
     }
     

@@ -1,1 +1,1 @@
-#include "../src/platform/image/ImageRenderTarget.h"
+#include "../src/platform/common/Platform.h"

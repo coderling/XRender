@@ -1,7 +1,7 @@
 [
 {
   "directory": "I:/XRender/build",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FoCMakeFiles\\XTiny.dir\\App.cpp.obj /FdTARGET_COMPILE_PDB -c I:\\XRender\\App.cpp",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FoCMakeFiles\\XTiny.dir\\App.cpp.obj /FdTARGET_COMPILE_PDB -c I:\\XRender\\App.cpp",
   "file": "I:/XRender/App.cpp"
 },
 
@@ -21,6 +21,12 @@
   "directory": "I:/XRender/build",
   "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\resources\\MeshLoader.cpp.obj /FdTARGET_COMPILE_PDB -c I:\\XRender\\src\\resources\\MeshLoader.cpp",
   "file": "I:/XRender/src/resources/MeshLoader.cpp"
+},
+
+{
+  "directory": "I:/XRender/build",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\resources\\Texture2DLoader.cpp.obj /FdTARGET_COMPILE_PDB -c I:\\XRender\\src\\resources\\Texture2DLoader.cpp",
+  "file": "I:/XRender/src/resources/Texture2DLoader.cpp"
 },
 
 {
@@ -115,6 +121,12 @@
 
 {
   "directory": "I:/XRender/build",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Sampler2D.cpp.obj /FdTARGET_COMPILE_PDB -c I:\\XRender\\src\\Sampler2D.cpp",
+  "file": "I:/XRender/src/Sampler2D.cpp"
+},
+
+{
+  "directory": "I:/XRender/build",
   "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Texture.cpp.obj /FdTARGET_COMPILE_PDB -c I:\\XRender\\src\\Texture.cpp",
   "file": "I:/XRender/src/Texture.cpp"
 },
@@ -145,25 +157,25 @@
 
 {
   "directory": "I:/XRender/build",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\platform\\win\\WindowsRenderTarget.cpp.obj /FdTARGET_COMPILE_PDB -c I:\\XRender\\src\\platform\\win\\WindowsRenderTarget.cpp",
-  "file": "I:/XRender/src/platform/win/WindowsRenderTarget.cpp"
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\platform\\image\\ImageRenderTarget.cpp.obj /FdTARGET_COMPILE_PDB -c I:\\XRender\\src\\platform\\image\\ImageRenderTarget.cpp",
+  "file": "I:/XRender/src/platform/image/ImageRenderTarget.cpp"
 },
 
 {
   "directory": "I:/XRender/build",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\test\\..\\include -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fotest\\CMakeFiles\\XRenderTest.dir\\test_xrender_loop.cpp.obj /FdTARGET_COMPILE_PDB -c I:\\XRender\\test\\test_xrender_loop.cpp",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\test\\..\\include -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fotest\\CMakeFiles\\XRenderTest.dir\\test_xrender_loop.cpp.obj /FdTARGET_COMPILE_PDB -c I:\\XRender\\test\\test_xrender_loop.cpp",
   "file": "I:/XRender/test/test_xrender_loop.cpp"
 },
 
 {
   "directory": "I:/XRender/build",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FothirdParty\\CMakeFiles\\ThirdPartyLib.dir\\geometry.cpp.obj /FdTARGET_COMPILE_PDB -c I:\\XRender\\thirdParty\\geometry.cpp",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FothirdParty\\CMakeFiles\\ThirdPartyLib.dir\\geometry.cpp.obj /FdTARGET_COMPILE_PDB -c I:\\XRender\\thirdParty\\geometry.cpp",
   "file": "I:/XRender/thirdParty/geometry.cpp"
 },
 
 {
   "directory": "I:/XRender/build",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FothirdParty\\CMakeFiles\\ThirdPartyLib.dir\\tgaimage.cpp.obj /FdTARGET_COMPILE_PDB -c I:\\XRender\\thirdParty\\tgaimage.cpp",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /FothirdParty\\CMakeFiles\\ThirdPartyLib.dir\\tgaimage.cpp.obj /FdTARGET_COMPILE_PDB -c I:\\XRender\\thirdParty\\tgaimage.cpp",
   "file": "I:/XRender/thirdParty/tgaimage.cpp"
 }
 ]

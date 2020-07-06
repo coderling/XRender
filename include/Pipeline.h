@@ -12,9 +12,5 @@
 #include "../src/Scene.h"
 #include "../src/Sampler2D.h"
 #include "../src/resources/Resources.h"
-#include "../src/resources/MeshLoader.h"
-#include "../src/resources/Texture2DLoader.h"
-
-
-#include "../src/platform/image/ImageRenderTarget.h"
 #include "../thirdParty/include/geometry.h"
+

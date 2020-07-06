@@ -30,6 +30,11 @@ namespace XRender::Res
             msg.append("is not implementation");
              throw msg;
         }
-
     };
 }
+
+#include "../Mesh.h"
+#include "../Texture2D.h"
+
+template<> class XRender::Res::ILoader<XRender::Mesh>;
+template<> class XRender::Res::ILoader<XRender::Texture2D>;

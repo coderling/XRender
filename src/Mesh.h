@@ -6,7 +6,6 @@
 
 #include "Vertex.h"
 #include "Color.h"
-#include "./resources/ILoader.h"
 
 namespace XRender
 {
@@ -36,7 +35,6 @@ private:
     std::optional<std::vector<Vec2f>> uv;
     std::optional<std::vector<Vec2f>> uv2;
     uint32_t vertex_count;
-    friend class Res::ILoader<Mesh>;
 };
 
 }

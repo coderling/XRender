@@ -8,10 +8,12 @@ namespace XRender::Test
     {
         std::unique_ptr<Object> obj = std::make_unique<Object>();
         std::unique_ptr<Mesh> mesh =  Res::Resources::Load<Mesh>("./obj/african_head.obj");
+        std::unique_ptr<Texture2D> texture = Res::Resources::Load<Texture2D>("./obj/african_head_diffuse.tga");
         obj->renderer = std::make_unique<Renderer>();
         obj->renderer->mesh = std::move(mesh);
         obj->renderer->mat = std::make_unique<Matrial>();
         obj->renderer->mat->shader = Shader::CreateShader<RandomColor>();
+        obj->renderer->mat->SetAtrribute("texture", std::move(texture));
         obj->SetPosition(Vec3f(0, 0, -2));
         scene->AddObject(std::move(obj));
     }

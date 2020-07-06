@@ -2,7 +2,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "Texture2DLoader.h"
+#include "ILoader.h"
 
 XRender::Res::ILoader<XRender::Texture2D>::ILoader()
 {

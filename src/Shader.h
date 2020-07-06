@@ -5,6 +5,8 @@
 #include <any>
 
 #include "Mesh.h"
+#include "Texture2D.h"
+#include "Sampler2D.h"
 #include "Semantic.h"
 
 namespace XRender
@@ -19,18 +21,41 @@ namespace XRender
         template<class T>
         static std::unique_ptr<Shader> CreateShader()
         {
-            return std::make_unique<T>();
+            auto ret = static_cast<std::unique_ptr<Shader>>(std::make_unique<T>());
+            ret->Init();
+            return ret;
         }
 
         template<typename T>
-        void SetUniform(const std::string& field_name, const T& value)
+        void SetUniform(const std::string& field_name, T&& value)
         {
             const auto &iter = uniforms.find(field_name);
             if (iter != uniforms.end()) 
             {
-              this->*(std::any_cast<T Shader::*>(iter->second)) = value;
+              this->*(std::any_cast<T Shader::*>(iter->second)) = std::forward<T>(value);
             }
         }
+        
+        template<typename T>
+        void SetUniform(const std::string& field_name, T* value)
+        {
+            const auto &iter = uniforms.find(field_name);
+            if (iter != uniforms.end()) 
+            {
+                this->*(std::any_cast<T Shader::*>(iter->second)) = value;
+            }
+        }
+        
+        template<>
+        void SetUniform(const std::string& field_name, Texture2D* value)
+        {
+            const auto &iter = uniforms.find(field_name);
+            if (iter != uniforms.end()) 
+            {
+                (this->*(std::any_cast<Sampler2D Shader::*>(iter->second))).AttachTexture(value);
+            }
+        }
+        
         
         virtual ~Shader();
          Shader();

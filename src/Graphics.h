@@ -14,6 +14,18 @@
 namespace XRender
 {
 
+enum struct EDepthTestMethod : uint32_t
+{
+    Less = 0,
+    Greater = 1,
+    LessEqual = 2,
+    GreaterEqual = 3,
+    Equal = 4, 
+    NotEqual = 5,
+    Always = 6,
+};
+
+
 class Graphics final : NoCopyable
 {
 private:
@@ -76,5 +88,6 @@ private:
     std::map<uint32_t, Matrix> model_matries; 
     uint32_t vbo_id_source;
     RenderContext render_context;
+    EDepthTestMethod depth_test_method = EDepthTestMethod::Less;
 };
 }

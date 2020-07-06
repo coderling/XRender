@@ -8,7 +8,7 @@ std::tuple<float, float, float> XRender::Math::TriangleBarycentric(const Vec2f& 
     Vec3f u = cross(v1, v2);
 
     // z < 1 说明v1, v2 共线，返回 < 0
-    if(std::abs(u.z) < 1) return std::make_tuple(-1, 1, 1);
+    if(std::abs(u.z) < 1e-2) return std::make_tuple(-1, 1, 1);
 
     return std::make_tuple(1 - (u.x + u.y) / u.z, u.y / u.z, u.x / u.z);
 }

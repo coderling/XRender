@@ -1,6 +1,8 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
-#include "MeshLoader.h"
+#include "ILoader.h"
 
 XRender::Res::ILoader<XRender::Mesh>::ILoader()
 {
@@ -36,6 +38,7 @@ void XRender::Res::ILoader<XRender::Mesh>::ObjFileLoad(XRender::Mesh* mesh, cons
         std::cout << "load obj file fail: " + path << std::endl;
         return;
     }
+    std::vector<Vec3f> positions;
     std::vector<Vec3i> normals;
     std::vector<Vec2f> uvs;
     std::vector<Vec3i> indeies;
@@ -51,7 +54,7 @@ void XRender::Res::ILoader<XRender::Mesh>::ObjFileLoad(XRender::Mesh* mesh, cons
             Vec3f v;
             for(int ind = 0; ind < 3; ++ind) iss >> v[ind];
             
-            mesh->positions.emplace_back(v);
+            positions.emplace_back(v);
         }
         else if(!line.compare(0, 3, "vn "))
         {
@@ -82,13 +85,18 @@ void XRender::Res::ILoader<XRender::Mesh>::ObjFileLoad(XRender::Mesh* mesh, cons
         }
     }
 
-    mesh->vertex_count = indeies.size();
-    mesh->uv.emplace(std::vector<Vec2f>());
-    mesh->normals.emplace(std::vector<Vec3f>());
+    std::vector<uint32_t> use_indeies;
+    std::vector<Vec2f> use_uv;
+    std::vector<Vec3f> use_normals;
     for(uint32_t t = 0; t < indeies.size(); ++t)
     {
-        mesh->indeies.emplace_back(indeies[t][0]);
-        mesh->uv->emplace_back(uvs[indeies[t][1]]);
-        mesh->normals->emplace_back(normals[indeies[t][2]]);
+        use_indeies.emplace_back(indeies[t][0]);
+        use_uv.emplace_back(uvs[indeies[t][1]]);
+        use_normals.emplace_back(normals[indeies[t][2]]);
     }
+
+    mesh->SetPositions(positions);
+    mesh->SetIndeies(use_indeies);
+    mesh->SetUV(use_uv);
+    mesh->SetNormals(use_normals);
 }

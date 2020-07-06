@@ -4,8 +4,12 @@
 #include <typeindex>
 #include <typeinfo>
 #include <memory>
+#include <functional>
+#include <unordered_map>
 
 #include "IO.h"
+#include "../Mesh.h"
+#include "../Texture2D.h"
 
 namespace XRender::Res
 {
@@ -13,6 +17,8 @@ namespace XRender::Res
     class ILoader
     {
     public:
+        ILoader<T>(){}
+
         std::unique_ptr<T> Load(const std::string& path)
         {
             std::string msg;
@@ -31,10 +37,36 @@ namespace XRender::Res
              throw msg;
         }
     };
+    
+    template<>
+    class ILoader<Mesh>
+    {
+    public:
+        ILoader();
+
+        std::unique_ptr<Mesh> Load(const std::string& path);
+
+        void UnLoad(std::unique_ptr<Mesh> res);
+    private:
+        void ObjFileLoad(Mesh* mesh, const std::string& path);
+    private:
+        std::unordered_map<std::string, std::function<void(Mesh*, const std::string&)>> meshLoaders;
+    };
+    
+    
+    template<>
+    class ILoader<Texture2D>
+    {
+    public:
+        ILoader();
+
+        std::unique_ptr<Texture2D> Load(const std::string& path);
+
+        void UnLoad(std::unique_ptr<Texture2D> res);
+
+    private:
+        void TGALoad(Texture2D* texture, const std::string& path);
+    private:
+        std::unordered_map<std::string, std::function<void(Texture2D*, const std::string&)>> textureLoaders;
+    };
 }
-
-#include "../Mesh.h"
-#include "../Texture2D.h"
-
-template<> class XRender::Res::ILoader<XRender::Mesh>;
-template<> class XRender::Res::ILoader<XRender::Texture2D>;

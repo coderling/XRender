@@ -11,6 +11,7 @@ int main(int argc, char**argv)
     pipeline_data.height = 600;
     XRender::Test::TestPipeline pipeline;
     XRender::Test::LoadObjModelAsObject(pipeline.scene.get());
+    //XRender::Test::LoadSampleTriangleAsObject(pipeline.scene.get());
     XRender::Test::InitSetCamera(XRender::Camera::MainCamera());
     pipeline_data.pipeline = &pipeline;
     pipeline_data.tick_func = [](){

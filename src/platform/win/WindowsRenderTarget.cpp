@@ -33,4 +33,6 @@ void XRender::WindowsRenderTarget::TryRegisterWindowsClassEx()
     wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc = &WindowsRenderTarget::WindowProc;
     wc.hInstance = GetModuleHandle(NULL);
+    wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    
 }

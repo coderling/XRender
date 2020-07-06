@@ -13,4 +13,3 @@
 #include "../src/Sampler2D.h"
 #include "../src/resources/Resources.h"
 #include "../thirdParty/include/geometry.h"
-

@@ -64,7 +64,6 @@ void XRender::Graphics::LoadIndexBuffer(const uint32_t &buffer_id, const uint32_
 void XRender::Graphics::BindShader(const uint32_t& buffer_id, Shader *shader)
 {
     assert(buffers.count(buffer_id) == 1);
-    shader->Init();
     shader_map.emplace(buffer_id, shader);
 }
 
@@ -118,7 +117,20 @@ void XRender::Graphics::Dispose()
 
 bool XRender::Graphics::DepthTest(const uint32_t &x, const uint32_t &y, const float &depth)
 {
-    return true;
+    const auto& cur_depth = render_context.GetDepthBuffer(x, y);
+    switch (depth_test_method) 
+    {
+        default:
+        {
+            if(depth < cur_depth)
+            {
+                render_context.SetDepthBuffer(x, y, depth);
+                return true;
+            }
+        }
+        break;;
+    }
+    return false;
 }
 
 void XRender::Graphics::InitRenderContext(const uint32_t& width, const uint32_t& height)

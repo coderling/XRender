@@ -33,6 +33,7 @@ void XRender::Res::ILoader<XRender::Texture2D>::TGALoad(Texture2D* texture, cons
 {
     TGAImage image;
     image.read_tga_file(path.c_str());
+    image.flip_vertically();
     texture->Create(image.get_width(), image.get_height());
     for(uint32_t x = 0; x < image.get_width(); ++x)
     {

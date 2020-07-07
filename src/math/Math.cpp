@@ -18,8 +18,8 @@ std::tuple<Vec2i, Vec2i> XRender::Math::TriangleBoundingBox(const Vec3f& point1,
     Vec2i lb, rt;
     lb.x = std::floor(std::min(std::min(point1.x, point2.x), point3.x)); 
     lb.y = std::floor(std::min(std::min(point1.y, point2.y), point3.y)); 
-    rt.x = std::floor(std::max(std::max(point1.x, point2.x), point3.x)); 
-    rt.y = std::floor(std::max(std::max(point1.y, point2.y), point3.y)); 
+    rt.x = std::ceil(std::max(std::max(point1.x, point2.x), point3.x)); 
+    rt.y = std::ceil(std::max(std::max(point1.y, point2.y), point3.y)); 
     return std::make_tuple(lb, rt);
 }
 

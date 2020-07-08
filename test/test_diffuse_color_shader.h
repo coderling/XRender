@@ -5,7 +5,7 @@
 
 namespace XRender::Test
 {
-    class RandomColor : public Shader
+    class DiffuseColor : public Shader
     {
         Sampler2D texture;
         void Init() override

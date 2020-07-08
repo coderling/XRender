@@ -178,6 +178,7 @@ void XRender::Camera::Update()
     GraphicsGlobalData::matrix_p = this->proj;
     GraphicsGlobalData::matrix_vp = this->proj * this->view;
     GraphicsGlobalData::matrix_viewport = this->view_port;
+    render_target->OnUpdate();
 }
 
 void XRender::Camera::Present()

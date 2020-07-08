@@ -1,9 +1,10 @@
 #include "Pipeline.h"
 #include "test_color_shader.h"
-#include "test_random_color_shader.h"
+#include "test_diffuse_color_shader.h"
 
 namespace XRender::Test
 {
+    template<typename T>
     void LoadObjModelAsObject(Scene* scene)
     {
         std::unique_ptr<Object> obj = std::make_unique<Object>();
@@ -12,7 +13,7 @@ namespace XRender::Test
         obj->renderer = std::make_unique<Renderer>();
         obj->renderer->mesh = std::move(mesh);
         obj->renderer->mat = std::make_unique<Matrial>();
-        obj->renderer->mat->shader = Shader::CreateShader<RandomColor>();
+        obj->renderer->mat->shader = Shader::CreateShader<T>();
         obj->renderer->mat->SetAtrribute("texture", std::move(texture));
         obj->SetPosition(Vec3f(0, 0, -2));
         scene->AddObject(std::move(obj));

@@ -163,8 +163,14 @@
 
 {
   "directory": "C:/dev/MyGit/XRender/build",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\test\\..\\include -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fotest\\CMakeFiles\\XRenderTest.dir\\test_xrender_loop.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\test\\test_xrender_loop.cpp",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\test\\..\\include -I..\\test\\..\\Shaders -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fotest\\CMakeFiles\\XRenderTest.dir\\test_xrender_loop.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\test\\test_xrender_loop.cpp",
   "file": "C:/dev/MyGit/XRender/test/test_xrender_loop.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP  -I..\\test\\..\\include -I..\\test\\..\\Shaders -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fotest\\CMakeFiles\\LambertLight.dir\\test_lambert_lighting.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\test\\test_lambert_lighting.cpp",
+  "file": "C:/dev/MyGit/XRender/test/test_lambert_lighting.cpp"
 },
 
 {

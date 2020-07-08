@@ -16,3 +16,12 @@ void XRender::Scene::AddObject(std::unique_ptr<Object> object)
     }
     objects.emplace_back(std::move(object));
 }
+   
+XRender::Lighting::Light* XRender::Scene::GetLight(const uint32_t& index)
+{
+    if(index < Lighting::max_light_num)
+    {
+        return &lights[index];
+    }
+    return nullptr;
+}

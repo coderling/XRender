@@ -13,6 +13,7 @@ namespace XRender
         virtual ~RenderTarget();
         void Init(const uint32_t& width, const uint32_t& height);
         virtual void OnPresent(const Color* frame_buffer) = 0;
+        virtual void OnUpdate() = 0;
         const uint32_t& GetWidth() const;
         const uint32_t& GetHeight() const;
     protected:

@@ -1,17 +1,24 @@
 cmake_minimum_required(VERSION 3.5)
-project(XRenderTest VERSION 0.0.1 LANGUAGES CXX)
+project(XRenderTest LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(XRenderTest 
-test_xrender_loop.cpp
+set(common_source
 test_color_shader.h
 test_random_color_shader.h
 test_create_scene.h
 test_pipeline.h
 )
 
-target_include_directories(XRenderTest PRIVATE ../include)
-
+add_executable(XRenderTest 
+test_xrender_loop.cpp)
+target_sources(XRenderTest PRIVATE ${ommon_source})
+target_include_directories(XRenderTest PRIVATE ../include PRIVATE ../Shaders)
 target_link_libraries(XRenderTest XRenderLib)
 
-install(TARGETS XRenderTest DESTINATION ${CMAKE_SOURCE_DIR}/bin)
+add_executable(LambertLight 
+test_lambert_lighting.cpp)
+target_sources(LambertLight PRIVATE ${ommon_source})
+target_include_directories(LambertLight PRIVATE ../include PRIVATE ../Shaders)
+target_link_libraries(LambertLight XRenderLib)
+
+install(TARGETS XRenderTest LambertLight DESTINATION ${CMAKE_SOURCE_DIR}/bin)

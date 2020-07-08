@@ -4,7 +4,7 @@ project(XTiny VERSION 0.0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-option(USE_IMAGE_TARGET "select to use specified function" ON)
+# option(USE_IMAGE_TARGET "select to use specified function" ON)
 
 add_executable(XTiny App.cpp)
 
@@ -15,3 +15,4 @@ install(TARGETS XTiny DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 add_subdirectory(src)
 add_subdirectory(test)
 add_subdirectory(thirdParty)
+add_subdirectory(Shaders)

@@ -1,6 +1,8 @@
 #pragma once
 #include <geometry.h>
 
+#include "Lighting.h"
+
 namespace XRender::GraphicsGlobalData
 {
     Matrix matrix_m;
@@ -10,4 +12,6 @@ namespace XRender::GraphicsGlobalData
     Matrix matrix_vp;
     Matrix matrix_mv;
     Matrix matrix_viewport;
+    Lighting::LightData lights[Lighting::max_light_num];
+    Lighting::LightData* light; 
 }

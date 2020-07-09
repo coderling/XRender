@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Pipeline.h"
+#include "Graphics.h"
 
 XRender::Pipeline::Pipeline() 
 {
@@ -8,6 +9,9 @@ XRender::Pipeline::Pipeline()
 }
 
 XRender::Pipeline::~Pipeline(){}
+
+void XRender::Pipeline::Prepare()
+{ }
 
 void XRender::Pipeline::PreRender(){}
 

@@ -17,7 +17,15 @@ namespace XRender::Lighting
     class Light final
     {
     public:
-        LightData data;
+        Light();
+        ~Light();
+        bool IsActive() const;
+        void Enable();
+        void Disable();
+        LightData* GetData() const;
+    private:
+        std::unique_ptr<LightData> data;
+        bool is_active;
     };
     
     const uint32_t max_light_num = 4;

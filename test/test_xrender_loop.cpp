@@ -4,6 +4,7 @@
 
 int main(int argc, char**argv)
 {
-    XRender::Test::OpenSampleModelScene<XRender::Test::DiffuseColor>("Diffuse");
+    auto& render = XRender::Test::OpenSampleModelScene<XRender::Test::DiffuseColor>("Diffuse");
+    render.Loop();
     return 0;
 }

@@ -15,6 +15,7 @@ class Pipeline
 public:
     Pipeline();
     virtual ~Pipeline();
+    void Prepare();
     virtual void PreRender();
     virtual void Render();
     virtual void PostRender();

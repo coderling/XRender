@@ -153,6 +153,25 @@ const XRender::RenderContext& XRender::Graphics::GetRenderContext() const
     return render_context;
 }
 
+void XRender::Graphics::AddLight(const Lighting::LightData* light)
+{
+    if(lights.count(light) != 0)
+    {
+        return;
+    }
+
+    lights.emplace(light);
+}
+
+void XRender::Graphics::RemoveLight(const Lighting::LightData* light)
+{
+    const auto iter = lights.find(light);
+    if(iter != lights.end())
+    {
+        lights.erase(light);
+    }
+}
+
 void XRender::Graphics::Execute()
 {
     render_context.ClearFrameBuffer(render_context.clear_color);
@@ -173,6 +192,17 @@ void XRender::Graphics::SetupGlobalData()
     GraphicsGlobalData::matrix_m = model_matries[current_execute_vbo_id];
     GraphicsGlobalData::matrix_mv = GraphicsGlobalData::matrix_v * GraphicsGlobalData::matrix_m;
     GraphicsGlobalData::matrix_mvp = GraphicsGlobalData::matrix_p * GraphicsGlobalData::matrix_mv;
+
+    uint32_t index = 0;
+    for(const Lighting::LightData* light : lights)
+    {
+        if(index >= Lighting::max_light_num) break;
+
+        GraphicsGlobalData::lights[index] = light;
+        ++index;
+    }
+
+    GraphicsGlobalData::light_count = index;
 }
 
 void XRender::Graphics::BindVertexInput(const uint32_t& index)

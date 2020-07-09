@@ -18,6 +18,17 @@ namespace XRender::Test
         obj->SetPosition(Vec3f(0, 0, -2));
         scene->AddObject(std::move(obj));
     }
+
+    void ConfigSceneLight(Scene* scene)
+    {
+        const auto light = scene->GetLight(0);
+        auto data = light->GetData();
+        data->color = CColor::Wihte;
+        data->intensity = 1;
+        data->range = 0;
+        data->world_pos = Vec4f(0, 0, -1, 0);
+        light->Enable();
+    }
     
     void LoadSampleTriangleAsObject(Scene* scene)
     {

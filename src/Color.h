@@ -32,7 +32,7 @@ namespace XRender
 
     namespace CColor
     {
-        const Color Wihte = {0, 0, 0, 1};
+        const Color Wihte = {1, 1, 1, 1};
         const Color BLACK = {0, 0, 0, 1};
         const Color RED = {1, 0, 0, 1};
         const Color GREEN = {0, 1, 0, 1};

@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include <functional>
+#include <unordered_set>
 
 #include "Semantic.h"
 #include "Vertex.h"
@@ -10,6 +11,7 @@
 #include "geometry.h"
 #include "RenderContext.h"
 #include "NoCopyable.h"
+#include "Lighting.h"
 
 namespace XRender
 {
@@ -64,6 +66,8 @@ public:
     uint32_t GetContextWidth() const;
     uint32_t GetContextHeight() const;
     const RenderContext& GetRenderContext() const;
+    void AddLight(const Lighting::LightData* light);
+    void RemoveLight(const Lighting::LightData* light);
 private:
     void SetupGlobalData();
     void ExecuteVertexShader();
@@ -89,5 +93,7 @@ private:
     uint32_t vbo_id_source;
     RenderContext render_context;
     EDepthTestMethod depth_test_method = EDepthTestMethod::Less;
+
+    std::unordered_set<const Lighting::LightData*> lights;
 };
 }

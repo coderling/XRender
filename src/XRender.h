@@ -15,6 +15,7 @@ public:
     void Initialize(PipelineInitializeData& pipeline_data);
     void Loop();
     void Exit();
+    Pipeline* GetPipeline() const;
 private:
     std::function<void()> tick_func;
     bool quit;

@@ -45,8 +45,10 @@ void XRender::XRender::Loop()
     {
         tick_func();
         Camera::MainCamera().Update();
+        pPipeline->PreRender(); 
         pPipeline->Render();
         Graphics::VirtualGraphic().Execute();
+        pPipeline->PostRender();
         Camera::MainCamera().Present();
     }
 }
@@ -54,4 +56,9 @@ void XRender::XRender::Loop()
 void XRender::XRender::Exit()
 {
     quit = true;
+}
+
+XRender::Pipeline* XRender::XRender::GetPipeline() const
+{
+    return pPipeline;
 }

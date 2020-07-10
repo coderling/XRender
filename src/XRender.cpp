@@ -1,5 +1,6 @@
 #include "XRender.h"
 #include "Graphics.h"
+#include "Time.h"
 
 XRender::XRender::XRender()
 {
@@ -43,6 +44,7 @@ void XRender::XRender::Loop()
 {
     while (!quit)
     {
+        Time::Timer().Update();
         tick_func();
         Camera::MainCamera().Update();
         pPipeline->PreRender(); 

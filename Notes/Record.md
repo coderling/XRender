@@ -1,6 +1,11 @@
 # 记录
 
-## windows生成vs工程，使用devenvbuild，并进行profile
+
+## feature
+
+* 
+
+* windows生成vs工程，使用devenvbuild，并进行profile
 
 * 要profile Rlease才会比较准确，关闭编译器优化，编译链接是生成pdb调试文件
 
@@ -20,3 +25,7 @@
         * [1](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation/rasterization-stage)
         * [2](https://zhuanlan.zhihu.com/p/134912873)
         * [3](https://zhuanlan.zhihu.com/p/65495373)
+
+* ShadowMap
+    * [1](https://learnopengl-cn.readthedocs.io/zh/latest/05%20Advanced%20Lighting/03%20Shadows/01%20Shadow%20Mapping/)
+    * [2](http://www.opengl-tutorial.org/cn/intermediate-tutorials/tutorial-16-shadow-mapping/)

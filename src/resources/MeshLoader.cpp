@@ -39,7 +39,7 @@ void XRender::Res::ILoader<XRender::Mesh>::ObjFileLoad(XRender::Mesh* mesh, cons
         return;
     }
     std::vector<Vec3f> positions;
-    std::vector<Vec3i> normals;
+    std::vector<Vec3f> normals;
     std::vector<Vec2f> uvs;
     std::vector<Vec3i> indeies;
     std::string line;

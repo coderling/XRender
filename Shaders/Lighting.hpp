@@ -5,15 +5,23 @@
 #include "../../src/Lighting.h"
 #include "../../src/Color.h"
 
+const float light_atten_factor1 = 4;
+const float light_atten_factor2 = 4;
+
 inline float LightAttenaution(const XRender::Lighting::LightData& light, const Vec3f& world_pos)
 {
     if(light.world_pos.w < 1e-2)
     {
         return 1;
     }
-    return 1;
-    Vec3f dis = embed<3>(light.world_pos) - world_pos;
-    return 1.0f / std::sqrt(dis.x * dis.x + dis.y * dis.y + dis.z * dis.z);
+
+    Vec3f dir = embed<3>(light.world_pos) - world_pos;
+    float dd = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
+    float d = std::sqrt(dd);
+ 
+    if (d > light.range) return 0;
+
+    return 1.0f / (1.0f + light_atten_factor1 * d + light_atten_factor2 * d);
 }
 
 inline Vec3f LightDir(const XRender::Lighting::LightData& light, const Vec3f& world_pos)

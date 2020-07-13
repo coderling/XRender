@@ -12,4 +12,5 @@
 #include "../src/Scene.h"
 #include "../src/Sampler2D.h"
 #include "../src/resources/Resources.h"
+#include "../src/Shapes/Shape.h"
 #include "../thirdParty/include/geometry.h"

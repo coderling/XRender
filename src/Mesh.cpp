@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "Mesh.h"
 
 uint32_t XRender::Mesh::GetVertexCount() const
@@ -118,4 +120,49 @@ void XRender::Mesh::GetVertexByIndex(Vertex &vertex, const uint32_t &index) cons
     colors? vertex.color = colors.value()[index] : CColor::BLACK;
     uv? vertex.uv = uv.value()[index] : Vec2f_Zero;
     uv2? vertex.uv2 = uv2.value()[index] : Vec2f_Zero;
+}
+
+
+void XRender::Mesh::SetWitchShapeData(const XRender::Shapes::ShapeData& data)
+{
+    vertex_count = std::min(data.index_count, data.vertex_count);
+    positions.clear();
+    for(uint32_t index = 0; index < vertex_count; ++index)
+    {
+        positions.emplace_back(*(data.verteices + index));
+    }
+
+    indeies.clear();
+    for(uint32_t index = 0; index < data.index_count; ++index)
+    {
+        indeies.emplace_back(*(data.indeics + index));
+    }
+
+    if(normals.has_value())
+    {
+        normals->clear();
+    }
+    else
+    {
+        normals.emplace(std::vector<Vec3f>());
+    }
+    for(uint32_t index = 0; index < vertex_count; ++index)
+    {
+        normals->emplace_back(*(data.normals + index));
+    }
+
+
+    if(uv.has_value())
+    {
+        uv->clear();
+    }
+    else
+    {
+        uv.emplace(std::vector<Vec2f>());
+    }
+    for(uint32_t index = 0; index < vertex_count; ++index)
+    {
+        uv->emplace_back(*(data.uv+ index));
+    }
+
 }

@@ -85,4 +85,6 @@ const uint32_t indeics[36] = {
  0, 2, 3, 0, 3, 1, 8, 4, 5, 8, 5, 9, 10, 6, 7, 10, 7, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23,
 };
 
+const uint32_t vertex_count = 24;
+const uint32_t index_count = 36;
 DEFINE_GETDATA(Cube);

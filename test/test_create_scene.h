@@ -19,9 +19,9 @@ namespace XRender::Test
         std::unique_ptr<Object> obj = std::make_unique<Object>();
         std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>();
         std::vector<Vec3f> points =  {
-            Vec3f(-0.5, 0, 0),
-            Vec3f(0, 0.5, 0),
-            Vec3f(0.5, 0, 0)
+            {0.5, 0.5, 0.5},
+            {-0.5, 0.5, 0.5},
+            {0.5, 0.5, -0.5},
         };
         std::vector<Color> colors = {
             Color(1, 0, 0, 1),

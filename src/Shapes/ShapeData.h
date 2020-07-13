@@ -22,7 +22,7 @@ namespace XRender::Shapes
 
     #define DEFINE_GETDATA(T) const XRender::Shapes::ShapeData& XRender::Shapes::T::GetShapeData()\
                               {\
-                                static XRender::Shapes::ShapeData data(24, 36, verteices, normals, uv, indeics);\
+                                static XRender::Shapes::ShapeData data(vertex_count, index_count, verteices, normals, uv, indeics);\
                                 return data;\
                               }
 }

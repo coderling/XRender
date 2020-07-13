@@ -23,6 +23,7 @@ const Vec3f& XRender::Object::GetPosition() const
 void XRender::Object::SetRotation(const Vec3f &rotation)
 {
     this->rotation = rotation;
+    UpdateRendererMatrix();
 }
 
 const Vec3f& XRender::Object::GetRotation() const
@@ -33,6 +34,7 @@ const Vec3f& XRender::Object::GetRotation() const
 void XRender::Object::SetScale(const Vec3f &scale)
 {
     this->scale = scale;
+    UpdateRendererMatrix();
 }
 
 const Vec3f& XRender::Object::GetScale() const

@@ -1,7 +1,9 @@
 #include <Pipeline.h>
 #include <PixelLambert.hpp>
+#include <ColorShader.hpp>
 
 #include "test_util.h"
+#include "test_create_scene.h"
 
 void ConfigLight(XRender::Scene* scene)
 {
@@ -16,21 +18,24 @@ void ConfigLight(XRender::Scene* scene)
 
 void ConfigSceneObjects(XRender::Scene* scene)
 {
+    /*
     std::unique_ptr<XRender::Object> object = XRender::Test::LoadSampleObject<XRender::Shaders::PixelLambert>();
     object->SetPosition(Vec3f(0, 0, -3));
     scene->AddObject(std::move(object));
-
+    */
+    XRender::Test::LoadSampleTriangleAsObject(scene);
+    
     std::unique_ptr<XRender::Object> cube = XRender::Shapes::CreateShape<XRender::Shapes::Cube>();
-    cube->renderer = std::make_unique<XRender::Renderer>();
     cube->renderer->mat = std::make_unique<XRender::Matrial>();
-    cube->renderer->mat->shader = XRender::Shader::CreateShader<XRender::Shaders::PixelLambert>();
-    object->SetPosition(Vec3f(0, 0, -2));
+    cube->renderer->mat->shader = XRender::Shader::CreateShader<XRender::Shaders::ColorShader>();
+    cube->SetPosition(Vec3f(0, 0, -2));
     scene->AddObject(std::move(cube));
+    
 }
 
 int main(int argc, char**argv)
 {
-    auto& render = XRender::Test::OpenSampleModelScene("LambertLight");
+    auto& render = XRender::Test::OpenSampleModelScene("Shadow");
     ConfigLight(render.GetPipeline()->scene.get());
     ConfigSceneObjects(render.GetPipeline()->scene.get());
     render.Loop();

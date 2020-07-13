@@ -55,7 +55,7 @@ void XRender::Graphics::LoadIndexBuffer(const uint32_t &buffer_id, const uint32_
 {
     assert(buffers.count(buffer_id) == 1 && buffers[buffer_id].index_buffer != nullptr);
     uint32_t* vio = buffers[buffer_id].index_buffer;
-    for(uint32_t index = 0; index < buffers[buffer_id].vertex_count; ++index)
+    for(uint32_t index = 0; index < buffers[buffer_id].index_count; ++index)
     {
         vio[index] = index_buffer[index]; 
     }
@@ -274,9 +274,11 @@ void XRender::Graphics::Rasterizer()
 void XRender::Graphics::RasterizerTriangle(const uint32_t& index)
 {
     Vec4f* triangle = cached_triangle.points;
+    VertexBuffer buffer = buffers[current_execute_vbo_id];
     for(uint32_t sub_index = 0; sub_index < 3; ++sub_index)
     {
-        uint32_t t_index = index * 3 + sub_index;
+        uint32_t t_index = buffer.index_buffer[index * 3 + sub_index];
+        std::cout << " " <<(index * 3 + sub_index) << " "<<t_index << " ";
         cached_triangle.vertex_outs[sub_index] = &cached_vertex_out[t_index];
 		Vec4f v;
 		GET_DATA_BY_SEMATIC(v, (*(cached_triangle.vertex_outs[sub_index])), SEMANTIC::SV_POSITION);
@@ -289,6 +291,8 @@ void XRender::Graphics::RasterizerTriangle(const uint32_t& index)
         v.w = w;
         FILL_SHADER_STRUCT((cached_vertex_out[t_index]), SEMANTIC::SV_POSITION, v);
     }
+
+    std::cout << std::endl;
 
     auto [lb, rt] = Math::TriangleBoundingBox(embed<3>(triangle[0]), embed<3>(triangle[1]), embed<3>(triangle[2]));
     lb.x = std::clamp(lb.x, 0, (int)render_context.GetWidth());

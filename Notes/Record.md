@@ -3,7 +3,15 @@
 
 ## feature
 
-* 
+* frustum culling
+
+* texture mapping
+
+* multi Lighting
+
+* shadow map
+
+* animation
 
 * windows生成vs工程，使用devenvbuild，并进行profile
 

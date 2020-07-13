@@ -4,11 +4,6 @@
 
 namespace XRender::Shaders
 {
-    #define BeginShader(type_name)\
-        class type_name : public Shader\
-        {\
-
-
     class ColorShader : public Shader
     {
         void Init() override

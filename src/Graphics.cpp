@@ -255,8 +255,24 @@ void XRender::Graphics::ExecuteVertexShader()
     {
         BindVertexInput(index);
         VertexOutput out = shader->Vertex(bind_vertex_input);
+        PerspectiveDivideAndViewPort(out);
         cached_vertex_out.emplace_back(out);
     }
+}
+
+void XRender::Graphics::PerspectiveDivideAndViewPort(VertexOutput& out)
+{
+		Vec4f v;
+		GET_DATA_BY_SEMATIC(v, out, SEMANTIC::SV_POSITION);
+        float w = v.w;
+        v.x /= w; v.y /= w; v.z /= w; v.w = 1;
+        auto screen_pos = GraphicsGlobalData::matrix_viewport * v;
+        out.screen.x = screen_pos.x;
+        out.screen.y = screen_pos.y;
+        out.viewDepth = v.z;
+        out.viewZ = w;
+        v.w = w;
+        FILL_SHADER_STRUCT(out, SEMANTIC::SV_POSITION, v);
 }
 
 void XRender::Graphics::Rasterizer()
@@ -273,44 +289,28 @@ void XRender::Graphics::Rasterizer()
 
 void XRender::Graphics::RasterizerTriangle(const uint32_t& index)
 {
-    Vec4f* triangle = cached_triangle.points;
+    VertexOutput** triangle = cached_triangle.vertex_outs;
     VertexBuffer buffer = buffers[current_execute_vbo_id];
     for(uint32_t sub_index = 0; sub_index < 3; ++sub_index)
     {
-        uint32_t t_index = buffer.index_buffer[index * 3 + sub_index];
-        std::cout << " " <<(index * 3 + sub_index) << " "<<t_index << " ";
-        cached_triangle.vertex_outs[sub_index] = &cached_vertex_out[t_index];
-		Vec4f v;
-		GET_DATA_BY_SEMATIC(v, (*(cached_triangle.vertex_outs[sub_index])), SEMANTIC::SV_POSITION);
-        float w = v.w;
-        v.x /= w; v.y /= w; v.z /= w; v.w = 1;
-        auto screen_pos = GraphicsGlobalData::matrix_viewport * v;
-        triangle[sub_index] = screen_pos;
-        cached_vertex_out[t_index].x = screen_pos.x;
-        cached_vertex_out[t_index].y = screen_pos.y;
-        v.w = w;
-        FILL_SHADER_STRUCT((cached_vertex_out[t_index]), SEMANTIC::SV_POSITION, v);
+		uint32_t t_index = buffer.index_buffer[index * 3 + sub_index];
+        triangle[sub_index] = &cached_vertex_out[t_index];
     }
 
-    std::cout << std::endl;
-
-    auto [lb, rt] = Math::TriangleBoundingBox(embed<3>(triangle[0]), embed<3>(triangle[1]), embed<3>(triangle[2]));
+    auto [lb, rt] = Math::TriangleBoundingBox(triangle[0]->screen, triangle[1]->screen, triangle[2]->screen);
     lb.x = std::clamp(lb.x, 0, (int)render_context.GetWidth());
     lb.y = std::clamp(lb.y, 0, (int)render_context.GetHeight());
     rt.x = std::clamp(rt.x, 0, (int)render_context.GetWidth());
     rt.y = std::clamp(rt.y, 0, (int)render_context.GetHeight());
 
     Vec2f center_point;
-    Vec2f p1 = embed<2>(triangle[0]);
-    Vec2f p2 = embed<2>(triangle[1]);
-    Vec2f p3 = embed<2>(triangle[2]);
     for(uint32_t x = lb.x; x < rt.x; ++x)
     {
         for(uint32_t y = lb.y; y < rt.y; ++y)
         {
             center_point.x = x + 0.5;
             center_point.y = y + 0.5;
-            auto[alpha, beta, gamma] = Math::TriangleBarycentric(p1, p2, p3, center_point);
+            auto[alpha, beta, gamma] = Math::TriangleBarycentric(triangle[0]->screen, triangle[1]->screen, triangle[2]->screen, center_point);
             if(alpha < 0 || beta < 0 || gamma < 0) continue;
             PropertyBarycentricInterpolation(Vec2i(x, y), Vec3f(alpha, beta, gamma));
         }
@@ -319,19 +319,20 @@ void XRender::Graphics::RasterizerTriangle(const uint32_t& index)
 
 void XRender::Graphics::PropertyBarycentricInterpolation(const Vec2i& point, const Vec3f& barycentric)
 {
-    Vec4f* triangle = cached_triangle.points;
+    VertexOutput** triangle = cached_triangle.vertex_outs;
     Shader* shader = shader_map[current_execute_vbo_id];
-    float viewZ = 1.f / (barycentric.x / triangle[0].w + barycentric.y / triangle[1].w + barycentric.z / triangle[2].w);
-    float A = barycentric.x / (triangle[0].w * viewZ);
-    float B = barycentric.y / (triangle[1].w * viewZ);
-    float G = barycentric.z / (triangle[2].w * viewZ);
-    float depth = Math::BarycentricInterpolation<float>(triangle[0].z, triangle[1].z, triangle[2].z, Vec3f(A, B, G));
+    float viewZ = 1.f / (barycentric.x / triangle[0]->viewZ + barycentric.y / triangle[1]->viewZ + barycentric.z / triangle[2]->viewZ);
+    float A = barycentric.x / (triangle[0]->viewZ * viewZ);
+    float B = barycentric.y / (triangle[1]->viewZ * viewZ);
+    float G = barycentric.z / (triangle[2]->viewZ * viewZ);
+    float depth = Math::BarycentricInterpolation<float>(triangle[0]->viewDepth, triangle[1]->viewDepth, triangle[2]->viewDepth, Vec3f(A, B, G));
     if(!DepthTest(point.x, point.y, depth)) return;
 
     VertexOutput framgent_in;
-    framgent_in.x = point.x; framgent_in.y = point.y;
-    Vec4f shade_pos = Math::BarycentricInterpolation<Vec4f>(triangle[0], triangle[1], triangle[2], barycentric);
-    FILL_SHADER_STRUCT(framgent_in, SEMANTIC::SV_POSITION, shade_pos);
+    framgent_in.screen.x = point.x; framgent_in.screen.y = point.y;
+    framgent_in.viewDepth = depth;
+    framgent_in.viewZ = viewZ;
+
     for(auto interpolation : shader->propertory_interpolation_funcs)
     {
         if(interpolation.first == SEMANTIC::SV_POSITION) continue;
@@ -348,7 +349,7 @@ void XRender::Graphics::ExecuteFragmentShader()
     for(auto framgent_in : cached_frament_in)
     {
         shader->Fragment(framgent_in, color);
-        AfterFramgent(framgent_in.x, framgent_in.y, color);
+        AfterFramgent(framgent_in.screen.x, framgent_in.screen.y, color);
     }
     cached_frament_in.clear();
 }

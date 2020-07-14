@@ -13,7 +13,7 @@ std::tuple<float, float, float> XRender::Math::TriangleBarycentric(const Vec2f& 
     return std::make_tuple(1 - (u.x + u.y) / u.z, u.y / u.z, u.x / u.z);
 }
 
-std::tuple<Vec2i, Vec2i> XRender::Math::TriangleBoundingBox(const Vec3f& point1, const Vec3f& point2, const Vec3f& point3)
+std::tuple<Vec2i, Vec2i> XRender::Math::TriangleBoundingBox(const Vec2f& point1, const Vec2f& point2, const Vec2f& point3)
 {
     Vec2i lb, rt;
     lb.x = std::floor(std::min(std::min(point1.x, point2.x), point3.x)); 

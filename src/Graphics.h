@@ -45,8 +45,8 @@ private:
     struct Triangle
     {
     public:
+        Vec4f screen_points[3];
         VertexOutput* vertex_outs[3];
-        Vec4f points[3];
     };
 public:
 	static Graphics& VirtualGraphic();
@@ -71,6 +71,7 @@ public:
 private:
     void SetupGlobalData();
     void ExecuteVertexShader();
+    void PerspectiveDivideAndViewPort(VertexOutput& out);
     void ExecuteFragmentShader();
     void Rasterizer();
     void RasterizerTriangle(const uint32_t& index);

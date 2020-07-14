@@ -40,6 +40,7 @@ const std::optional<std::vector<Vec2f>>& XRender::Mesh::GetUV2() const
 void XRender::Mesh::SetPositions(const std::vector<Vec3f>& points)
 {
     positions.clear();
+    vertex_count = points.size();
     for (const auto& v : points)
     {
         positions.emplace_back(v);
@@ -49,7 +50,6 @@ void XRender::Mesh::SetPositions(const std::vector<Vec3f>& points)
 void XRender::Mesh::SetIndeies(const std::vector<uint32_t>& indeies)
 {
     this->indeies.clear();
-    this->vertex_count = indeies.size();
     for (const auto& index : indeies)
     {
         this->indeies.emplace_back(index);
@@ -115,7 +115,7 @@ void XRender::Mesh::SetUV2(const std::vector<Vec2f>& uvs)
 void XRender::Mesh::GetVertexByIndex(Vertex &vertex, const uint32_t &index) const
 {
     assert(index < vertex_count);
-    vertex.pos = positions[indeies[index]];
+    vertex.pos = positions[index];
     normals? vertex.normal = normals.value()[index] : Vec3f_Zero;
     colors? vertex.color = colors.value()[index] : CColor::BLACK;
     uv? vertex.uv = uv.value()[index] : Vec2f_Zero;
@@ -125,13 +125,13 @@ void XRender::Mesh::GetVertexByIndex(Vertex &vertex, const uint32_t &index) cons
 
 void XRender::Mesh::SetWitchShapeData(const XRender::Shapes::ShapeData& data)
 {
-    vertex_count = std::min(data.index_count, data.vertex_count);
+    vertex_count = data.vertex_count;
     positions.clear();
     for(uint32_t index = 0; index < vertex_count; ++index)
     {
         positions.emplace_back(*(data.verteices + index));
     }
-
+    
     indeies.clear();
     for(uint32_t index = 0; index < data.index_count; ++index)
     {
@@ -146,6 +146,7 @@ void XRender::Mesh::SetWitchShapeData(const XRender::Shapes::ShapeData& data)
     {
         normals.emplace(std::vector<Vec3f>());
     }
+
     for(uint32_t index = 0; index < vertex_count; ++index)
     {
         normals->emplace_back(*(data.normals + index));

@@ -1,8 +1,26 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <unordered_map>
 
 #include "ILoader.h"
+
+struct Vec3iHash
+{
+    std::size_t operator()(const Vec3i& key) const
+    {
+        using std::hash;
+        return (hash<int>()(key.x)) ^ (hash<int>()(key.y)) ^ (hash<int>()(key.z));
+    }
+};
+
+struct Vec3iEqual
+{
+    bool operator()(const Vec3i& lhs, const Vec3i& rhs) const
+    {
+        return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
+    }
+};
 
 XRender::Res::ILoader<XRender::Mesh>::ILoader()
 {
@@ -84,18 +102,31 @@ void XRender::Res::ILoader<XRender::Mesh>::ObjFileLoad(XRender::Mesh* mesh, cons
             }
         }
     }
-
+    
     std::vector<uint32_t> use_indeies;
+    std::vector<Vec3f> use_positions;
     std::vector<Vec2f> use_uv;
     std::vector<Vec3f> use_normals;
-    for(uint32_t t = 0; t < indeies.size(); ++t)
+    std::unordered_map<Vec3i, uint32_t, Vec3iHash, Vec3iEqual> vertex_indeices;
+    for(uint32_t index = 0; index < indeies.size(); ++index)
     {
-        use_indeies.emplace_back(indeies[t][0]);
-        use_uv.emplace_back(uvs[indeies[t][1]]);
-        use_normals.emplace_back(normals[indeies[t][2]]);
+        const auto& v = indeies[index];
+        if (vertex_indeices.count(v) == 1)
+        {
+            use_indeies.emplace_back(vertex_indeices[v]);
+        }
+        else
+        {
+            use_positions.emplace_back(positions[v.x]);
+            use_uv.emplace_back(uvs[v.y]);
+            use_normals.emplace_back(normals[v.z]);
+            uint32_t v_index = use_positions.size() - 1;
+            vertex_indeices[v] = v_index;
+            use_indeies.emplace_back(v_index);
+        }
     }
 
-    mesh->SetPositions(positions);
+    mesh->SetPositions(use_positions);
     mesh->SetIndeies(use_indeies);
     mesh->SetUV(use_uv);
     mesh->SetNormals(use_normals);

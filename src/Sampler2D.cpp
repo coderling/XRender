@@ -12,7 +12,7 @@ XRender::Color XRender::Sampler2D::Point(const float& u, const float& v)
 {
     if(texture == nullptr)
     {
-        return CColor::BLACK;
+        return CColor::GREY;
     }
 
     uint32_t x = std::lround(u * texture->GetWidth()) % texture->GetWidth();

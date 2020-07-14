@@ -6,7 +6,7 @@
 namespace XRender::Math
 {
     std::tuple<float, float, float> TriangleBarycentric(const Vec2f& point1, const Vec2f& point2, const Vec2f& point3, Vec2f p);
-    std::tuple<Vec2i, Vec2i> TriangleBoundingBox(const Vec3f& point1, const Vec3f& point2, const Vec3f& point3);
+    std::tuple<Vec2i, Vec2i> TriangleBoundingBox(const Vec2f& point1, const Vec2f& point2, const Vec2f& point3);
 
     template<class T>
     T BarycentricInterpolation(const T& proterty1, const T& proterty2, const T& proterty3, const Vec3f& barycentric)

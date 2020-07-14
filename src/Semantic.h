@@ -32,8 +32,9 @@ namespace XRender
     struct VertexOutput
     {
     public:
-        float x;
-        float y;
+        Vec2f screen;
+        float viewDepth;
+        float viewZ;
         std::map<SEMANTIC, std::any> data;
     };
 

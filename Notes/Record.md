@@ -5,6 +5,12 @@
 
 * frustum culling
 
+    * [1](https://www.gamedev.net/articles/programming/general-and-gameplay-programming/frustum-culling-r4613/)
+
+    * [2](http://www.lighthouse3d.com/tutorials/view-frustum-culling/)
+    
+* back culling
+
 * texture mapping
 
 * multi Lighting

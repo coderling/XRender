@@ -27,7 +27,7 @@ void ConfigSceneObjects(XRender::Scene* scene)
     std::unique_ptr<XRender::Object> cube = XRender::Shapes::CreateShape<XRender::Shapes::Panel>();
     cube->renderer->mat = std::make_unique<XRender::Matrial>();
     cube->renderer->mat->shader = XRender::Shader::CreateShader<XRender::Shaders::PixelLambert>();
-    cube->SetPosition(Vec3f(0, 0, -5));
+    cube->SetPosition(Vec3f(0, 0, -10));
     cube->SetRotation(Vec3f(45, 45, 45));
     scene->AddObject(std::move(cube));
 }

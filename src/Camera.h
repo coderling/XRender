@@ -37,6 +37,5 @@ private:
     float near_plane;
     float far_plane;
     std::unique_ptr<RenderTarget> render_target;
-    friend class Frustum;
 };
 }

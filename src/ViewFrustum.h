@@ -7,6 +7,13 @@ namespace XRender
 {
     class Frustum final
     {
+    public:
+        enum EState
+        {
+            INSIDE = 0,
+            INTERSECT,
+            OUTSIDE,
+        };
     private:
         struct Plane final
         {
@@ -25,13 +32,15 @@ namespace XRender
             NEAR,
             FAR
         };
+
     public:
         void Update(const Camera& camera);
-        bool PointInFrustum() const;
-        bool SphereInFrustum() const;
-        bool AABBInFrustum() const;
+        EState PointInFrustum(const Vec3f& point) const;
+        EState SphereInFrustum(const Vec3f& pos, const float& radius) const;
+        //bool AABBInFrustum() const;
     private:
         void SetPlane(const EPlane& plane, const float& A, const float& B, const float& C, const float& D);
+        float DistanceToPlane(const uint32_t& plane_index, const Vec3f& point) const;
         Plane planes[6];
     };
 }

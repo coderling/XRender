@@ -60,6 +60,7 @@ namespace XRender
         virtual ~Shader();
          Shader();
     protected:
+        bool enable_shadow = false;
         uint32_t vertex_intput_semantic = 0;
         uint32_t vertex_output_semantic = 0;
         bool HasVertexInputSemantic(const SEMANTIC& semantic) const;

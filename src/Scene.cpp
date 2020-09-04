@@ -10,10 +10,16 @@ const std::vector<XRender::Renderer*>& XRender::Scene::GetActiveRenderers() cons
 
 void XRender::Scene::AddObject(std::unique_ptr<Object> object)
 {
+    bounds.Expand(object->GetPosition());
     if(object->renderer != nullptr)
     {
+        if(object->renderer->mesh != nullptr)
+        {
+            bounds.Expand(object->renderer->mesh->bounds);
+        }
         renderers.emplace_back(object->renderer.get());
     }
+    
     objects.emplace_back(std::move(object));
 }
    

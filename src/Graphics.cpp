@@ -161,6 +161,13 @@ void XRender::Graphics::AddLight(const Lighting::LightData* light)
     }
 
     lights.emplace(light);
+    if(light->intensity > 0 && light->world_pos.w == 0)
+    {
+        if(shadow_light == nullptr || shadow_light->intensity < light->intensity)
+        {
+            shadow_light = light;
+        }
+    }
 }
 
 void XRender::Graphics::RemoveLight(const Lighting::LightData* light)
@@ -179,12 +186,24 @@ void XRender::Graphics::Execute()
     for(const auto& kv : shader_map)
     {
         current_execute_vbo_id = kv.first;
+        if(kv.second->enable_shadow)
+        {
+            RenderShadowMap();
+        }
         SetupGlobalData();
         ExecuteVertexShader();
         Rasterizer();
         ExecuteFragmentShader();
     }
     current_execute_vbo_id = 0;
+}
+
+void XRender::Graphics::RenderShadowMap()
+{
+    if(shadow_light == nullptr)
+        return;
+    
+    
 }
 
 void XRender::Graphics::SetupGlobalData()
@@ -269,7 +288,8 @@ void XRender::Graphics::PerspectiveDivideAndViewPort(VertexOutput& out)
         auto screen_pos = GraphicsGlobalData::matrix_viewport * v;
         out.screen.x = screen_pos.x;
         out.screen.y = screen_pos.y;
-        out.viewDepth = v.z;
+        /// v.z [-1, 1] => [0, 1]
+        out.viewDepth = v.z * 0.5f + 0.5f;
         out.viewZ = w;
         v.w = w;
         FILL_SHADER_STRUCT(out, SEMANTIC::SV_POSITION, v);

@@ -73,6 +73,7 @@ private:
     void ExecuteVertexShader();
     void PerspectiveDivideAndViewPort(VertexOutput& out);
     void ExecuteFragmentShader();
+    void RenderShadowMap();
     void Rasterizer();
     void RasterizerTriangle(const uint32_t& index);
     void PropertyBarycentricInterpolation(const Vec2i& point, const Vec3f& barycentric);
@@ -96,5 +97,6 @@ private:
     EDepthTestMethod depth_test_method = EDepthTestMethod::Less;
 
     std::unordered_set<const Lighting::LightData*> lights;
+    const Lighting::LightData* shadow_light = nullptr;
 };
 }

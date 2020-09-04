@@ -7,6 +7,7 @@
 #include "Vertex.h"
 #include "Color.h"
 #include "./Shapes/ShapeData.h"
+#include "Bounds.h"
 
 namespace XRender
 {
@@ -29,6 +30,9 @@ public:
     void SetUV2(const std::vector<Vec2f>& uvs);
     void GetVertexByIndex(Vertex& vertex, const uint32_t& index) const;
     void SetWitchShapeData(const Shapes::ShapeData& data);
+
+public:
+    Bounds bounds;
 private:
     std::vector<Vec3f> positions;
     std::vector<uint32_t >indeies;

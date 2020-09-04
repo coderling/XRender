@@ -108,6 +108,7 @@ void XRender::Res::ILoader<XRender::Mesh>::ObjFileLoad(XRender::Mesh* mesh, cons
     std::vector<Vec2f> use_uv;
     std::vector<Vec3f> use_normals;
     std::unordered_map<Vec3i, uint32_t, Vec3iHash, Vec3iEqual> vertex_indeices;
+    mesh->bounds.Zero();
     for(uint32_t index = 0; index < indeies.size(); ++index)
     {
         const auto& v = indeies[index];
@@ -117,6 +118,7 @@ void XRender::Res::ILoader<XRender::Mesh>::ObjFileLoad(XRender::Mesh* mesh, cons
         }
         else
         {
+            mesh->bounds.Expand(positions[v.x]);
             use_positions.emplace_back(positions[v.x]);
             use_uv.emplace_back(uvs[v.y]);
             use_normals.emplace_back(normals[v.z]);

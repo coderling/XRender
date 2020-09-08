@@ -14,14 +14,14 @@ namespace XRender::Test
         light->Enable();
     }
     
-    void LoadSampleTriangleAsObject(Scene* scene)
+    std::unique_ptr<Object> LoadSampleTriangleAsObject()
     {
         std::unique_ptr<Object> obj = std::make_unique<Object>();
         std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>();
         std::vector<Vec3f> points =  {
             {0.5, 0.5, 0.5},
+            {0,- 0.5, 0.5},
             {-0.5, 0.5, 0.5},
-            {0.5, 0.5, -0.5},
         };
         std::vector<Color> colors = {
             Color(1, 0, 0, 1),
@@ -38,7 +38,7 @@ namespace XRender::Test
         obj->renderer->mat = std::make_unique<Matrial>();
         obj->renderer->mat->shader = Shader::CreateShader<ColorShader>();
         obj->SetPosition(Vec3f(0, 0, -2));
-        scene->AddObject(std::move(obj));
+        return obj;
     }
 
         

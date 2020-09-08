@@ -3,6 +3,7 @@
 
 #include "RenderTarget.h"
 #include "RenderContext.h"
+#include "ViewFrustum.h"
 
 namespace XRender
 {
@@ -24,6 +25,7 @@ public:
     void SetRenderTarget(std::unique_ptr<RenderTarget> target);
     void Update();
     void Present();
+    const Frustum& GetFrustum() const;
 private:
     void ReCaculateProjectMatrix();
     void CaculatePerspective();
@@ -36,6 +38,10 @@ private:
     float aspect;
     float near_plane;
     float far_plane;
+    Frustum frustum;
     std::unique_ptr<RenderTarget> render_target;
+
+    Vec3f pos;
+    Vec3f rotation;
 };
 }

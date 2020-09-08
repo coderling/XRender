@@ -178,7 +178,13 @@ void XRender::Camera::Update()
     GraphicsGlobalData::matrix_p = this->proj;
     GraphicsGlobalData::matrix_vp = this->proj * this->view;
     GraphicsGlobalData::matrix_viewport = this->view_port;
+    frustum.Update(proj);
     render_target->OnUpdate();
+}
+
+const XRender::Frustum& XRender::Camera::GetFrustum() const
+{
+    return frustum;
 }
 
 void XRender::Camera::Present()

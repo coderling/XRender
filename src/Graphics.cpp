@@ -203,7 +203,7 @@ void XRender::Graphics::RenderShadowMap()
     if(shadow_light == nullptr)
         return;
     
-    
+
 }
 
 void XRender::Graphics::SetupGlobalData()
@@ -307,6 +307,12 @@ void XRender::Graphics::Rasterizer()
     cached_vertex_out.clear();
 }
 
+bool XRender::Graphics::IsBackFace(const Vec2f& p1, const Vec2f& p2, const Vec2f& p3) const
+{
+    float signed_value = p3.x * p2.y - p1.x * p2.y - p1.x * p2.y - p2.x * p3.y + p2.x * p1.y + p1.x * p3.y;
+    return signed_value <= 0;
+}
+
 void XRender::Graphics::RasterizerTriangle(const uint32_t& index)
 {
     VertexOutput** triangle = cached_triangle.vertex_outs;
@@ -316,6 +322,11 @@ void XRender::Graphics::RasterizerTriangle(const uint32_t& index)
 		uint32_t t_index = buffer.index_buffer[index * 3 + sub_index];
         triangle[sub_index] = &cached_vertex_out[t_index];
     }
+
+    // back-face culling, 计算几何，判断线段的拐向， 矢量叉积
+    if(IsBackFace(triangle[0]->screen, triangle[1]->screen, triangle[2]->screen))
+        return;
+    
 
     auto [lb, rt] = Math::TriangleBoundingBox(triangle[0]->screen, triangle[1]->screen, triangle[2]->screen);
     lb.x = std::clamp(lb.x, 0, (int)render_context.GetWidth());

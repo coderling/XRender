@@ -1,5 +1,4 @@
 #include "Cull.h"
-#include "ViewFrustum.h"
 
 XRender::Cull& XRender::Cull::GlobalCull()
 {
@@ -9,8 +8,6 @@ XRender::Cull& XRender::Cull::GlobalCull()
 
 const std::vector<XRender::Renderer*>& XRender::Cull::CullRenderers(const Camera &cam, const Scene* scene)
 {
-    static Frustum frustum;
-    frustum.Update(cam);
     renderers.clear();
     const auto& active_renderers = scene->GetActiveRenderers();
     for(auto renderer : active_renderers)

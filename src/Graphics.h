@@ -45,7 +45,6 @@ private:
     struct Triangle
     {
     public:
-        Vec4f screen_points[3];
         VertexOutput* vertex_outs[3];
     };
 public:
@@ -82,10 +81,11 @@ private:
     void BindVertexInput(const uint32_t& index);
     void FillSemanticToVertexInput(const uint32_t& index, const SEMANTIC& st);
     void ReleaseVertexBuffer(VertexBuffer& buffer);
-    
+    bool IsBackFace(const Vec2f& p1, const Vec2f& p2, const Vec2f& p3) const; 
     VertexInput bind_vertex_input;
     std::vector<VertexOutput> cached_vertex_out;
     Triangle cached_triangle;
+    Vec3f cached_face[3];
     std::vector<VertexOutput> cached_frament_in;
     uint32_t current_execute_vbo_id;
     

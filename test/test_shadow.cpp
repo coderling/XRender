@@ -34,7 +34,7 @@ void ConfigSceneObjects(XRender::Scene* scene)
 
 int main(int argc, char**argv)
 {
-    auto& render = XRender::Test::OpenSampleModelScene("Shadow");
+    auto& render = XRender::Test::OpenSampleModelScene("Shadow", [] {});
     ConfigLight(render.GetPipeline()->scene.get());
     ConfigSceneObjects(render.GetPipeline()->scene.get());
     render.Loop();

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <geometry.h>
-#include "Camera.h"
+
+#include "Bounds.h"
 
 namespace XRender
 {
@@ -34,13 +35,14 @@ namespace XRender
         };
 
     public:
-        void Update(const Camera& camera);
+        void Update(const Matrix& matrix);
         EState PointInFrustum(const Vec3f& point) const;
         EState SphereInFrustum(const Vec3f& pos, const float& radius) const;
-        //bool AABBInFrustum() const;
+        EState AABBInFrustum(const Bounds& bounds) const;
     private:
         void SetPlane(const EPlane& plane, const float& A, const float& B, const float& C, const float& D);
         float DistanceToPlane(const uint32_t& plane_index, const Vec3f& point) const;
         Plane planes[6];
+        Bounds bounds;        
     };
 }

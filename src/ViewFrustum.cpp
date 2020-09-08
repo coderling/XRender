@@ -1,11 +1,11 @@
 #include <cmath>
+#include <algorithm>
 
 #include "ViewFrustum.h"
 
 
-void XRender::Frustum::Update(const Camera& camera)
+void XRender::Frustum::Update(const Matrix& matrix)
 {
-    const auto& matrix = camera.GetProjMatrix();
     SetPlane(EPlane::LEFT,  matrix[3][0] + matrix[0][0], matrix[3][1] + matrix[0][1], matrix[3][2] + matrix[0][2], matrix[3][3] + matrix[0][3]);
     SetPlane(EPlane::RIGHT, matrix[3][0] - matrix[0][0], matrix[3][1] - matrix[0][1], matrix[3][2] - matrix[0][2], matrix[3][3] - matrix[0][3]);
     
@@ -59,4 +59,10 @@ XRender::Frustum::EState XRender::Frustum::SphereInFrustum(const Vec3f& point, c
         }
     }
     return INSIDE;
+}
+
+XRender::Frustum::EState XRender::Frustum::AABBInFrustum(const Bounds& bounds) const
+{
+    float max_distance = std::max(bounds.extents.x, std::max(bounds.extents.y, bounds.extents.z));
+    return SphereInFrustum(bounds.center, max_distance);
 }

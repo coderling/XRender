@@ -6,6 +6,7 @@
 
 #include "Scene.h"
 #include "RenderTarget.h"
+#include "Camera.h"
 
 namespace XRender
 {
@@ -16,10 +17,11 @@ public:
     Pipeline();
     virtual ~Pipeline();
     void Prepare();
+    void BaseRender(const std::vector<Camera*>& camreas);
     virtual void PreRender();
-    virtual void Render();
+    virtual void Render(Camera* camera);
     virtual void PostRender();
-    void DrawRenderers(const std::vector<Renderer*>& renderers);
+    void DrawRenderers(const std::vector<Renderer*>& renderers, Camera* camera);
     
     std::unique_ptr<Scene> scene;
 };

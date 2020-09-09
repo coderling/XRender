@@ -67,8 +67,10 @@ public:
     const RenderContext& GetRenderContext() const;
     void AddLight(const Lighting::LightData* light);
     void RemoveLight(const Lighting::LightData* light);
+    void ActiveRender(const uint32_t& vbo_id);
 private:
     void SetupGlobalData();
+    void SetupObjectData();
     void ExecuteVertexShader();
     void PerspectiveDivideAndViewPort(VertexOutput& out);
     void ExecuteFragmentShader();
@@ -82,6 +84,7 @@ private:
     void FillSemanticToVertexInput(const uint32_t& index, const SEMANTIC& st);
     void ReleaseVertexBuffer(VertexBuffer& buffer);
     bool IsBackFace(const Vec2f& p1, const Vec2f& p2, const Vec2f& p3) const; 
+
     VertexInput bind_vertex_input;
     std::vector<VertexOutput> cached_vertex_out;
     Triangle cached_triangle;
@@ -89,6 +92,7 @@ private:
     std::vector<VertexOutput> cached_frament_in;
     uint32_t current_execute_vbo_id;
     
+    std::unordered_set<uint32_t> active_buffers;
     std::map<uint32_t, VertexBuffer> buffers;
     std::map<uint32_t, Shader*> shader_map; 
     std::map<uint32_t, Matrix> model_matries; 

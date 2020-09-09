@@ -18,7 +18,7 @@ public:
     float GetDepthBuffer(const uint32_t& x, const uint32_t& y);
     const uint32_t& GetWidth() const;
     const uint32_t& GetHeight() const;
-    void ClearFrameBuffer(const XRender::Color& color);
+    void ClearFrameBuffer(const Color& color);
     void ClearDepthBuffer(const float& depth);
 
 public:

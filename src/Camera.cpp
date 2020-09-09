@@ -4,7 +4,7 @@
 
 XRender::Camera& XRender::Camera::MainCamera()
 {
-	static XRender::Camera main_camera;
+	static Camera main_camera;
 	return main_camera;
 }
 
@@ -174,12 +174,16 @@ void XRender::Camera::SetRenderTarget(std::unique_ptr<RenderTarget> target)
 
 void XRender::Camera::Update()
 {
+    frustum.Update(proj);
+    render_target->OnUpdate();
+}
+
+void XRender::Camera::SyncGraphicsCameraData() const
+{
     GraphicsGlobalData::matrix_v = this->view;
     GraphicsGlobalData::matrix_p = this->proj;
     GraphicsGlobalData::matrix_vp = this->proj * this->view;
     GraphicsGlobalData::matrix_viewport = this->view_port;
-    frustum.Update(proj);
-    render_target->OnUpdate();
 }
 
 const XRender::Frustum& XRender::Camera::GetFrustum() const
@@ -193,4 +197,11 @@ void XRender::Camera::Present()
     assert(Graphics::VirtualGraphic().GetContextHeight() == render_target->GetHeight());
     const Color* frame_buffer = Graphics::VirtualGraphic().GetRenderContext().GetBuffer();
     render_target->OnPresent(frame_buffer);
+}
+
+void XRender::Camera::Render()
+{
+    SyncGraphicsCameraData();
+    Graphics::VirtualGraphic().Execute();
+    Present();
 }

@@ -24,8 +24,10 @@ public:
     void SetViewPort(const float& x, const float& y, const float& w, const float& h);
     void SetRenderTarget(std::unique_ptr<RenderTarget> target);
     void Update();
+    void SyncGraphicsCameraData() const;
     void Present();
     const Frustum& GetFrustum() const;
+    void Render();
 private:
     void ReCaculateProjectMatrix();
     void CaculatePerspective();

@@ -18,6 +18,7 @@ public:
     Renderer();
     void Batch();
     void UpdateMatrix(const Matrix& matrix);
+    const uint32_t& GetVbo() const;
 public:
     bool active;
     bool geometryDirty;

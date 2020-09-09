@@ -183,19 +183,17 @@ void XRender::Graphics::Execute()
 {
     render_context.ClearFrameBuffer(render_context.clear_color);
     render_context.ClearDepthBuffer(render_context.clear_depth);
-    for(const auto& kv : shader_map)
+    SetupGlobalData();
+    for(const auto& vbo_id : active_buffers)
     {
-        current_execute_vbo_id = kv.first;
-        if(kv.second->enable_shadow)
-        {
-            RenderShadowMap();
-        }
-        SetupGlobalData();
+        current_execute_vbo_id = vbo_id;
+        SetupObjectData();
         ExecuteVertexShader();
         Rasterizer();
         ExecuteFragmentShader();
     }
     current_execute_vbo_id = 0;
+    active_buffers.clear();
 }
 
 void XRender::Graphics::RenderShadowMap()
@@ -208,10 +206,6 @@ void XRender::Graphics::RenderShadowMap()
 
 void XRender::Graphics::SetupGlobalData()
 {
-    GraphicsGlobalData::matrix_m = model_matries[current_execute_vbo_id];
-    GraphicsGlobalData::matrix_mv = GraphicsGlobalData::matrix_v * GraphicsGlobalData::matrix_m;
-    GraphicsGlobalData::matrix_mvp = GraphicsGlobalData::matrix_p * GraphicsGlobalData::matrix_mv;
-
     uint32_t index = 0;
     for(const Lighting::LightData* light : lights)
     {
@@ -222,6 +216,13 @@ void XRender::Graphics::SetupGlobalData()
     }
 
     GraphicsGlobalData::light_count = index;
+}
+
+void XRender::Graphics::SetupObjectData()
+{
+    GraphicsGlobalData::matrix_m = model_matries[current_execute_vbo_id];
+    GraphicsGlobalData::matrix_mv = GraphicsGlobalData::matrix_v * GraphicsGlobalData::matrix_m;
+    GraphicsGlobalData::matrix_mvp = GraphicsGlobalData::matrix_p * GraphicsGlobalData::matrix_mv;
 }
 
 void XRender::Graphics::BindVertexInput(const uint32_t& index)
@@ -388,6 +389,11 @@ void XRender::Graphics::ExecuteFragmentShader()
 void XRender::Graphics::AfterFramgent(const uint32_t& x, const uint32_t& y, const Color& color)
 {
     render_context.SetPixel(x, y, color);
+}
+
+void XRender::Graphics::ActiveRender(const uint32_t& vbo_id)
+{
+    active_buffers.emplace(vbo_id);
 }
 
 XRender::Graphics& XRender::Graphics::VirtualGraphic()

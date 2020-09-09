@@ -5,17 +5,12 @@
 XRender::XRender::XRender()
 {
     quit = false;
-    tick_func = nullptr;
     pPipeline = nullptr;
 }
 
 XRender::XRender::~XRender()
 {
-    if(tick_func != nullptr)
-    {
-        tick_func = nullptr;
-    }
-
+    ticks.clear();
     if(pPipeline != nullptr)
     {
         pPipeline = nullptr;
@@ -29,15 +24,12 @@ void XRender::XRender::Initialize(PipelineInitializeData& pipeline_data)
     assert(pipeline_data.width > 0 && pipeline_data.height > 0);
 
     pipeline_data.render_target->Init(pipeline_data.width, pipeline_data.height);
-    tick_func = pipeline_data.tick_func;
-    if(tick_func == nullptr)
-    {
-        tick_func = [](){};
-    }
-
+    RegistrTickFunc(pipeline_data.tick_func);
     pPipeline = pipeline_data.pipeline;
+    
     Graphics::VirtualGraphic().InitRenderContext(pipeline_data.render_target->GetWidth(), pipeline_data.render_target->GetHeight());
     Camera::MainCamera().SetRenderTarget(std::move(pipeline_data.render_target));
+    RegisterCamera(&Camera::MainCamera());
 }
 
 void XRender::XRender::Loop()
@@ -45,13 +37,76 @@ void XRender::XRender::Loop()
     while (!quit)
     {
         Time::Timer().Update();
-        tick_func();
-        Camera::MainCamera().Update();
-        pPipeline->PreRender(); 
-        pPipeline->Render();
-        Graphics::VirtualGraphic().Execute();
-        pPipeline->PostRender();
-        Camera::MainCamera().Present();
+        InnerTick();
+        pPipeline->BaseRender(cameras);
+    }
+}
+
+void XRender::XRender::TickCamera() const
+{
+    for(auto& c : cameras)
+    {
+        c->Update();
+    }
+}
+
+void XRender::XRender::RegisterCamera(Camera* camera)
+{
+    for(const auto& c : cameras)
+    {
+        if(c == camera)
+        {
+            return;
+        }
+    }
+
+    cameras.emplace_back(camera);
+}
+
+void XRender::XRender::UnRegisterCamera(Camera* camera)
+{
+    auto iter = cameras.begin();
+    for(; iter != cameras.end(); iter++)
+    {
+        if(*iter == camera)
+        {
+            cameras.erase(iter);
+            return;
+        }
+    }
+}
+
+void XRender::XRender::RegistrTickFunc(std::function<void()> tick)
+{
+    for(const auto& t : ticks)
+    {
+        if(t.target<void()>() == tick.target<void()>())
+        {
+            return;
+        }
+    }
+    ticks.emplace_back(tick);
+}
+
+void XRender::XRender::UnRegistrTickFunc(std::function<void ()> tick)
+{
+    auto iter = ticks.begin();
+    for(; iter != ticks.end(); iter++)
+    {
+        if(*iter->target<void()>() == tick.target<void()>())
+        {
+            ticks.erase(iter);
+            return;
+        }
+    }
+}
+
+void XRender::XRender::InnerTick()
+{
+    TickCamera();
+    for(const auto& tick : ticks)
+    {
+        tick();
     }
 }
 

@@ -12,7 +12,7 @@ class Cull
 {
 public:
 	static Cull& GlobalCull();
-    const std::vector<Renderer*>& CullRenderers(const Camera& cam, const Scene* scene);
+    const std::vector<Renderer*>& CullRenderers(const Camera* cam, const Scene* scene);
 private:
     std::vector<Renderer*> renderers;
 };

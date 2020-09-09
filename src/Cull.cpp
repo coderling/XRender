@@ -6,7 +6,7 @@ XRender::Cull& XRender::Cull::GlobalCull()
 	return global_cull;
 }
 
-const std::vector<XRender::Renderer*>& XRender::Cull::CullRenderers(const Camera &cam, const Scene* scene)
+const std::vector<XRender::Renderer*>& XRender::Cull::CullRenderers(const Camera* cam, const Scene* scene)
 {
     renderers.clear();
     const auto& active_renderers = scene->GetActiveRenderers();

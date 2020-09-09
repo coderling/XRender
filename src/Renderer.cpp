@@ -51,3 +51,7 @@ void XRender::Renderer::UpdateMatrix(const Matrix& matrix)
       virtual_graphics.LoadModelMatrix(vbo_id, model_matrix);
 }
 
+const uint32_t& XRender::Renderer::GetVbo() const
+{
+    return vbo_id;
+}

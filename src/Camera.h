@@ -4,6 +4,7 @@
 #include "RenderTarget.h"
 #include "RenderContext.h"
 #include "ViewFrustum.h"
+#include "GraphicsEnum.h"
 
 namespace XRender
 {
@@ -27,12 +28,12 @@ public:
     void SyncGraphicsCameraData() const;
     void Present();
     const Frustum& GetFrustum() const;
-    void Render();
 private:
     void ReCaculateProjectMatrix();
     void CaculatePerspective();
     Matrix CaculateOrthgraphic(const float& left, const float& right, const float& top, const float& bottom, const float& near, const float& far) const;
     bool is_perspective;
+    Matrix invert_view;
     Matrix view;
     Matrix proj;
     Matrix view_port;
@@ -42,8 +43,6 @@ private:
     float far_plane;
     Frustum frustum;
     std::unique_ptr<RenderTarget> render_target;
-
-    Vec3f pos;
-    Vec3f rotation;
+    int clear_flag = GraphicsEnum::EClearFlag::Clear_Depth | GraphicsEnum::EClearFlag::Clear_Color;
 };
 }

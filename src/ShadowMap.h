@@ -1,12 +1,10 @@
 #pragma once
 
-namespace XRender 
+#include "Lighting.h"
+
+namespace XRender :: ShadowMap
 {
-    class ShadowMap final
-    {
-    public:
-        void Init();
-    private:
-        float* depth_buffer;
-    };
+    void Setup();
+    void Render();
+    void Release();
 }

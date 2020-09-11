@@ -69,3 +69,19 @@ XRender::Color XRender::Color32ToColor(const XRender::Color32 &color)
 
     return col;
 }
+
+void XRender::ColorToColor32(const XRender::Color &color, XRender::Color32& ret)
+{
+    ret.r = static_cast<uint8_t>(std::round(color.r * 255));
+    ret.g = static_cast<uint8_t>(std::round(color.g * 255));
+    ret.b = static_cast<uint8_t>(std::round(color.b * 255));
+    ret.a = static_cast<uint8_t>(std::round(color.a * 255));
+}
+
+void XRender::Color32ToColor(const XRender::Color32 &color, XRender::Color& ret)
+{
+    ret.r = color.r * 1.f / 255;
+    ret.g = color.g * 1.f / 255;
+    ret.b = color.b * 1.f / 255;
+    ret.a = color.a * 1.f / 255;
+}

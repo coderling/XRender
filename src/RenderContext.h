@@ -23,7 +23,7 @@ public:
 
 public:
     Color clear_color = XRender::CColor::BLUE;
-    float clear_depth = 0;
+    float clear_depth = 1;
 private:
     uint32_t GetIndex(const uint32_t& x, const uint32_t& y) const;
 

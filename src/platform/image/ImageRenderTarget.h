@@ -11,11 +11,11 @@ namespace XRender
     public:
         ImageRenderTarget(const std::string& name);
         ~ImageRenderTarget() override;
-        void OnPresent(const Color* frame_buffer) override;
+        void OnPresent(const RenderContext* context) override;
         void Save();
     private:
         void OnInit() override;
-        TGAColor ColorToTGAColor(const Color& color);
+        void ColorToTGAColor(const XRender::Color& color, TGAColor& ret);
         std::unique_ptr<TGAImage> pRtImage = nullptr;
         std::string out_path;
     };

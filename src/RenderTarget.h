@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Color.h"
+#include "RenderContext.h"
 
 namespace XRender
 {
@@ -12,7 +13,7 @@ namespace XRender
         RenderTarget(const std::string& name);
         virtual ~RenderTarget();
         void Init(const uint32_t& width, const uint32_t& height);
-        virtual void OnPresent(const Color* frame_buffer) = 0;
+        virtual void OnPresent(const RenderContext* context) = 0;
         virtual void OnUpdate() = 0;
         const uint32_t& GetWidth() const;
         const uint32_t& GetHeight() const;

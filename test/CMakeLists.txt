@@ -13,19 +13,19 @@ test_util.h
 add_executable(XRenderTest 
 test_xrender_loop.cpp)
 target_sources(XRenderTest PRIVATE ${ommon_source})
-target_include_directories(XRenderTest PRIVATE ../include PRIVATE ../Shaders)
+target_include_directories(XRenderTest PRIVATE ../include PRIVATE ../Shaders PRIVATE ../PostProcessing)
 target_link_libraries(XRenderTest XRenderLib)
 
 add_executable(LambertLight 
 test_lambert_lighting.cpp)
 target_sources(LambertLight PRIVATE ${ommon_source})
-target_include_directories(LambertLight PRIVATE ../include PRIVATE ../Shaders)
+target_include_directories(LambertLight PRIVATE ../include PRIVATE ../Shaders PRIVATE ../PostProcessing)
 target_link_libraries(LambertLight XRenderLib)
 
 add_executable(TestShadow
 test_shadow.cpp)
 target_sources(TestShadow PRIVATE ${ommon_source})
-target_include_directories(TestShadow PRIVATE ../include PRIVATE ../Shaders)
+target_include_directories(TestShadow PRIVATE ../include PRIVATE ../Shaders PRIVATE ../PostProcessing)
 target_link_libraries(TestShadow XRenderLib)
 
 install(TARGETS XRenderTest LambertLight DESTINATION ${CMAKE_SOURCE_DIR}/bin)

@@ -22,4 +22,9 @@ namespace XRender::Math
     Matrix TransposeMatrix(Vec3f trans);
     
     Matrix ModelMatrix(Vec3f pos, Vec3f scale, Vec3f angle);
+
+    inline bool FloatEqual(const float& lv, const float& rv)
+    {
+        return std::abs(lv - rv) < 1e-4;
+    }
 }

@@ -51,6 +51,7 @@ void XRender::Camera::LookAt(const Vec3f& pos, const Vec3f& up, const Vec3f& loo
     view[2][1] = lk.y;
     view[2][2] = lk.z;
     view[2][3] = lk.x * -pos.x + lk.y * -pos.y + lk.z * -pos.z;
+    invert_view = view.invert();
 }
 
 void XRender::Camera::SetIsPerspective(const bool& isPerProj)
@@ -100,8 +101,8 @@ void XRender::Camera::CaculatePerspective()
     float right = top * aspect;
     float left = -right;
     
-    float near = -near_plane;
-    float far = -far_plane;
+    float near = near_plane;
+    float far = far_plane;
     // 挤压到正交的视锥体, 再进行正交投影
     Matrix persToOrthMatrix = Matrix::identity();
     persToOrthMatrix[0][0] = near;
@@ -174,16 +175,20 @@ void XRender::Camera::SetRenderTarget(std::unique_ptr<RenderTarget> target)
 
 void XRender::Camera::Update()
 {
-    frustum.Update(proj);
+    frustum.Update(proj * view);
     render_target->OnUpdate();
 }
 
 void XRender::Camera::SyncGraphicsCameraData() const
 {
+    GraphicsGlobalData::zbuffer_args.x = 1 - far_plane / near_plane;
+    GraphicsGlobalData::zbuffer_args.y = far_plane / near_plane;
     GraphicsGlobalData::matrix_v = this->view;
     GraphicsGlobalData::matrix_p = this->proj;
     GraphicsGlobalData::matrix_vp = this->proj * this->view;
     GraphicsGlobalData::matrix_viewport = this->view_port;
+    Graphics::VirtualGraphic().SetClearFlag(clear_flag);
+    Graphics::VirtualGraphic().SetDepthOnlyMode(false);
 }
 
 const XRender::Frustum& XRender::Camera::GetFrustum() const
@@ -195,13 +200,5 @@ void XRender::Camera::Present()
 {
     assert(Graphics::VirtualGraphic().GetContextWidth() == render_target->GetWidth());
     assert(Graphics::VirtualGraphic().GetContextHeight() == render_target->GetHeight());
-    const Color* frame_buffer = Graphics::VirtualGraphic().GetRenderContext().GetBuffer();
-    render_target->OnPresent(frame_buffer);
-}
-
-void XRender::Camera::Render()
-{
-    SyncGraphicsCameraData();
-    Graphics::VirtualGraphic().Execute();
-    Present();
+    render_target->OnPresent(&Graphics::VirtualGraphic().GetRenderContext());
 }

@@ -6,6 +6,7 @@
 
 #include "Graphics.h"
 #include "GraphicsGlobalData.h"
+#include "CVVClip.hpp"
 #include "./math/Math.h"
 
 XRender::Graphics::~Graphics(){}
@@ -117,6 +118,9 @@ void XRender::Graphics::Dispose()
 
 bool XRender::Graphics::DepthTest(const uint32_t &x, const uint32_t &y, const float &depth)
 {
+    if(depth < 0 || depth > 1)
+        return false;
+
     const auto& cur_depth = render_context.GetDepthBuffer(x, y);
     switch (depth_test_method) 
     {
@@ -148,7 +152,7 @@ uint32_t XRender::Graphics::GetContextHeight() const
     return render_context.GetHeight();
 }
 
-const XRender::RenderContext& XRender::Graphics::GetRenderContext() const
+XRender::RenderContext& XRender::Graphics::GetRenderContext()
 {
     return render_context;
 }
@@ -161,13 +165,6 @@ void XRender::Graphics::AddLight(const Lighting::LightData* light)
     }
 
     lights.emplace(light);
-    if(light->intensity > 0 && light->world_pos.w == 0)
-    {
-        if(shadow_light == nullptr || shadow_light->intensity < light->intensity)
-        {
-            shadow_light = light;
-        }
-    }
 }
 
 void XRender::Graphics::RemoveLight(const Lighting::LightData* light)
@@ -179,11 +176,30 @@ void XRender::Graphics::RemoveLight(const Lighting::LightData* light)
     }
 }
 
+
+void XRender::Graphics::SetClearFlag(const int& flag)
+{
+    clear_flag = flag;
+}
+
+void XRender::Graphics::SetDepthOnlyMode(const bool& state)
+{
+    depth_only = state;
+}
+
+void XRender::Graphics::BeginFrame()
+{
+    SetupGlobalData();
+}
+
 void XRender::Graphics::Execute()
 {
-    render_context.ClearFrameBuffer(render_context.clear_color);
-    render_context.ClearDepthBuffer(render_context.clear_depth);
-    SetupGlobalData();
+    if((clear_flag & GraphicsEnum::EClearFlag::Clear_Color) != GraphicsEnum::EClearFlag::Clear_None)
+        render_context.ClearFrameBuffer(render_context.clear_color);
+
+    if((clear_flag & GraphicsEnum::EClearFlag::Clear_Depth) != GraphicsEnum::EClearFlag::Clear_None)
+        render_context.ClearDepthBuffer(render_context.clear_depth);
+
     for(const auto& vbo_id : active_buffers)
     {
         current_execute_vbo_id = vbo_id;
@@ -192,16 +208,12 @@ void XRender::Graphics::Execute()
         Rasterizer();
         ExecuteFragmentShader();
     }
-    current_execute_vbo_id = 0;
-    active_buffers.clear();
 }
 
-void XRender::Graphics::RenderShadowMap()
+void XRender::Graphics::EndFrame()
 {
-    if(shadow_light == nullptr)
-        return;
-    
-
+    current_execute_vbo_id = 0;
+    active_buffers.clear();
 }
 
 void XRender::Graphics::SetupGlobalData()
@@ -273,10 +285,9 @@ void XRender::Graphics::ExecuteVertexShader()
     assert(shader->HasVertexInputSemantic(SEMANTIC::POSITION));
     for(uint32_t index = 0; index < buffer.vertex_count; ++index)
     {
-        BindVertexInput(index);
-        VertexOutput out = shader->Vertex(bind_vertex_input);
-        PerspectiveDivideAndViewPort(out);
-        cached_vertex_out.emplace_back(out);
+		BindVertexInput(index);
+		VertexOutput out = shader->Vertex(bind_vertex_input);
+	    cached_vertex_out.emplace_back(out);
     }
 }
 
@@ -296,6 +307,19 @@ void XRender::Graphics::PerspectiveDivideAndViewPort(VertexOutput& out)
         FILL_SHADER_STRUCT(out, SEMANTIC::SV_POSITION, v);
 }
 
+bool XRender::Graphics::IsBackFace(const Vec4f& p1, const Vec4f& p2, const Vec4f& p3) const
+{
+    static Vec4f p3p1;
+    static Vec4f p2p1;
+
+    p3p1.x = p3.x - p1.x;
+    p3p1.y = p3.y - p1.y;
+    p2p1.x = p2.x - p1.x;
+    p2p1.y = p2.y - p1.y;
+    float signed_value = p3p1.x * p2p1.y - p2p1.x * p3p1.y;
+    return signed_value <= 0;
+}
+
 void XRender::Graphics::Rasterizer()
 {
     cached_frament_in.clear();
@@ -303,33 +327,46 @@ void XRender::Graphics::Rasterizer()
     uint32_t triangle_count = buffer.index_count / 3;
     for(uint32_t index = 0; index < triangle_count; ++index)
     {
-        RasterizerTriangle(index);
+        DrawTriangle(index);
     }
     cached_vertex_out.clear();
 }
 
-bool XRender::Graphics::IsBackFace(const Vec2f& p1, const Vec2f& p2, const Vec2f& p3) const
+void XRender::Graphics::DrawTriangle(const uint32_t& index)
 {
-    float signed_value = p3.x * p2.y - p1.x * p2.y - p1.x * p2.y - p2.x * p3.y + p2.x * p1.y + p1.x * p3.y;
-    return signed_value <= 0;
-}
-
-void XRender::Graphics::RasterizerTriangle(const uint32_t& index)
-{
-    VertexOutput** triangle = cached_triangle.vertex_outs;
     VertexBuffer buffer = buffers[current_execute_vbo_id];
     for(uint32_t sub_index = 0; sub_index < 3; ++sub_index)
     {
 		uint32_t t_index = buffer.index_buffer[index * 3 + sub_index];
-        triangle[sub_index] = &cached_vertex_out[t_index];
+        cached_triangle[sub_index] = &cached_vertex_out[t_index];
+        GET_DATA_BY_SEMATIC(cached_triangle_points[sub_index], cached_vertex_out[t_index], SEMANTIC::SV_POSITION);
     }
-
+    
     // back-face culling, 计算几何，判断线段的拐向， 矢量叉积
-    if(IsBackFace(triangle[0]->screen, triangle[1]->screen, triangle[2]->screen))
+    if(IsBackFace(cached_triangle_points[0], cached_triangle_points[1], cached_triangle_points[2]))
         return;
     
+    //cvv clip
+    static std::vector<VertexOutput> clip_verteies;
+    clip_verteies.clear();
+    ClipTriangleDetail(clip_verteies, cached_triangle, cached_triangle_points);
+    uint32_t t_index = 0;
+    for(auto& out : clip_verteies)
+    {
+		PerspectiveDivideAndViewPort(out);
+        cached_triangle[t_index] = &out;
+        ++t_index;
+        if(t_index == 3)
+        {
+            RasterizerTriangle();
+            t_index = 0;
+        }
+    }
+}
 
-    auto [lb, rt] = Math::TriangleBoundingBox(triangle[0]->screen, triangle[1]->screen, triangle[2]->screen);
+void XRender::Graphics::RasterizerTriangle()
+{
+    auto [lb, rt] = Math::TriangleBoundingBox(cached_triangle[0]->screen, cached_triangle[1]->screen, cached_triangle[2]->screen);
     lb.x = std::clamp(lb.x, 0, (int)render_context.GetWidth());
     lb.y = std::clamp(lb.y, 0, (int)render_context.GetHeight());
     rt.x = std::clamp(rt.x, 0, (int)render_context.GetWidth());
@@ -342,7 +379,7 @@ void XRender::Graphics::RasterizerTriangle(const uint32_t& index)
         {
             center_point.x = x + 0.5;
             center_point.y = y + 0.5;
-            auto[alpha, beta, gamma] = Math::TriangleBarycentric(triangle[0]->screen, triangle[1]->screen, triangle[2]->screen, center_point);
+            auto[alpha, beta, gamma] = Math::TriangleBarycentric(cached_triangle[0]->screen, cached_triangle[1]->screen, cached_triangle[2]->screen, center_point);
             if(alpha < 0 || beta < 0 || gamma < 0) continue;
             PropertyBarycentricInterpolation(Vec2i(x, y), Vec3f(alpha, beta, gamma));
         }
@@ -351,14 +388,17 @@ void XRender::Graphics::RasterizerTriangle(const uint32_t& index)
 
 void XRender::Graphics::PropertyBarycentricInterpolation(const Vec2i& point, const Vec3f& barycentric)
 {
-    VertexOutput** triangle = cached_triangle.vertex_outs;
     Shader* shader = shader_map[current_execute_vbo_id];
-    float viewZ = 1.f / (barycentric.x / triangle[0]->viewZ + barycentric.y / triangle[1]->viewZ + barycentric.z / triangle[2]->viewZ);
-    float A = barycentric.x / (triangle[0]->viewZ * viewZ);
-    float B = barycentric.y / (triangle[1]->viewZ * viewZ);
-    float G = barycentric.z / (triangle[2]->viewZ * viewZ);
-    float depth = Math::BarycentricInterpolation<float>(triangle[0]->viewDepth, triangle[1]->viewDepth, triangle[2]->viewDepth, Vec3f(A, B, G));
+    float depth = Math::BarycentricInterpolation<float>(cached_triangle[0]->viewDepth, cached_triangle[1]->viewDepth, cached_triangle[2]->viewDepth, barycentric);
     if(!DepthTest(point.x, point.y, depth)) return;
+
+    // 只渲染深度
+    if(depth_only) return;;
+    
+    float viewZ = (barycentric.x / cached_triangle[0]->viewZ + barycentric.y / cached_triangle[1]->viewZ + barycentric.z / cached_triangle[2]->viewZ);
+    float A = barycentric.x / (cached_triangle[0]->viewZ * viewZ);
+    float B = barycentric.y / (cached_triangle[1]->viewZ * viewZ);
+    float G = barycentric.z / (cached_triangle[2]->viewZ * viewZ);
 
     VertexOutput framgent_in;
     framgent_in.screen.x = point.x; framgent_in.screen.y = point.y;
@@ -368,7 +408,7 @@ void XRender::Graphics::PropertyBarycentricInterpolation(const Vec2i& point, con
     for(auto interpolation : shader->propertory_interpolation_funcs)
     {
         if(interpolation.first == SEMANTIC::SV_POSITION) continue;
-        interpolation.second(framgent_in, cached_triangle.vertex_outs, interpolation.first, barycentric);
+        interpolation.second(framgent_in, cached_triangle, interpolation.first, Vec3f(A, B, G));
     }
 
     cached_frament_in.emplace_back(framgent_in);
@@ -376,17 +416,19 @@ void XRender::Graphics::PropertyBarycentricInterpolation(const Vec2i& point, con
 
 void XRender::Graphics::ExecuteFragmentShader()
 {
+    if(depth_only) return;
+
     Shader* shader = shader_map[current_execute_vbo_id];
     Color color;
     for(auto framgent_in : cached_frament_in)
     {
         shader->Fragment(framgent_in, color);
-        AfterFramgent(framgent_in.screen.x, framgent_in.screen.y, color);
+        ApplyFragment(framgent_in.screen.x, framgent_in.screen.y, color);
     }
     cached_frament_in.clear();
 }
 
-void XRender::Graphics::AfterFramgent(const uint32_t& x, const uint32_t& y, const Color& color)
+void XRender::Graphics::ApplyFragment(const uint32_t& x, const uint32_t& y, const Color& color)
 {
     render_context.SetPixel(x, y, color);
 }

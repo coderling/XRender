@@ -36,6 +36,11 @@ ${CMAKE_CURRENT_SOURCE_DIR}/Shapes/Cube.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Shapes/Panel.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Shapes/Sphere.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Shapes/ShapeData.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/ShadowMap.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/ShadowSetting.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/PostProcess/PostProcess.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/PostProcess/PostProcessContext.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/PostProcess/PostProcessEffect.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/platform/common/Platform.cpp)
 
 if(USE_IMAGE_TARGET)

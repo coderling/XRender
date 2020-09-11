@@ -5,6 +5,7 @@
 
 namespace XRender::GraphicsGlobalData
 {
+    Vec4f zbuffer_args;
     Matrix matrix_m;
     Matrix matrix_v;
     Matrix matrix_p;

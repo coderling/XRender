@@ -18,9 +18,9 @@ public:
     virtual ~Pipeline();
     void Prepare();
     void BaseRender(const std::vector<Camera*>& camreas);
-    virtual void PreRender();
+    virtual void PreRender(Camera* camera);
     virtual void Render(Camera* camera);
-    virtual void PostRender();
+    virtual void PostRender(Camera* camera);
     void DrawRenderers(const std::vector<Renderer*>& renderers, Camera* camera);
     
     std::unique_ptr<Scene> scene;

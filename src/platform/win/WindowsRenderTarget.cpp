@@ -57,16 +57,18 @@ XRender::WindowsRenderTarget::~WindowsRenderTarget()
     DestroyWindowData();
 }
 
-void XRender::WindowsRenderTarget::OnPresent(const Color *frame_buffer)
+void XRender::WindowsRenderTarget::OnPresent(const RenderContext* context)
 {
+    auto frame_buffer = context->GetBuffer();
     uint32_t tcount = width * height;
+    Color32 color;
     for(uint32_t index = 0; index < tcount; ++index)
     {
-        const auto& col32 = ColorToColor32(frame_buffer[index]);
+        ColorToColor32(frame_buffer[index], color);
         uint32_t buffer_index = index * 4;
-        memory_dc_buffer[buffer_index + 0] = static_cast<unsigned char>(col32.b);
-        memory_dc_buffer[buffer_index + 1] = static_cast<unsigned char>(col32.g);
-        memory_dc_buffer[buffer_index + 2] = static_cast<unsigned char>(col32.r);
+        memory_dc_buffer[buffer_index + 0] = static_cast<unsigned char>(color.b);
+        memory_dc_buffer[buffer_index + 1] = static_cast<unsigned char>(color.g);
+        memory_dc_buffer[buffer_index + 2] = static_cast<unsigned char>(color.r);
     }
 
     BitBltMemoryDC();

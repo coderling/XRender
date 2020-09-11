@@ -11,7 +11,7 @@ namespace XRender
     public:
         WindowsRenderTarget(const std::string& name);
         ~WindowsRenderTarget() override;
-        void OnPresent(const Color* frame_buffer) override;
+        void OnPresent(const RenderContext* context) override;
     private:
         void OnInit() override;
         void OnUpdate() override;

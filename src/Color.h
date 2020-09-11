@@ -42,4 +42,6 @@ namespace XRender
 
     Color32 ColorToColor32(const Color& color);
     Color Color32ToColor(const Color32& color);
+    void ColorToColor32(const XRender::Color &color, XRender::Color32& ret);
+    void Color32ToColor(const XRender::Color32 &color, XRender::Color& ret);
 }

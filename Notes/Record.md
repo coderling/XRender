@@ -40,6 +40,11 @@
         * [2](https://zhuanlan.zhihu.com/p/134912873)
         * [3](https://zhuanlan.zhihu.com/p/65495373)
 
+* CVV裁剪
+    * https://www.zhihu.com/question/64675018
+    * https://zhuanlan.zhihu.com/p/102758967
+    * https://en.wikipedia.org/wiki/Sutherland%E2%80%93Hodgman_algorithm
+
 * ShadowMap
     * [1](https://learnopengl-cn.readthedocs.io/zh/latest/05%20Advanced%20Lighting/03%20Shadows/01%20Shadow%20Mapping/)
     * [2](http://www.opengl-tutorial.org/cn/intermediate-tutorials/tutorial-16-shadow-mapping/)

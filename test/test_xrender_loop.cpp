@@ -3,8 +3,10 @@
 
 #include "test_util.h"
 #include "test_create_scene.h"
+#include "PS_ShowDepth.hpp"
 
 const bool IsTriangle = true;
+const bool depth_only = false;
 
 XRender::Object* p_obj = nullptr;
 Vec3f rotation = Vec3f_Zero;
@@ -14,7 +16,7 @@ void Tick()
     if (p_obj != nullptr)
     {
         rotation.y += 10;
-        p_obj->SetRotation(rotation);
+        //p_obj->SetRotation(rotation);
     }
 }
 
@@ -39,6 +41,12 @@ int main(int argc, char**argv)
 		RenderSampleTriangle(render.GetPipeline()->scene.get());
     else
         RenderSampleObject(render.GetPipeline()->scene.get());
+    
+    if(depth_only)
+    {
+        XRender::PostProcess::AddPostProcessEffect<XRender::PostProcessing::PS_ShowDepth>(&XRender::Camera::MainCamera());
+    }
+
     render.Loop();
     return 0;
 }

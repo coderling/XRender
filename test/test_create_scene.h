@@ -19,16 +19,18 @@ namespace XRender::Test
         std::unique_ptr<Object> obj = std::make_unique<Object>();
         std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>();
         std::vector<Vec3f> points =  {
-            {0.5, 0.5, 0.5},
-            {0,- 0.5, 0.5},
-            {-0.5, 0.5, 0.5},
+            {-0.5, -0.5, -0.1},
+            {-0.5, 0.5, -0.1},
+            {0.5, 0.5, -0.1},
+            {0.5, -0.5, -0.1},
         };
         std::vector<Color> colors = {
             Color(1, 0, 0, 1),
             Color(0, 1, 0, 1),
             Color(0, 0, 1, 1),
+            Color(0, 1, 1, 1),
         };
-        std::vector<uint32_t> indeies = {0, 1, 2};
+        std::vector<uint32_t> indeies = {0, 1, 2, 0, 2, 3};
 
         mesh->SetPositions(points);
         mesh->SetColors(colors);
@@ -37,7 +39,9 @@ namespace XRender::Test
         obj->renderer->mesh = std::move(mesh);
         obj->renderer->mat = std::make_unique<Matrial>();
         obj->renderer->mat->shader = Shader::CreateShader<ColorShader>();
-        obj->SetPosition(Vec3f(0, 0, -2));
+        obj->SetPosition(Vec3f(0, 0, -1));
+        obj->SetRotation(Vec3f(0, 45, 0));
+        obj->SetScale(Vec3f(3, 1, 1));
         return obj;
     }
 

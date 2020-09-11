@@ -12,21 +12,10 @@
 #include "RenderContext.h"
 #include "NoCopyable.h"
 #include "Lighting.h"
+#include "GraphicsEnum.h"
 
 namespace XRender
 {
-
-enum struct EDepthTestMethod : uint32_t
-{
-    Less = 0,
-    Greater = 1,
-    LessEqual = 2,
-    GreaterEqual = 3,
-    Equal = 4, 
-    NotEqual = 5,
-    Always = 6,
-};
-
 
 class Graphics final : NoCopyable
 {
@@ -45,7 +34,6 @@ private:
     struct Triangle
     {
     public:
-        VertexOutput* vertex_outs[3];
     };
 public:
 	static Graphics& VirtualGraphic();
@@ -60,35 +48,39 @@ public:
     void LoadModelMatrix(const uint32_t& buffer_id, const Matrix& matrix);
     void ReleaseVBOANDVIO(const uint32_t& buffer_id);
     void Dispose();
+    void BeginFrame();
     void Execute();
+    void EndFrame();
     void InitRenderContext(const uint32_t& width, const uint32_t& height);
     uint32_t GetContextWidth() const;
     uint32_t GetContextHeight() const;
-    const RenderContext& GetRenderContext() const;
+    RenderContext& GetRenderContext();
     void AddLight(const Lighting::LightData* light);
     void RemoveLight(const Lighting::LightData* light);
     void ActiveRender(const uint32_t& vbo_id);
+    void SetClearFlag(const int& flag);
+    void SetDepthOnlyMode(const bool& state);
 private:
     void SetupGlobalData();
     void SetupObjectData();
     void ExecuteVertexShader();
     void PerspectiveDivideAndViewPort(VertexOutput& out);
     void ExecuteFragmentShader();
-    void RenderShadowMap();
     void Rasterizer();
-    void RasterizerTriangle(const uint32_t& index);
+    void RasterizerTriangle();
+    void DrawTriangle(const uint32_t& index);
     void PropertyBarycentricInterpolation(const Vec2i& point, const Vec3f& barycentric);
     bool DepthTest(const uint32_t& x, const uint32_t& y, const float& depth);
-    void AfterFramgent(const uint32_t& x, const uint32_t& y, const Color& color);
+    void ApplyFragment(const uint32_t& x, const uint32_t& y, const Color& color);
     void BindVertexInput(const uint32_t& index);
     void FillSemanticToVertexInput(const uint32_t& index, const SEMANTIC& st);
     void ReleaseVertexBuffer(VertexBuffer& buffer);
-    bool IsBackFace(const Vec2f& p1, const Vec2f& p2, const Vec2f& p3) const; 
+    bool IsBackFace(const Vec4f& p1, const Vec4f& p2, const Vec4f& p3) const; 
 
     VertexInput bind_vertex_input;
     std::vector<VertexOutput> cached_vertex_out;
-    Triangle cached_triangle;
-    Vec3f cached_face[3];
+    VertexOutput* cached_triangle[3];
+    Vec4f cached_triangle_points[3];
     std::vector<VertexOutput> cached_frament_in;
     uint32_t current_execute_vbo_id;
     
@@ -98,9 +90,11 @@ private:
     std::map<uint32_t, Matrix> model_matries; 
     uint32_t vbo_id_source;
     RenderContext render_context;
-    EDepthTestMethod depth_test_method = EDepthTestMethod::Less;
+    GraphicsEnum::EDepthTestMethod depth_test_method = GraphicsEnum::EDepthTestMethod::Less;
 
     std::unordered_set<const Lighting::LightData*> lights;
     const Lighting::LightData* shadow_light = nullptr;
+    int clear_flag = GraphicsEnum::EClearFlag::Clear_Depth | GraphicsEnum::EClearFlag::Clear_Color;
+    bool depth_only = false;
 };
 }

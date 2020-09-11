@@ -2,18 +2,23 @@
 
 #include "Pipeline.h"
 #include "Graphics.h"
+#include "ShadowMap.h"
+#include "PostProcess/PostProcess.h"
 
 XRender::Pipeline::Pipeline() 
 {
     scene = std::make_unique<Scene>();
 }
 
-XRender::Pipeline::~Pipeline(){}
+XRender::Pipeline::~Pipeline()
+{
+    ShadowMap::Release();
+}
 
 void XRender::Pipeline::Prepare()
 { }
 
-void XRender::Pipeline::PreRender(){}
+void XRender::Pipeline::PreRender(Camera* camera){}
 
 void XRender::Pipeline::Render(Camera* camera)
 {
@@ -26,9 +31,10 @@ void XRender::Pipeline::BaseRender(const std::vector<Camera*>& cameras)
 {
     for(const auto& camera : cameras)
     {
-        PreRender();
+        PreRender(camera);
         Render(camera);
-        PostRender();
+        PostRender(camera);
+        PostProcess::ExecutePostProcess(camera);
         camera->Present();
     }
 }
@@ -45,9 +51,12 @@ void XRender::Pipeline::DrawRenderers(const std::vector<Renderer*>& renderers, C
         Graphics::VirtualGraphic().ActiveRender(renderer->GetVbo());
     }
 
+    Graphics::VirtualGraphic().BeginFrame();
+    ShadowMap::Render();
     camera->SyncGraphicsCameraData();
     Graphics::VirtualGraphic().Execute();
+    Graphics::VirtualGraphic().EndFrame();
 }
 
-void XRender::Pipeline::PostRender(){}
+void XRender::Pipeline::PostRender(Camera* camera){}
 

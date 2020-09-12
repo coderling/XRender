@@ -44,6 +44,7 @@
     * https://www.zhihu.com/question/64675018
     * https://zhuanlan.zhihu.com/p/102758967
     * https://en.wikipedia.org/wiki/Sutherland%E2%80%93Hodgman_algorithm
+    * https://www.gamasutra.com/view/news/168577/Indepth_Software_rasterizer_and_triangle_clipping.php
 
 * ShadowMap
     * [1](https://learnopengl-cn.readthedocs.io/zh/latest/05%20Advanced%20Lighting/03%20Shadows/01%20Shadow%20Mapping/)

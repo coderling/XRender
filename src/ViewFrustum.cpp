@@ -31,6 +31,7 @@ float XRender::Frustum::DistanceToPlane(const uint32_t& plane_index, const Vec3f
     return plane.a * point.x + plane.b * point.y + plane.c * point.z + plane.d;
 }
 
+
 XRender::Frustum::EState XRender::Frustum::PointInFrustum(const Vec3f& point) const
 {
     for(uint32_t pindex = 0; pindex < 6; ++pindex)

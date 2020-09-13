@@ -10,6 +10,49 @@ XRender::Color::Color(const float& r, const float& g, const float& b, const floa
     this->a = a;
 }
 
+float& XRender::Color::operator[](const size_t i)
+{ 
+    assert(i<4);
+    switch (i) {
+        case 0:
+            return r;
+            break;
+        case 1:
+            return g;
+        case 2:
+            return b;
+        case 3:
+            return a;
+        default:
+            return this->r;
+            break;
+    }
+}
+
+const float& XRender::Color::operator[](const size_t i) const 
+{ 
+    assert(i<4);
+    switch (i) {
+        case 0:
+            return r;
+            break;
+        case 1:
+            return g;
+        case 2:
+            return b;
+        case 3:
+            return a;
+        default:
+            return this->r;
+            break;
+    }
+}
+
+uint32_t XRender::Color::size() const
+{
+    return 4;
+}
+
 XRender::Color32::Color32(const uint8_t& r, const uint8_t& g, const uint8_t& b, const uint8_t& a)
 {
     this->r = r;
@@ -17,6 +60,7 @@ XRender::Color32::Color32(const uint8_t& r, const uint8_t& g, const uint8_t& b, 
     this->b = b;
     this->a = a;
 }
+
 
 XRender::Color XRender::operator*(const XRender::Color& lcolor, const float& v)
 {
@@ -45,6 +89,16 @@ XRender::Color XRender::operator+(const XRender::Color& lcolor, const XRender::C
     col.g = lcolor.g + rcolor.g;
     col.b = lcolor.b + rcolor.b;
     col.a = lcolor.a + rcolor.a;
+    return col;
+}
+
+XRender::Color XRender::operator-(const XRender::Color& lcolor, const XRender::Color& rcolor)
+{
+    XRender::Color col;
+    col.r = lcolor.r - rcolor.r;
+    col.g = lcolor.g - rcolor.g;
+    col.b = lcolor.b - rcolor.b;
+    col.a = lcolor.a - rcolor.a;
     return col;
 }
 

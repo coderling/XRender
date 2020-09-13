@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include <cassert>
 
 namespace XRender
 {
@@ -13,11 +14,15 @@ namespace XRender
         float g;
         float b;
         float a;
+        float& operator[](const size_t i);
+        const float& operator[](const size_t i) const ;
+         uint32_t size() const;
     };
 
     Color operator*(const Color& lcolor, const float& v);
     Color operator*(const Color& lcolor, const Color& rcolor);
     Color operator+(const Color& lcolor, const Color& rcolor);
+    Color operator-(const Color& lcolor, const Color& rcolor);
 
     struct Color32
     {

@@ -68,8 +68,9 @@ namespace XRender
         virtual VertexOutput Vertex(const VertexInput& in) = 0; 
         virtual void Fragment(const VertexOutput& in, Color& color) = 0;
 
-        std::map<SEMANTIC, std::function<void(VertexOutput& out, VertexOutput* triangle[], const SEMANTIC& semantic, const Vec3f& barycentric)>> propertory_interpolation_funcs;
-        std::map<std::string, std::any> uniforms;
+        barycentrix_interpolation_map_type propertory_interpolation_funcs;
+        linear_interpolation_map_type propertory_interpolation_linear_funcs;
+        std::unordered_map<std::string, std::any> uniforms;
     private:
         friend class Graphics;
     };

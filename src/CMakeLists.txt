@@ -38,6 +38,7 @@ ${CMAKE_CURRENT_SOURCE_DIR}/Shapes/Sphere.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Shapes/ShapeData.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/ShadowMap.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/ShadowSetting.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/Semantic.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/PostProcess/PostProcess.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/PostProcess/PostProcessContext.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/PostProcess/PostProcessEffect.cpp

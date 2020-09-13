@@ -118,6 +118,7 @@ void XRender::Graphics::Dispose()
 
 bool XRender::Graphics::DepthTest(const uint32_t &x, const uint32_t &y, const float &depth)
 {
+    return true;
     if(depth < 0 || depth > 1)
         return false;
 
@@ -349,17 +350,15 @@ void XRender::Graphics::DrawTriangle(const uint32_t& index)
     //cvv clip
     static std::vector<VertexOutput> clip_verteies;
     clip_verteies.clear();
-    ClipTriangleDetail(clip_verteies, cached_triangle, cached_triangle_points);
-    uint32_t t_index = 0;
-    for(auto& out : clip_verteies)
+    std::size_t triangle_count = ClipTriangleDetail(clip_verteies, cached_triangle, cached_triangle_points);
+    for (std::size_t t_index = 1; t_index < triangle_count; ++t_index)
     {
-		PerspectiveDivideAndViewPort(out);
-        cached_triangle[t_index] = &out;
-        ++t_index;
-        if(t_index == 3)
+        for (std::size_t p_index = 0; p_index < 3; ++p_index)
         {
+            auto& out = clip_verteies[p_index + t_index];
+		    PerspectiveDivideAndViewPort(out);
+            cached_triangle[p_index] = &out;
             RasterizerTriangle();
-            t_index = 0;
         }
     }
 }
@@ -404,13 +403,7 @@ void XRender::Graphics::PropertyBarycentricInterpolation(const Vec2i& point, con
     framgent_in.screen.x = point.x; framgent_in.screen.y = point.y;
     framgent_in.viewDepth = depth;
     framgent_in.viewZ = viewZ;
-
-    for(auto interpolation : shader->propertory_interpolation_funcs)
-    {
-        if(interpolation.first == SEMANTIC::SV_POSITION) continue;
-        interpolation.second(framgent_in, cached_triangle, interpolation.first, Vec3f(A, B, G));
-    }
-
+    BarycentrixInterpolationVertex(framgent_in, cached_triangle, Vec3f(A, B, G));
     cached_frament_in.emplace_back(framgent_in);
 }
 

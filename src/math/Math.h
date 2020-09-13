@@ -13,6 +13,12 @@ namespace XRender::Math
     {
         return proterty1 * barycentric.x + proterty2 * barycentric.y  + proterty3 * barycentric.z;
     }
+    
+    template<class T>
+    inline T LinearInterpolation(const T& proterty1, const T& proterty2, const float& t)
+    {
+        return proterty1 + (proterty2 - proterty1) * t;
+    }
 
 
     Matrix ScaleMatrix(Vec3f scale);

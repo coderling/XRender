@@ -1,4 +1,5 @@
 #include "Shader.h"
+#include <type_traits>
 
 XRender::Shader::~Shader(){}
 XRender::Shader::Shader()
@@ -9,10 +10,10 @@ XRender::Shader::Shader()
 
 bool XRender::Shader::HasVertexInputSemantic(const SEMANTIC& semantic) const
 {
-    return (vertex_intput_semantic | static_cast<uint32_t>(semantic)) != 0;
+    return (vertex_intput_semantic & (1 << static_cast<uint32_t>(semantic))) != 0;
 }
 
 bool XRender::Shader::HasVertexOutputSemantic(const SEMANTIC& semantic) const
 {
-    return (vertex_output_semantic | static_cast<uint32_t>(semantic)) != 0;
+    return (vertex_output_semantic & (1 << static_cast<uint32_t>(semantic))) != 0;
 }

@@ -77,3 +77,80 @@ Matrix XRender::Math::ModelMatrix(Vec3f pos, Vec3f scale, Vec3f angle)
     // 先缩放+旋转+平移
     return TransposeMatrix(pos) * RotateMatrix(angle) * ScaleMatrix(scale);
 }
+
+Matrix XRender::Math::CameraLookAt(const Vec3f& pos, const Vec3f& up, const Vec3f& look)
+{
+    Matrix view = Matrix::identity();
+    Vec3f lcp = cross(look, up);
+    Vec3f t_up = cross(lcp, look);
+    lcp.normalize();
+    t_up.normalize();
+    Vec3f lk = look;
+    lk.normalize();
+
+    view[0][0] = lcp.x;
+    view[0][1] = lcp.y;
+    view[0][2] = lcp.z;
+    view[0][3] = lcp.x * -pos.x + lcp.y * -pos.y + lcp.z * -pos.z;
+
+    view[1][0] = t_up.x;
+    view[1][1] = t_up.y;
+    view[1][2] = t_up.z;
+    view[1][3] = t_up.x * -pos.x + t_up.y * -pos.y + t_up.z * -pos.z;
+    
+    view[2][0] = lk.x;
+    view[2][1] = lk.y;
+    view[2][2] = lk.z;
+    view[2][3] = lk.x * -pos.x + lk.y * -pos.y + lk.z * -pos.z;
+    view.invert();
+
+    return view;
+}
+   
+Matrix XRender::Math::Perspective(const float& fov, const float& aspect, const float& near, const float& far)
+{
+    float top = near * tan(fov* PI / 2.0f / 180.0f);
+    float bottom = -top;
+    float right = top * aspect;
+    float left = -right;
+    // 挤压到正交的视锥体, 再进行正交投影
+    Matrix persToOrthMatrix = Matrix::identity();
+    persToOrthMatrix[0][0] = near;
+    persToOrthMatrix[1][1] = near;
+    persToOrthMatrix[2][2] = near+ far;
+    persToOrthMatrix[2][3] = -near * far;
+	persToOrthMatrix[3][2] = 1;
+	persToOrthMatrix[3][3] = 0;
+
+    const Matrix& orth = CaculateOrthgraphic(left, right, top, bottom, near, far);
+
+    return orth * persToOrthMatrix;
+}
+
+Matrix XRender::Math::CaculateOrthgraphic(const float& left, const float& right, const float& top, const float& bottom,
+                               const float& near, const float& far)
+{
+    assert(far > near && near > 0);
+    // 先平移---》缩放到[-1, 1]的立方体内
+    Matrix transpose = Matrix::identity();
+    transpose[0][3] = -(left + right) / 2;
+    transpose[1][3] = -(bottom + top) / 2;
+    transpose[2][3] = -(near + far) / 2;
+
+    float xscale = 2 / (right - left);
+    float yscale = 2 / (top - bottom);
+    float zscale = 2 / (far - near);
+    assert(xscale > 0 && yscale > 0 && zscale > 0);
+    
+    Matrix scaleMatrix = Matrix::identity();
+    scaleMatrix[0][0] = xscale;
+    scaleMatrix[1][1] = yscale;
+    scaleMatrix[2][2] = zscale;
+
+    return scaleMatrix * transpose;
+}
+
+bool XRender::Math::FloatEqual(const float& lv, const float& rv)
+{
+    return std::abs(lv - rv) < 1e-4;
+}

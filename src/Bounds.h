@@ -16,6 +16,6 @@ namespace XRender
         Vec3f center;
         Vec3f extents;
     private:
-        const Vec2f& ExpandAxis(const float& distance, const float& extent_axis);
+        Vec2f ExpandAxis(const float& distance, const float& extent_axis);
     };
 }

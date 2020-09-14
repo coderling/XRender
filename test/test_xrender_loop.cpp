@@ -30,9 +30,9 @@ void RenderSampleTriangle(XRender::Scene* scene)
 void RenderSampleObject(XRender::Scene* scene)
 {
     auto object = XRender::Test::LoadSampleObject<XRender::Shaders::DiffuseColor>();
-    object->SetPosition(Vec3f(0, 0, -5));
+    object->SetPosition(Vec3f(0, 0, -2));
     rotation.x = 0;
-    rotation.y = 180;
+    rotation.y = 0;
     rotation.z = 0;
     object->SetRotation(rotation);
     p_obj = object.get();

@@ -29,35 +29,17 @@ const Matrix& XRender::Camera::GetProjMatrix() const
 
 void XRender::Camera::LookAt(const Vec3f& pos, const Vec3f& up, const Vec3f& look)
 {
-    view = Matrix::identity();
-    Vec3f lcp = cross(look, up);
-    Vec3f t_up = cross(lcp, look);
-    lcp.normalize();
-    t_up.normalize();
-    Vec3f lk = look;
-    lk.normalize();
-
-    view[0][0] = lcp.x;
-    view[0][1] = lcp.y;
-    view[0][2] = lcp.z;
-    view[0][3] = lcp.x * -pos.x + lcp.y * -pos.y + lcp.z * -pos.z;
-
-    view[1][0] = t_up.x;
-    view[1][1] = t_up.y;
-    view[1][2] = t_up.z;
-    view[1][3] = t_up.x * -pos.x + t_up.y * -pos.y + t_up.z * -pos.z;
-    
-    view[2][0] = lk.x;
-    view[2][1] = lk.y;
-    view[2][2] = lk.z;
-    view[2][3] = lk.x * -pos.x + lk.y * -pos.y + lk.z * -pos.z;
+    view = Math::CameraLookAt(pos, up, look);
     invert_view = view.invert();
 }
 
 void XRender::Camera::SetIsPerspective(const bool& isPerProj)
 {
-    is_perspective = isPerProj;
-    ReCaculateProjectMatrix();
+    if (isPerProj != is_perspective)
+    {
+        is_perspective = isPerProj;
+        ReCaculateProjectMatrix();
+    }
 }
 
 void XRender::Camera::ReCaculateProjectMatrix()
@@ -68,13 +50,7 @@ void XRender::Camera::ReCaculateProjectMatrix()
         return;
     }
 
-    int width = render_target->GetWidth();
-    int height = render_target->GetHeight();
-    float left = width * 1.f / 2;
-    float right = -left;
-    float top = height * 1.f / 2;
-    float bottom = -top;
-    proj = CaculateOrthgraphic(left, right, top, bottom, near_plane, far_plane);
+    CaculateOrthgraphic();
 }
 
 void XRender::Camera::SetFieldOfView(const float& angle)
@@ -96,34 +72,7 @@ void XRender::Camera::SetPerspective(const float &angle, const float &near, cons
 
 void XRender::Camera::CaculatePerspective()
 {
-    float top = near_plane * tan(angle * PI / 2.0f / 180.0f);
-    float bottom = -top;
-    float right = top * aspect;
-    float left = -right;
-    /*
-    float z_range = far_plane - near_plane;
-    proj = Matrix::identity();
-    proj[1][1] = 1 / (float)tan(angle * PI / 2 / 180.0f);
-    proj[0][0] = proj[1][1] / aspect;
-    proj[2][2] = -(near_plane + far_plane) / z_range;
-    proj[2][3] = -2 * near_plane * far_plane / z_range;
-    proj[3][2] = -1;
-    proj[3][3] = 0;
-    */
-    float near = near_plane;
-    float far = far_plane;
-    // 挤压到正交的视锥体, 再进行正交投影
-    Matrix persToOrthMatrix = Matrix::identity();
-    persToOrthMatrix[0][0] = near;
-    persToOrthMatrix[1][1] = near;
-    persToOrthMatrix[2][2] = near+ far;
-    persToOrthMatrix[2][3] = -near * far;
-	persToOrthMatrix[3][2] = 1;
-	persToOrthMatrix[3][3] = 0;
-
-    Matrix orth = CaculateOrthgraphic(left, right, top, bottom, near, far);
-
-    proj = orth * persToOrthMatrix;
+    proj = Math::Perspective(angle, aspect, near_plane, far_plane);
 }
 
 void XRender::Camera::SetOrthgraphic(const float &near, const float &far)
@@ -134,24 +83,15 @@ void XRender::Camera::SetOrthgraphic(const float &near, const float &far)
     ReCaculateProjectMatrix();
 }
 
-Matrix XRender::Camera::CaculateOrthgraphic(const float& left, const float& right, const float& top, const float& bottom, const float& near, const float& far) const
+void XRender::Camera::CaculateOrthgraphic()
 {
-    // 先平移---》缩放到[-1, 1]的立方体内，方便裁剪
-    Matrix transpose = Matrix::identity();
-    transpose[0][3] = -(left + right) / 2;
-    transpose[1][3] = -(bottom + top) / 2;
-    transpose[2][3] = -(near + far) / 2;
-
-    float xscale = 2 / (right - left);
-    float yscale = 2 / (top - bottom);
-    float zscale = 2 / (far - near);
-    
-    Matrix scaleMatrix = Matrix::identity();
-    scaleMatrix[0][0] = xscale;
-    scaleMatrix[1][1] = yscale;
-    scaleMatrix[2][2] = zscale;
-
-    return scaleMatrix * transpose;
+    int width = render_target->GetWidth();
+    int height = render_target->GetHeight();
+    float left = width * 1.f / 2;
+    float right = -left;
+    float top = height * 1.f / 2;
+    float bottom = -top;
+    proj = Math::CaculateOrthgraphic(left, right, top, bottom, near_plane, far_plane);
 }
 
 void XRender::Camera::SetViewPort(const float &x, const float &y, const float &w, const float &h)

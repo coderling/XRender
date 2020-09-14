@@ -29,8 +29,12 @@ namespace XRender::Math
     
     Matrix ModelMatrix(Vec3f pos, Vec3f scale, Vec3f angle);
 
-    inline bool FloatEqual(const float& lv, const float& rv)
-    {
-        return std::abs(lv - rv) < 1e-4;
-    }
+    Matrix CameraLookAt(const Vec3f& pos, const Vec3f& up, const Vec3f& look);
+
+    Matrix Perspective(const float& fov, const float& aspect, const float& near, const float& far);
+    
+    Matrix CaculateOrthgraphic(const float& left, const float& right, const float& top, const float& bottom,
+                               const float& near, const float& far);
+
+    inline bool FloatEqual(const float& lv, const float& rv);
 }

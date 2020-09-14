@@ -31,7 +31,7 @@ public:
 private:
     void ReCaculateProjectMatrix();
     void CaculatePerspective();
-    Matrix CaculateOrthgraphic(const float& left, const float& right, const float& top, const float& bottom, const float& near, const float& far) const;
+    void CaculateOrthgraphic();
     bool is_perspective;
     Matrix invert_view;
     Matrix view;

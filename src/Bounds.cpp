@@ -49,7 +49,7 @@ void XRender::Bounds::Zero()
     extents = Vec3f_Zero;
 }
 
-const Vec2f& XRender::Bounds::ExpandAxis(const float& distance, const float& extent_axis)
+Vec2f XRender::Bounds::ExpandAxis(const float& distance, const float& extent_axis)
 {
     Vec2f ret;
     if(distance > extent_axis)
@@ -65,5 +65,5 @@ const Vec2f& XRender::Bounds::ExpandAxis(const float& distance, const float& ext
         ret.y = -extent;
     }
 
-    return std::move(ret);
+    return ret;
 }

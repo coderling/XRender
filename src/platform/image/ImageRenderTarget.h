@@ -15,6 +15,7 @@ namespace XRender
         void Save();
     private:
         void OnInit() override;
+        void OnUpdate() override;
         void ColorToTGAColor(const XRender::Color& color, TGAColor& ret);
         std::unique_ptr<TGAImage> pRtImage = nullptr;
         std::string out_path;

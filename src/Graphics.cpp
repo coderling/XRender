@@ -118,10 +118,6 @@ void XRender::Graphics::Dispose()
 
 bool XRender::Graphics::DepthTest(const uint32_t &x, const uint32_t &y, const float &depth)
 {
-    return true;
-    if(depth < 0 || depth > 1)
-        return false;
-
     const auto& cur_depth = render_context.GetDepthBuffer(x, y);
     switch (depth_test_method) 
     {
@@ -308,17 +304,17 @@ void XRender::Graphics::PerspectiveDivideAndViewPort(VertexOutput& out)
         FILL_SHADER_STRUCT(out, SEMANTIC::SV_POSITION, v);
 }
 
-bool XRender::Graphics::IsBackFace(const Vec4f& p1, const Vec4f& p2, const Vec4f& p3) const
+bool XRender::Graphics::IsBackFace(const Vec2f& p1, const Vec2f& p2, const Vec2f& p3) const
 {
-    static Vec4f p3p1;
-    static Vec4f p2p1;
+    static Vec2f p3p1;
+    static Vec2f p2p1;
 
     p3p1.x = p3.x - p1.x;
     p3p1.y = p3.y - p1.y;
     p2p1.x = p2.x - p1.x;
     p2p1.y = p2.y - p1.y;
-    float signed_value = p3p1.x * p2p1.y - p2p1.x * p3p1.y;
-    return signed_value <= 0;
+    float signed_value_old = p3p1.x * p2p1.y - p2p1.x * p3p1.y;
+    return  signed_value_old > 0;
 }
 
 void XRender::Graphics::Rasterizer()
@@ -343,9 +339,6 @@ void XRender::Graphics::DrawTriangle(const uint32_t& index)
         GET_DATA_BY_SEMATIC(cached_triangle[sub_index]->point, cached_vertex_out[t_index], SEMANTIC::SV_POSITION);
     }
     
-    // back-face culling, 计算几何，判断线段的拐向， 矢量叉积
-    if(IsBackFace(cached_triangle[0]->point, cached_triangle[1]->point, cached_triangle[2]->point))
-        return;
     
     //cvv clip
     static std::vector<VertexOutput> clip_verteies;
@@ -361,6 +354,9 @@ void XRender::Graphics::DrawTriangle(const uint32_t& index)
         PerspectiveDivideAndViewPort(clip_verteies[t_index]);
         cached_triangle[1] = &clip_verteies[t_index - 1];
         cached_triangle[2] = &clip_verteies[t_index];
+        // back-face culling, 计算几何，判断线段的拐向， 矢量叉积
+        if(IsBackFace(cached_triangle[0]->screen, cached_triangle[1]->screen, cached_triangle[2]->screen))
+            continue;
         RasterizerTriangle();
     }
 }
@@ -391,6 +387,7 @@ void XRender::Graphics::PropertyBarycentricInterpolation(const Vec2i& point, con
 {
     Shader* shader = shader_map[current_execute_vbo_id];
     float depth = Math::BarycentricInterpolation<float>(cached_triangle[0]->viewDepth, cached_triangle[1]->viewDepth, cached_triangle[2]->viewDepth, barycentric);
+    //early depth test
     if(!DepthTest(point.x, point.y, depth)) return;
 
     // 只渲染深度

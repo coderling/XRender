@@ -40,6 +40,10 @@
         * [2](https://zhuanlan.zhihu.com/p/134912873)
         * [3](https://zhuanlan.zhihu.com/p/65495373)
 
+* backface cull
+    * https://www.khronos.org/registry/OpenGL/specs/es/2.0/es_full_spec_2.0.pdf 3.5.1
+    * https://dev.gameres.com/Program/Abstract/Geometry.htm#%E7%9F%A2%E9%87%8F%E5%8F%89%E7%A7%AF
+
 * CVV裁剪
     * https://www.zhihu.com/question/64675018
     * https://zhuanlan.zhihu.com/p/102758967

@@ -79,8 +79,8 @@ namespace XRender
         if(it != the_struct.data.data.end())\
         {\
 	        uint32_t size = std::is_same_v<std::decay_t<decltype(ret)>, float> ? 1 : ret.size();\
-            assert(size == it->second.size());\
-            for(uint32_t index = 0; index < it->second.size(); ++index)\
+            assert(size <= it->second.size());\
+            for(uint32_t index = 0; index < size; ++index)\
             {\
                 ret[index] = it->second[index];\
             }\

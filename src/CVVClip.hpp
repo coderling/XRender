@@ -8,7 +8,7 @@
 
 namespace XRender
 {
-    static const float w_zero = 1e-5;
+    static const float w_zero = 1e-20;
 
     enum EClipPlane
     {
@@ -98,12 +98,13 @@ namespace XRender
             && IsInCVV(in_verteies[2].point))
             {
                 out_verteies = in_verteies;
+                return;
             }
         
         // clip z first
+        ClipTrianglePlane(in_verteies, out_verteies, EClipPlane::POSITIVE_W);
         ClipTrianglePlane(in_verteies, out_verteies, EClipPlane::NEGATIVE_Z);
         ClipTrianglePlane(out_verteies, in_verteies, EClipPlane::POSITIVE_Z);
-        ClipTrianglePlane(in_verteies, out_verteies, EClipPlane::POSITIVE_W);
         ClipTrianglePlane(out_verteies, in_verteies, EClipPlane::NEGATIVE_X);
         ClipTrianglePlane(in_verteies, out_verteies, EClipPlane::POSITIVE_X);
         ClipTrianglePlane(out_verteies, in_verteies, EClipPlane::NEGATIVE_Y);

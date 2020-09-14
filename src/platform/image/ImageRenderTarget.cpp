@@ -26,13 +26,16 @@ void XRender::ImageRenderTarget::OnPresent(const RenderContext* context)
     auto frame_buffer = context->GetBuffer();
     assert(frame_buffer != nullptr);
     uint32_t index;
+    uint32_t buffer_index = 0;
     TGAColor color;
-    for(uint32_t x = 0; x < width; x++)
+    for(uint32_t y = 0; y < height; ++y)
     {
-        for(uint32_t y = 0; y < height; y++)
+        uint32_t cy = height - y - 1;
+        for(uint32_t x = 0; x < width; ++x)
         {
-            index = width * y + x;
-            ColorToTGAColor(frame_buffer[index], color);
+            index = y * width + x;
+            buffer_index = cy * width + x;
+            ColorToTGAColor(frame_buffer[buffer_index], color);
             pRtImage->set(x, y, color);
         }
     }
@@ -42,6 +45,11 @@ void XRender::ImageRenderTarget::OnPresent(const RenderContext* context)
 void XRender::ImageRenderTarget::OnInit()
 {
     pRtImage = std::make_unique<TGAImage>(width, height, TGAImage::RGB);
+}
+
+void XRender::ImageRenderTarget::OnUpdate()
+{
+
 }
 
 

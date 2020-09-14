@@ -5,7 +5,7 @@
 #include "test_create_scene.h"
 #include "PS_ShowDepth.hpp"
 
-const bool IsTriangle = true;
+const bool IsTriangle = false;
 const bool depth_only = false;
 
 XRender::Object* p_obj = nullptr;
@@ -15,7 +15,7 @@ void Tick()
 {
     if (p_obj != nullptr)
     {
-        rotation.y += 10;
+        rotation.y += 1;
         //p_obj->SetRotation(rotation);
     }
 }
@@ -30,7 +30,12 @@ void RenderSampleTriangle(XRender::Scene* scene)
 void RenderSampleObject(XRender::Scene* scene)
 {
     auto object = XRender::Test::LoadSampleObject<XRender::Shaders::DiffuseColor>();
-    object->SetPosition(Vec3f(0, 0, -3));
+    object->SetPosition(Vec3f(0, 0, -5));
+    rotation.x = 0;
+    rotation.y = 180;
+    rotation.z = 0;
+    object->SetRotation(rotation);
+    p_obj = object.get();
     scene->AddObject(std::move(object));
 }
 

@@ -62,15 +62,22 @@ void XRender::WindowsRenderTarget::OnPresent(const RenderContext* context)
     auto frame_buffer = context->GetBuffer();
     uint32_t tcount = width * height;
     Color32 color;
-    for(uint32_t index = 0; index < tcount; ++index)
+    // windows 屏幕坐标左上角（0，0） 右下角（width, height）需要转换
+    uint32_t index = 0;
+    uint32_t buffer_index = 0;
+    for(uint32_t y = 0; y < height; ++y)
     {
-        ColorToColor32(frame_buffer[index], color);
-        uint32_t buffer_index = index * 4;
-        memory_dc_buffer[buffer_index + 0] = static_cast<unsigned char>(color.b);
-        memory_dc_buffer[buffer_index + 1] = static_cast<unsigned char>(color.g);
-        memory_dc_buffer[buffer_index + 2] = static_cast<unsigned char>(color.r);
+        uint32_t cy = height - y - 1;
+        for(uint32_t x = 0; x < width; ++x)
+        {
+            index = y * width + x;
+            buffer_index = (y * width + x) * 4;
+            ColorToColor32(frame_buffer[index], color);
+            memory_dc_buffer[buffer_index + 0] = static_cast<unsigned char>(color.b);
+            memory_dc_buffer[buffer_index + 1] = static_cast<unsigned char>(color.g);
+            memory_dc_buffer[buffer_index + 2] = static_cast<unsigned char>(color.r);
+        }
     }
-
     BitBltMemoryDC();
 }
 
@@ -104,8 +111,8 @@ void XRender::WindowsRenderTarget::CreateWindows()
     this->hWnd = CreateWindow(name.c_str(),
                               name.c_str(),
                               WS_OVERLAPPEDWINDOW,
-                              500,
-                              500,
+                              0,
+                              0,
                               width,
                               height,
                               NULL,

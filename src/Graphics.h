@@ -75,7 +75,7 @@ private:
     void BindVertexInput(const uint32_t& index);
     void FillSemanticToVertexInput(const uint32_t& index, const SEMANTIC& st);
     void ReleaseVertexBuffer(VertexBuffer& buffer);
-    bool IsBackFace(const Vec4f& p1, const Vec4f& p2, const Vec4f& p3) const; 
+    bool IsBackFace(const Vec2f& p1, const Vec2f& p2, const Vec2f& p3) const; 
 
     VertexInput bind_vertex_input;
     std::vector<VertexOutput> cached_vertex_out;

@@ -74,7 +74,7 @@ void XRender::Camera::ReCaculateProjectMatrix()
     float right = -left;
     float top = height * 1.f / 2;
     float bottom = -top;
-    proj = CaculateOrthgraphic(left, right, top, bottom, -near_plane, -far_plane);
+    proj = CaculateOrthgraphic(left, right, top, bottom, near_plane, far_plane);
 }
 
 void XRender::Camera::SetFieldOfView(const float& angle)
@@ -100,7 +100,16 @@ void XRender::Camera::CaculatePerspective()
     float bottom = -top;
     float right = top * aspect;
     float left = -right;
-    
+    /*
+    float z_range = far_plane - near_plane;
+    proj = Matrix::identity();
+    proj[1][1] = 1 / (float)tan(angle * PI / 2 / 180.0f);
+    proj[0][0] = proj[1][1] / aspect;
+    proj[2][2] = -(near_plane + far_plane) / z_range;
+    proj[2][3] = -2 * near_plane * far_plane / z_range;
+    proj[3][2] = -1;
+    proj[3][3] = 0;
+    */
     float near = near_plane;
     float far = far_plane;
     // 挤压到正交的视锥体, 再进行正交投影
@@ -135,7 +144,7 @@ Matrix XRender::Camera::CaculateOrthgraphic(const float& left, const float& righ
 
     float xscale = 2 / (right - left);
     float yscale = 2 / (top - bottom);
-    float zscale = 2 / (near - far);
+    float zscale = 2 / (far - near);
     
     Matrix scaleMatrix = Matrix::identity();
     scaleMatrix[0][0] = xscale;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <functional>
 
 #include "Semantic.h"
 #include "math/Math.h"
@@ -9,25 +10,40 @@ namespace XRender
 {
     static const float w_zero = 1e-5;
 
-    inline float LerpValue(const float& w1, const float& w2)
+    enum EClipPlane
     {
-        // w = w1 + (w2 - w1) * t; make w = 1e-10 , get t
-        return (w_zero - w1) / (w2 - w1);
-    }
+        POSITIVE_W = 0,
+        NEGATIVE_Z,
+        POSITIVE_Z,
+        NEGATIVE_X,
+        POSITIVE_X,
+        NEGATIVE_Y,
+        POSITIVE_Y,
+    };
 
-    inline Vec4f IntersectionPoint(const Vec4f& p1, const Vec4f& p2, const float& t)
-    {
-        Vec4f ret;
-        ret.x = Math::LinearInterpolation(p1.x, p2.x, t);
-        ret.y = Math::LinearInterpolation(p1.y, p2.y, t);
-        ret.z = Math::LinearInterpolation(p1.z, p2.z, t);
-        ret.w = Math::LinearInterpolation(p1.w, p2.w, t);
-        return ret;
-    }
+    static const std::function<bool(const Vec4f& point)> IsInPlane[7]{
+        [](const Vec4f& point) { return point.w > w_zero; },
+        [](const Vec4f& point) { return point.z >= -point.w; },
+        [](const Vec4f& point) { return point.z <= point.w; },
+        [](const Vec4f& point) { return point.x >= -point.w; },
+        [](const Vec4f& point) { return point.x <= point.w; },
+        [](const Vec4f& point) { return point.y >= -point.w; },
+        [](const Vec4f& point) { return point.y <= point.w; },
+    };
+    
+    static const std::function<float(const Vec4f& point1, const Vec4f& point2)> LerpRatio[7]{
+        [](const Vec4f& point1, const Vec4f& point2) { return (w_zero - point1.w) / (point2.w - point1.w); }, // w == w_zero
+        [](const Vec4f& point1, const Vec4f& point2) { return (point1.z + point1.w) / (point1.z + point1.w - point2.z - point2.w); }, // z == -w
+        [](const Vec4f& point1, const Vec4f& point2) { return (point1.z - point1.w) / (point1.z - point1.w - point2.z + point2.w); }, // z == w
+        [](const Vec4f& point1, const Vec4f& point2) { return (point1.x + point1.w) / (point1.x + point1.w - point2.x - point2.w); }, // x == -w
+        [](const Vec4f& point1, const Vec4f& point2) { return (point1.x - point1.w) / (point1.x - point1.w - point2.x + point2.w); }, // x == w
+        [](const Vec4f& point1, const Vec4f& point2) { return (point1.y + point1.w) / (point1.y + point1.w - point2.y - point2.w); }, // y == -w
+        [](const Vec4f& point1, const Vec4f& point2) { return (point1.y - point1.w) / (point1.y - point1.w - point2.y + point2.w); }, // y == w
+    };
 
-    inline bool IsInSide(const Vec4f& point)
+    inline bool IsInSide(const Vec4f& point, const EClipPlane& plane)
     {
-        return point.w >= w_zero;
+        return IsInPlane[plane](point);
     }
 
     inline bool IsInCVV(const Vec4f& point)
@@ -35,55 +51,62 @@ namespace XRender
         return std::abs(point.x) <= point.w && std::abs(point.y) <= point.w && std::abs(point.z) <= point.w;
     }
 
-    uint32_t SutherlandHodgman(std::vector<VertexOutput>& out_verteies, VertexOutput **triangle, const Vec4f* points, const uint32_t count)
+    void ClipTrianglePlane(std::vector<VertexOutput>& in_verteies, std::vector<VertexOutput>& out_verteies, const EClipPlane& plane)
     {
-        for(uint32_t index = 0; index < count; ++index)
+        out_verteies.clear();
+        const auto& size = in_verteies.size();
+        for(std::size_t index = 0; index < in_verteies.size(); ++index)
         {
-            const auto& current = points[index];
-            const uint32_t& pre_index = (index + count - 1) % count;
-            const auto& prev = points[pre_index];
-            const float& t = LerpValue(prev.w, current.w);
-            auto p = IntersectionPoint(prev, current, t);
-            const bool& current_in = IsInSide(current);
-            const bool& prev_in = IsInSide(prev);
-            
-            VertexOutput intersect_vertex;
-			VertexOutput* current_vertex = triangle[index];
-			VertexOutput* pre_vertex = triangle[pre_index];
+            auto& current = in_verteies[index];
+            const auto& prev_index = (index + size - 1) % size;
+            auto& prev = in_verteies[prev_index];
+            const bool& current_in = IsInSide(current.point, plane);
+            const bool& prev_in = IsInSide(prev.point, plane);
+
             if(current_in)
             {
                 if(!prev_in)
                 {
-                    LinearInterpolationVertex(intersect_vertex, *pre_vertex, *current_vertex, t);
+                    VertexOutput intersect_vertex;
+                    LinearInterpolationVertex(intersect_vertex, prev, current, LerpRatio[plane](prev.point, current.point));
+                    GET_DATA_BY_SEMATIC(intersect_vertex.point, intersect_vertex, SEMANTIC::SV_POSITION);
                     out_verteies.emplace_back(intersect_vertex);
                 }
-                out_verteies.emplace_back(*current_vertex);
+                out_verteies.emplace_back(current);
             }
             else if(prev_in)
             {
-                LinearInterpolationVertex(intersect_vertex, *pre_vertex, *current_vertex, t);
+                VertexOutput intersect_vertex;
+                LinearInterpolationVertex(intersect_vertex, prev, current, LerpRatio[plane](prev.point, current.point));
+                GET_DATA_BY_SEMATIC(intersect_vertex.point, intersect_vertex, SEMANTIC::SV_POSITION);
                 out_verteies.emplace_back(intersect_vertex);
             }
         }
-
-        if (out_verteies.size() < 2) return 0;
-        return out_verteies.size() - 2;
     }
 
-    uint32_t ClipTriangleDetail(std::vector<VertexOutput>& out_verteies, VertexOutput **triangle, const Vec4f* points)
+    void ClipTriangleDetail(std::vector<VertexOutput>& out_verteies, VertexOutput **triangle)
     {
         // clip near_plane first then clip w <= 0
-        bool p1_in = IsInSide(points[0]);
-        bool p2_in = IsInSide(points[1]);
-        bool p3_in = IsInSide(points[2]);
-        if(p1_in && p2_in && p3_in)
-        {
-            out_verteies.emplace_back(*(triangle[0]));
-            out_verteies.emplace_back(*(triangle[1]));
-            out_verteies.emplace_back(*(triangle[2]));
-            return 1;
-        }
+        std::vector<VertexOutput> in_verteies{
+            *(triangle[0]),
+            *(triangle[1]),
+            *(triangle[2]),
+        };
 
-        return SutherlandHodgman(out_verteies, triangle, points, 3);
+        if(IsInCVV(in_verteies[0].point)
+            && IsInCVV(in_verteies[1].point)
+            && IsInCVV(in_verteies[2].point))
+            {
+                out_verteies = in_verteies;
+            }
+        
+        // clip z first
+        ClipTrianglePlane(in_verteies, out_verteies, EClipPlane::NEGATIVE_Z);
+        ClipTrianglePlane(out_verteies, in_verteies, EClipPlane::POSITIVE_Z);
+        ClipTrianglePlane(in_verteies, out_verteies, EClipPlane::POSITIVE_W);
+        ClipTrianglePlane(out_verteies, in_verteies, EClipPlane::NEGATIVE_X);
+        ClipTrianglePlane(in_verteies, out_verteies, EClipPlane::POSITIVE_X);
+        ClipTrianglePlane(out_verteies, in_verteies, EClipPlane::NEGATIVE_Y);
+        ClipTrianglePlane(in_verteies, out_verteies, EClipPlane::POSITIVE_Y);
     }
 }

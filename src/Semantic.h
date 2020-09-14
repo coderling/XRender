@@ -50,6 +50,7 @@ namespace XRender
         Vec2f screen;
         float viewDepth;
         float viewZ;
+        Vec4f point;
         VertexData data;
     };
     

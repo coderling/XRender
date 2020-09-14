@@ -340,26 +340,28 @@ void XRender::Graphics::DrawTriangle(const uint32_t& index)
     {
 		uint32_t t_index = buffer.index_buffer[index * 3 + sub_index];
         cached_triangle[sub_index] = &cached_vertex_out[t_index];
-        GET_DATA_BY_SEMATIC(cached_triangle_points[sub_index], cached_vertex_out[t_index], SEMANTIC::SV_POSITION);
+        GET_DATA_BY_SEMATIC(cached_triangle[sub_index]->point, cached_vertex_out[t_index], SEMANTIC::SV_POSITION);
     }
     
     // back-face culling, 计算几何，判断线段的拐向， 矢量叉积
-    if(IsBackFace(cached_triangle_points[0], cached_triangle_points[1], cached_triangle_points[2]))
+    if(IsBackFace(cached_triangle[0]->point, cached_triangle[1]->point, cached_triangle[2]->point))
         return;
     
     //cvv clip
     static std::vector<VertexOutput> clip_verteies;
     clip_verteies.clear();
-    std::size_t triangle_count = ClipTriangleDetail(clip_verteies, cached_triangle, cached_triangle_points);
-    for (std::size_t t_index = 1; t_index < triangle_count; ++t_index)
+    ClipTriangleDetail(clip_verteies, cached_triangle);
+    if(clip_verteies.size() < 3) return;
+    
+    PerspectiveDivideAndViewPort(clip_verteies[0]);
+    PerspectiveDivideAndViewPort(clip_verteies[1]);
+    cached_triangle[0] = &clip_verteies[0];
+    for (size_t t_index = 2; t_index < clip_verteies.size(); ++t_index)
     {
-        for (std::size_t p_index = 0; p_index < 3; ++p_index)
-        {
-            auto& out = clip_verteies[p_index + t_index];
-		    PerspectiveDivideAndViewPort(out);
-            cached_triangle[p_index] = &out;
-            RasterizerTriangle();
-        }
+        PerspectiveDivideAndViewPort(clip_verteies[t_index]);
+        cached_triangle[1] = &clip_verteies[t_index - 1];
+        cached_triangle[2] = &clip_verteies[t_index];
+        RasterizerTriangle();
     }
 }
 

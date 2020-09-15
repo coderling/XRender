@@ -35,13 +35,13 @@ namespace XRender::Test
         mesh->SetPositions(points);
         mesh->SetColors(colors);
         mesh->SetIndeies(indeies);
-        obj->renderer = std::make_unique<Renderer>();
-        obj->renderer->mesh = std::move(mesh);
-        obj->renderer->mat = std::make_unique<Matrial>();
-        obj->renderer->mat->shader = Shader::CreateShader<ColorShader>();
-        obj->SetPosition(Vec3f(0, 0, -1));
-        obj->SetRotation(Vec3f(0, 0, 0));
-        obj->SetScale(Vec3f(1, 1, 1));
+        obj->SetRenderer(std::make_unique<Renderer>());
+        obj->Renderer()->mesh = std::move(mesh);
+        obj->Renderer()->mat = std::make_unique<Matrial>();
+        obj->Renderer()->mat->shader = Shader::CreateShader<ColorShader>();
+        obj->Transform().SetPosition(Vec3f(0, 0, -1));
+        obj->Transform().SetRotation(Vec3f(0, 0, 0));
+        obj->Transform().SetScale(Vec3f(1, 1, 1));
         return obj;
     }
 

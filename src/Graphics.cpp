@@ -69,7 +69,7 @@ void XRender::Graphics::BindShader(const uint32_t& buffer_id, Shader *shader)
     shader_map.emplace(buffer_id, shader);
 }
 
-void XRender::Graphics::LoadModelMatrix(const uint32_t& buffer_id, const Matrix& matrix)
+void XRender::Graphics::LoadModelMatrix(const uint32_t& buffer_id, const Matrix* matrix)
 {
     assert(buffers.count(buffer_id) == 1);
     model_matries.insert_or_assign(buffer_id, matrix);
@@ -224,7 +224,7 @@ void XRender::Graphics::SetupGlobalData()
 
 void XRender::Graphics::SetupObjectData()
 {
-    GraphicsGlobalData::matrix_m = model_matries[current_execute_vbo_id];
+    GraphicsGlobalData::matrix_m = *(model_matries[current_execute_vbo_id]);
     GraphicsGlobalData::matrix_mv = GraphicsGlobalData::matrix_v * GraphicsGlobalData::matrix_m;
     GraphicsGlobalData::matrix_mvp = GraphicsGlobalData::matrix_p * GraphicsGlobalData::matrix_mv;
 }

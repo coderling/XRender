@@ -43,6 +43,5 @@ namespace XRender
         void SetPlane(const EPlane& plane, const float& A, const float& B, const float& C, const float& D);
         float DistanceToPlane(const uint32_t& plane_index, const Vec3f& point) const;
         Plane planes[6];
-        Bounds bounds;        
     };
 }

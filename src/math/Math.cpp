@@ -102,7 +102,6 @@ Matrix XRender::Math::CameraLookAt(const Vec3f& pos, const Vec3f& up, const Vec3
     view[2][1] = lk.y;
     view[2][2] = lk.z;
     view[2][3] = lk.x * -pos.x + lk.y * -pos.y + lk.z * -pos.z;
-    view.invert();
 
     return view;
 }

@@ -34,11 +34,11 @@ namespace XRender::Test
         std::unique_ptr<Object> obj = std::make_unique<Object>();
         std::unique_ptr<Mesh> mesh =  Res::Resources::Load<Mesh>("./obj/african_head.obj");
         std::unique_ptr<Texture2D> texture = Res::Resources::Load<Texture2D>("./obj/african_head_diffuse.tga");
-        obj->renderer = std::make_unique<Renderer>();
-        obj->renderer->mesh = std::move(mesh);
-        obj->renderer->mat = std::make_unique<Matrial>();
-        obj->renderer->mat->shader = Shader::CreateShader<T>();
-        obj->renderer->mat->SetAtrribute("texture", std::move(texture));
+        obj->SetRenderer(std::make_unique<Renderer>());
+        obj->Renderer()->mesh = std::move(mesh);
+        obj->Renderer()->mat = std::make_unique<Matrial>();
+        obj->Renderer()->mat->shader = Shader::CreateShader<T>();
+        obj->Renderer()->mat->SetAtrribute("texture", std::move(texture));
         return obj;
     }
     

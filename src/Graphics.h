@@ -47,7 +47,7 @@ public:
     void CreateVIO(const uint32_t& buffer_id, const uint32_t& count);
     void LoadIndexBuffer(const uint32_t& buffer_id, const uint32_t* source_data);
     void BindShader(const uint32_t& buffer_id, Shader* shader);
-    void LoadModelMatrix(const uint32_t& buffer_id, const Matrix& matrix);
+    void LoadModelMatrix(const uint32_t& buffer_id, const Matrix* matrix);
     void ReleaseVBOANDVIO(const uint32_t& buffer_id);
     void Dispose();
     void BeginFrame();
@@ -89,7 +89,7 @@ private:
     std::unordered_set<uint32_t> active_buffers;
     std::map<uint32_t, VertexBuffer> buffers;
     std::map<uint32_t, Shader*> shader_map; 
-    std::map<uint32_t, Matrix> model_matries; 
+    std::map<uint32_t, const Matrix*> model_matries; 
     uint32_t vbo_id_source;
     RenderContext render_context;
     GraphicsEnum::EDepthTestMethod depth_test_method = GraphicsEnum::EDepthTestMethod::Less;

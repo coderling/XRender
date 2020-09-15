@@ -17,7 +17,7 @@ public:
     virtual ~Renderer();
     Renderer();
     void Batch();
-    void UpdateMatrix(const Matrix& matrix);
+    void SetMatrix(const Matrix* matrix);
     const uint32_t& GetVbo() const;
 public:
     bool active;
@@ -25,7 +25,7 @@ public:
     std::unique_ptr<Mesh> mesh;
     std::unique_ptr<Matrial> mat;
 private:
-    Matrix model_matrix;
+    const Matrix* matrix;
     uint32_t vbo_id;
 };
 

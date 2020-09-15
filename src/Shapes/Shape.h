@@ -19,8 +19,8 @@ namespace XRender::Shapes
         std::unique_ptr<Object> obj = std::make_unique<Object>();
         std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>();
         mesh->SetWitchShapeData(data);
-        obj->renderer = std::make_unique<Renderer>();
-        obj->renderer->mesh = std::move(mesh);
+        obj->SetRenderer(std::make_unique<Renderer>());
+        obj->Renderer()->mesh = std::move(mesh);
         return obj;
     }
 }

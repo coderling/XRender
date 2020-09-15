@@ -36,9 +36,16 @@ void PrePare()
     CreateDepthBuffer();
 }
 
-void UpdateViewSpace()
+XRender::Bounds GetCameraBounds(const XRender::Camera camera)
 {
+    XRender::Bounds camera_bounds;
 
+    return camera_bounds;
+}
+
+void UpdateViewSpace(const XRender::Camera* camera)
+{
+    //const auto& scene_bounds = current_pipeline->scene->GetSceneBounds();
 }
 
 void XRender::ShadowMap::Setup(XRender::Pipeline* pipeline) 
@@ -47,7 +54,7 @@ void XRender::ShadowMap::Setup(XRender::Pipeline* pipeline)
     current_pipeline = pipeline; 
 }
 
-void XRender::ShadowMap::Render()
+void XRender::ShadowMap::Render(const Camera* camera)
 {
     if (!ShadowSetting::enable_shadow)
         return;
@@ -56,7 +63,7 @@ void XRender::ShadowMap::Render()
     if(use_light == nullptr)
         return;
 
-    UpdateViewSpace();
+    UpdateViewSpace(camera);
     Graphics::VirtualGraphic().SetClearFlag(GraphicsEnum::EClearFlag::Clear_Depth);
     Graphics::VirtualGraphic().Execute();
 }

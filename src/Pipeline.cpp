@@ -52,7 +52,7 @@ void XRender::Pipeline::DrawRenderers(const std::vector<Renderer*>& renderers, C
     }
 
     Graphics::VirtualGraphic().BeginFrame();
-    ShadowMap::Render();
+    ShadowMap::Render(camera);
     camera->SyncGraphicsCameraData();
     Graphics::VirtualGraphic().Execute();
     Graphics::VirtualGraphic().EndFrame();

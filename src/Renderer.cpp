@@ -9,9 +9,10 @@
 XRender::Renderer::~Renderer()
 {
     XRender::Res::Resources::UnLoad<Mesh>(std::move(mesh));
+    matrix = nullptr;
 }
 
-XRender::Renderer::Renderer(): active(true), geometryDirty(true), vbo_id(0), model_matrix(Matrix::identity())
+XRender::Renderer::Renderer(): active(true), geometryDirty(true), vbo_id(0)
 {
 }
 
@@ -38,17 +39,13 @@ void XRender::Renderer::Batch()
     const std::vector<uint32_t>& indeies = mesh->GetIndeies();
     virtual_graphics.CreateVIO(vbo_id, indeies.size()); 
     virtual_graphics.LoadIndexBuffer(vbo_id, &(indeies[0]));
-
-    virtual_graphics.LoadModelMatrix(vbo_id, model_matrix);
+    virtual_graphics.LoadModelMatrix(vbo_id, this->matrix);
     virtual_graphics.BindShader(vbo_id, mat->shader.get());
 }
 
-void XRender::Renderer::UpdateMatrix(const Matrix& matrix)
+void XRender::Renderer::SetMatrix(const Matrix* matrix)
 {
-    model_matrix = matrix;
-    auto& virtual_graphics = Graphics::VirtualGraphic();
-    if (vbo_id > 0)
-      virtual_graphics.LoadModelMatrix(vbo_id, model_matrix);
+    this->matrix = matrix;
 }
 
 const uint32_t& XRender::Renderer::GetVbo() const

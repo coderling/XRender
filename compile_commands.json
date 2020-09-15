@@ -97,8 +97,8 @@
 
 {
   "directory": "C:/dev/MyGit/XRender/build",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\RenderTarget.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\RenderTarget.cpp",
-  "file": "C:/dev/MyGit/XRender/src/RenderTarget.cpp"
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\RenderDevice.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\RenderDevice.cpp",
+  "file": "C:/dev/MyGit/XRender/src/RenderDevice.cpp"
 },
 
 {
@@ -247,8 +247,8 @@
 
 {
   "directory": "C:/dev/MyGit/XRender/build",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\platform\\image\\ImageRenderTarget.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\platform\\image\\ImageRenderTarget.cpp",
-  "file": "C:/dev/MyGit/XRender/src/platform/image/ImageRenderTarget.cpp"
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\platform\\image\\ImageDevice.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\platform\\image\\ImageDevice.cpp",
+  "file": "C:/dev/MyGit/XRender/src/platform/image/ImageDevice.cpp"
 },
 
 {

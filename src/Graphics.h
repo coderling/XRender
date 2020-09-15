@@ -13,6 +13,8 @@
 #include "NoCopyable.h"
 #include "Lighting.h"
 #include "GraphicsEnum.h"
+#include "RenderTexture.h"
+#include "RenderDevice.h"
 
 namespace XRender
 {
@@ -51,15 +53,15 @@ public:
     void BeginFrame();
     void Execute();
     void EndFrame();
-    void InitRenderContext(const uint32_t& width, const uint32_t& height);
+    void SetupGraphics(const uint32_t& w, const uint32_t& h, const std::string& name);
     uint32_t GetContextWidth() const;
     uint32_t GetContextHeight() const;
-    RenderContext& GetRenderContext();
+    RenderContext* GetRenderContext();
     void AddLight(const Lighting::LightData* light);
     void RemoveLight(const Lighting::LightData* light);
     void ActiveRender(const uint32_t& vbo_id);
     void SetClearFlag(const int& flag);
-    void SetDepthOnlyMode(const bool& state);
+    void Present();
 private:
     void SetupGlobalData();
     void SetupObjectData();
@@ -71,17 +73,17 @@ private:
     void DrawTriangle(const uint32_t& index);
     void PropertyBarycentricInterpolation(const Vec2i& point, const Vec3f& barycentric);
     bool DepthTest(const uint32_t& x, const uint32_t& y, const float& depth);
-    void ApplyFragment(const uint32_t& x, const uint32_t& y, const Color& color);
+    void ApplyFragment(const uint32_t& x, const uint32_t& y, const Color& color, const float& depth);
     void BindVertexInput(const uint32_t& index);
     void FillSemanticToVertexInput(const uint32_t& index, const SEMANTIC& st);
     void ReleaseVertexBuffer(VertexBuffer& buffer);
     bool IsBackFace(const Vec2f& p1, const Vec2f& p2, const Vec2f& p3) const; 
 
     VertexInput bind_vertex_input;
+    VertexOutput fragment_input;
     std::vector<VertexOutput> cached_vertex_out;
     VertexOutput* cached_triangle[3];
     Vec4f cached_triangle_points[3];
-    std::vector<VertexOutput> cached_frament_in;
     uint32_t current_execute_vbo_id;
     
     std::unordered_set<uint32_t> active_buffers;
@@ -95,6 +97,5 @@ private:
     std::unordered_set<const Lighting::LightData*> lights;
     const Lighting::LightData* shadow_light = nullptr;
     int clear_flag = GraphicsEnum::EClearFlag::Clear_Depth | GraphicsEnum::EClearFlag::Clear_Color;
-    bool depth_only = false;
 };
 }

@@ -17,8 +17,9 @@ ${CMAKE_CURRENT_SOURCE_DIR}/Mesh.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Object.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Pipeline.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/RenderContext.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/RenderTexture.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Renderer.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/RenderTarget.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/RenderDevice.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Scene.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Shader.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/Texture2D.cpp
@@ -47,13 +48,13 @@ ${CMAKE_CURRENT_SOURCE_DIR}/platform/common/Platform.cpp)
 if(USE_IMAGE_TARGET)
 add_definitions(-DUSE_IMAGE_TARGET)
 target_sources(XRenderLib PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/image/ImageRenderTarget.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/image/ImageDevice.cpp)
 elseif(WIN32)
 target_sources(XRenderLib PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/win/WindowsRenderTarget.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/win/WindowsDevice.cpp)
 else()
 target_sources(XRenderLib PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/image/ImageRenderTarget.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/image/ImageDevice.cpp)
 endif()
 
 target_include_directories(XRenderLib PUBLIC ${CMAKE_SOURCE_DIR}/thirdParty/include)

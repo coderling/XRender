@@ -24,7 +24,6 @@ public:
     bool geometryDirty;
     std::unique_ptr<Mesh> mesh;
     std::unique_ptr<Matrial> mat;
-    
 private:
     Matrix model_matrix;
     uint32_t vbo_id;

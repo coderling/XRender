@@ -6,7 +6,7 @@ std::unordered_map<XRender::Camera*, std::unique_ptr<XRender::PostProcess>> XRen
 void XRender::PostProcess::ExecutePostProcess(Camera *camera)
 {
     static PostProcessContext context;
-    context.render_context = &Graphics::VirtualGraphic().GetRenderContext();
+    context.render_context = Graphics::VirtualGraphic().GetRenderContext();
     PostProcess* process = GetPostProcess(camera);
     if (process == nullptr)
         return;

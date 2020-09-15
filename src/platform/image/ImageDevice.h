@@ -1,16 +1,16 @@
 #pragma once
 
-#include "../../RenderTarget.h"
+#include "../../RenderDevice.h"
 #include "tgaimage.h"
 
 namespace XRender
 {
 
-    class ImageRenderTarget: public RenderTarget 
+    class ImageDevice: public RenderDevice 
     {
     public:
-        ImageRenderTarget(const std::string& name);
-        ~ImageRenderTarget() override;
+        ImageDevice(const std::string& name);
+        ~ImageDevice() override;
         void OnPresent(const RenderContext* context) override;
         void Save();
     private:

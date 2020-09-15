@@ -1,7 +1,7 @@
 #pragma once
 #include <geometry.h>
 
-#include "RenderTarget.h"
+#include "RenderDevice.h"
 #include "RenderContext.h"
 #include "ViewFrustum.h"
 #include "GraphicsEnum.h"
@@ -23,7 +23,6 @@ public:
     void SetPerspective(const float& angle, const float& near, const float& far);
     void SetOrthgraphic(const float& near, const float& far);
     void SetViewPort(const float& x, const float& y, const float& w, const float& h);
-    void SetRenderTarget(std::unique_ptr<RenderTarget> target);
     void Update();
     void SyncGraphicsCameraData() const;
     void Present();
@@ -42,7 +41,6 @@ private:
     float near_plane;
     float far_plane;
     Frustum frustum;
-    std::unique_ptr<RenderTarget> render_target;
     int clear_flag = GraphicsEnum::EClearFlag::Clear_Depth | GraphicsEnum::EClearFlag::Clear_Color;
 };
 }

@@ -1,7 +1,7 @@
 #include <cassert>
 #include <strsafe.h>
 
-#include "WindowsRenderTarget.h"
+#include "WindowsDevice.h"
 
 void ErrorExit(LPTSTR lpszFunction) 
 { 
@@ -42,7 +42,7 @@ void ShowError()
         ErrorExit(TEXT("GetProcessId"));
 }
 
-XRender::WindowsRenderTarget::WindowsRenderTarget(const std::string& name): RenderTarget(name), hWnd(NULL), memory_dc(NULL), memory_dc_buffer(NULL)
+XRender::WindowsDevice::WindowsDevice(const std::string& name): RenderDevice(name), hWnd(NULL), memory_dc(NULL), memory_dc_buffer(NULL)
 {
     auto c_str = name.c_str();
 	int len = MultiByteToWideChar(CP_ACP, 0, c_str, std::strlen(c_str), NULL, 0);
@@ -51,28 +51,28 @@ XRender::WindowsRenderTarget::WindowsRenderTarget(const std::string& name): Rend
 	lname[len] = '\0';
 }
 
-XRender::WindowsRenderTarget::~WindowsRenderTarget()
+XRender::WindowsDevice::~WindowsDevice()
 {
     ShowWindow(hWnd, SW_HIDE);
     DestroyWindowData();
 }
 
-void XRender::WindowsRenderTarget::OnPresent(const RenderContext* context)
+void XRender::WindowsDevice::OnPresent(const RenderContext* context)
 {
-    auto frame_buffer = context->GetBuffer();
-    uint32_t tcount = width * height;
+    auto rendertexture = context->ActivedRenderTexture();
     Color32 color;
+    Color scolor;
     // windows 屏幕坐标左上角（0，0） 右下角（width, height）需要转换
-    uint32_t index = 0;
     uint32_t buffer_index = 0;
     for(uint32_t y = 0; y < height; ++y)
     {
         uint32_t cy = height - y - 1;
         for(uint32_t x = 0; x < width; ++x)
         {
-            index = y * width + x;
-            buffer_index = (y * width + x) * 4;
-            ColorToColor32(frame_buffer[index], color);
+            buffer_index = (cy * width + x) * 4;
+            rendertexture->ReadPixel(x, y, color);
+            if (color.r > 0)
+                int a = 0;
             memory_dc_buffer[buffer_index + 0] = static_cast<unsigned char>(color.b);
             memory_dc_buffer[buffer_index + 1] = static_cast<unsigned char>(color.g);
             memory_dc_buffer[buffer_index + 2] = static_cast<unsigned char>(color.r);
@@ -81,7 +81,7 @@ void XRender::WindowsRenderTarget::OnPresent(const RenderContext* context)
     BitBltMemoryDC();
 }
 
-void XRender::WindowsRenderTarget::OnUpdate()
+void XRender::WindowsDevice::OnUpdate()
 {
     MSG message;
     while (PeekMessage(&message, NULL, 0, 0, PM_REMOVE))
@@ -91,14 +91,14 @@ void XRender::WindowsRenderTarget::OnUpdate()
     }
 }
 
-void XRender::WindowsRenderTarget::BitBltMemoryDC()
+void XRender::WindowsDevice::BitBltMemoryDC()
 {
     HDC window_dc = GetDC(hWnd);
     BitBlt(window_dc, 0, 0, width, height, memory_dc, 0, 0, SRCCOPY);
     ReleaseDC(hWnd, window_dc);
 }
 
-void XRender::WindowsRenderTarget::OnInit()
+void XRender::WindowsDevice::OnInit()
 {
     TryRegisterWindowsClassEx();
     CreateWindows();
@@ -106,7 +106,7 @@ void XRender::WindowsRenderTarget::OnInit()
     ShowWindow(hWnd, SW_SHOW);
 }
 
-void XRender::WindowsRenderTarget::CreateWindows()
+void XRender::WindowsDevice::CreateWindows()
 {
     this->hWnd = CreateWindow(name.c_str(),
                               name.c_str(),
@@ -123,7 +123,7 @@ void XRender::WindowsRenderTarget::CreateWindows()
     assert(this->hWnd != NULL);
 }
 
-void XRender::WindowsRenderTarget::CreateMemoryDevieceContext()
+void XRender::WindowsDevice::CreateMemoryDevieceContext()
 {
     HDC window_dc = GetDC(hWnd);
     memory_dc = CreateCompatibleDC(window_dc);
@@ -159,7 +159,7 @@ void XRender::WindowsRenderTarget::CreateMemoryDevieceContext()
     }
 }
 
-void XRender::WindowsRenderTarget::TryRegisterWindowsClassEx()
+void XRender::WindowsDevice::TryRegisterWindowsClassEx()
 {
     static bool is_register = false;
     if (is_register)
@@ -169,7 +169,7 @@ void XRender::WindowsRenderTarget::TryRegisterWindowsClassEx()
     WNDCLASS wc;
 
     wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = &WindowsRenderTarget::WindowProc;
+    wc.lpfnWndProc = &WindowsDevice::WindowProc;
     wc.hInstance = GetModuleHandle(NULL);
     wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
@@ -186,13 +186,13 @@ void XRender::WindowsRenderTarget::TryRegisterWindowsClassEx()
     is_register = true;
 }
 
-void XRender::WindowsRenderTarget::DestroyWindowData()
+void XRender::WindowsDevice::DestroyWindowData()
 {
     DeleteDC(memory_dc);
     DestroyWindow(hWnd);
 }
 
-LRESULT CALLBACK XRender::WindowsRenderTarget::WindowProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK XRender::WindowsDevice::WindowProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
     return DefWindowProc(hwnd, message, wParam, lParam);
 }

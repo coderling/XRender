@@ -17,10 +17,7 @@ namespace XRender::PostProcessing
                 for(uint32_t j = 0; j < h; ++j)
                 {
                     Color col;
-                    float depth = (context->render_context->GetDepthBuffer(i, j));
-                    col.r = col.g = col.b = depth;
                     col.a = 1;
-                    context->render_context->SetPixel(i, j, col);
                 }
             }
         }

@@ -100,25 +100,6 @@ namespace XRender
                   || std::is_same_v<T, Color>);\
     assert(!this->HasVertexOutputSemantic(semantic));\
     this->vertex_output_semantic |= 1 << static_cast<uint32_t>(semantic);\
-    this->propertory_interpolation_funcs.emplace(semantic,\
-    [](VertexOutput& out, VertexOutput* triangle[], const SEMANTIC& tsemantic, const Vec3f& barycentric)\
-        {\
-            T property1; GET_DATA_BY_SEMATIC(property1, (*(triangle[0])), tsemantic);\
-            T property2; GET_DATA_BY_SEMATIC(property2, (*(triangle[1])), tsemantic);\
-            T property3; GET_DATA_BY_SEMATIC(property3, (*(triangle[2])), tsemantic);\
-            T ret = Math::BarycentricInterpolation<T>(property1, property2, property3, barycentric);\
-            FILL_SHADER_STRUCT(out, tsemantic, ret);\
-        }\
-    );\
-    this->propertory_interpolation_linear_funcs.emplace(semantic,\
-    [](VertexOutput& out, const SEMANTIC& tsemantic, VertexOutput& v1, VertexOutput& v2, const float& t)\
-        {\
-            T property1; GET_DATA_BY_SEMATIC(property1, v1, tsemantic);\
-            T property2; GET_DATA_BY_SEMATIC(property2, v2, tsemantic);\
-            T& ret = Math::LinearInterpolation<T>(property1, property2, t);\
-            FILL_SHADER_STRUCT(out, tsemantic, ret);\
-        }\
-    );\
     }
 
 

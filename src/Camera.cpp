@@ -10,9 +10,9 @@ XRender::Camera& XRender::Camera::MainCamera()
 
 XRender::Camera::Camera()
 {
-    render_target = nullptr;
     is_perspective = true;
     angle = 60;
+    aspect = 1;
     near_plane = 0.1f;
     far_plane = 1000.f;
 }
@@ -66,12 +66,14 @@ void XRender::Camera::SetPerspective(const float &angle, const float &near, cons
     this->near_plane = near;
     this->far_plane = far;
     is_perspective = true;
-    if (render_target != nullptr)
-      CaculatePerspective();
+    CaculatePerspective();
 }
 
 void XRender::Camera::CaculatePerspective()
 {
+    auto device = RenderDevice::Device();
+    assert(device != nullptr);
+    this->aspect = device->GetWidth() * 1.0f / device->GetHeight();
     proj = Math::Perspective(angle, aspect, near_plane, far_plane);
 }
 
@@ -85,8 +87,10 @@ void XRender::Camera::SetOrthgraphic(const float &near, const float &far)
 
 void XRender::Camera::CaculateOrthgraphic()
 {
-    int width = render_target->GetWidth();
-    int height = render_target->GetHeight();
+    auto device = RenderDevice::Device();
+    assert(device != nullptr);
+    int width = device->GetWidth();
+    int height = device->GetHeight();
     float left = width * 1.f / 2;
     float right = -left;
     float top = height * 1.f / 2;
@@ -96,9 +100,10 @@ void XRender::Camera::CaculateOrthgraphic()
 
 void XRender::Camera::SetViewPort(const float &x, const float &y, const float &w, const float &h)
 {
-    assert(render_target != nullptr);
-    int width = render_target->GetWidth();
-    int height = render_target->GetHeight();
+    auto device = RenderDevice::Device();
+    assert(device != nullptr);
+    int width = device->GetWidth();
+    int height = device->GetHeight();
     int ix = (int)(width * x);
     int iy = (int)(height * y);
     int iw = (int)(width * w);
@@ -114,18 +119,9 @@ void XRender::Camera::SetViewPort(const float &x, const float &y, const float &w
     view_port[2][2] = 1;
 }
 
-void XRender::Camera::SetRenderTarget(std::unique_ptr<RenderTarget> target)
-{
-    render_target = std::move(target);
-    SetViewPort(0, 0, 1, 1);
-    aspect = render_target->GetWidth() * 1.f / render_target->GetHeight();
-    ReCaculateProjectMatrix();
-}
-
 void XRender::Camera::Update()
 {
     frustum.Update(proj * view);
-    render_target->OnUpdate();
 }
 
 void XRender::Camera::SyncGraphicsCameraData() const
@@ -137,7 +133,6 @@ void XRender::Camera::SyncGraphicsCameraData() const
     GraphicsGlobalData::matrix_vp = this->proj * this->view;
     GraphicsGlobalData::matrix_viewport = this->view_port;
     Graphics::VirtualGraphic().SetClearFlag(clear_flag);
-    Graphics::VirtualGraphic().SetDepthOnlyMode(false);
 }
 
 const XRender::Frustum& XRender::Camera::GetFrustum() const
@@ -147,7 +142,5 @@ const XRender::Frustum& XRender::Camera::GetFrustum() const
 
 void XRender::Camera::Present()
 {
-    assert(Graphics::VirtualGraphic().GetContextWidth() == render_target->GetWidth());
-    assert(Graphics::VirtualGraphic().GetContextHeight() == render_target->GetHeight());
-    render_target->OnPresent(&Graphics::VirtualGraphic().GetRenderContext());
+    Graphics::VirtualGraphic().Present();
 }

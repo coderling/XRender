@@ -1,6 +1,10 @@
 #include "XRender.h"
 #include "Graphics.h"
 #include "Time.h"
+#include "ShadowMap.h"
+#include "RenderTexture.h"
+#include "GraphicsEnum.h"
+#include "RenderDevice.h"
 
 XRender::XRender::XRender()
 {
@@ -20,16 +24,15 @@ XRender::XRender::~XRender()
 void XRender::XRender::Initialize(PipelineInitializeData& pipeline_data)
 {
     assert(pipeline_data.pipeline != nullptr);
-    assert(pipeline_data.render_target != nullptr);
     assert(pipeline_data.width > 0 && pipeline_data.height > 0);
 
-    pipeline_data.render_target->Init(pipeline_data.width, pipeline_data.height);
     RegistrTickFunc(pipeline_data.tick_func);
     pPipeline = pipeline_data.pipeline;
-    
-    Graphics::VirtualGraphic().InitRenderContext(pipeline_data.render_target->GetWidth(), pipeline_data.render_target->GetHeight());
-    Camera::MainCamera().SetRenderTarget(std::move(pipeline_data.render_target));
+
+    Graphics::VirtualGraphic().SetupGraphics(pipeline_data.width, pipeline_data.height, pipeline_data.title);
+    Camera::MainCamera().SetViewPort(0, 0, 1, 1);
     RegisterCamera(&Camera::MainCamera());
+    ShadowMap::Setup(pPipeline);
 }
 
 void XRender::XRender::Loop()
@@ -103,6 +106,7 @@ void XRender::XRender::UnRegistrTickFunc(std::function<void ()> tick)
 
 void XRender::XRender::InnerTick()
 {
+    RenderDevice::Device()->OnUpdate();
     TickCamera();
     for(const auto& tick : ticks)
     {

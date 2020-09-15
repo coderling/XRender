@@ -16,7 +16,7 @@ void Tick()
     if (p_obj != nullptr)
     {
         rotation.y += 1;
-        //p_obj->SetRotation(rotation);
+        p_obj->SetRotation(rotation);
     }
 }
 
@@ -30,7 +30,7 @@ void RenderSampleTriangle(XRender::Scene* scene)
 void RenderSampleObject(XRender::Scene* scene)
 {
     auto object = XRender::Test::LoadSampleObject<XRender::Shaders::DiffuseColor>();
-    object->SetPosition(Vec3f(0, 0, -2));
+    object->SetPosition(Vec3f(0, 0, -3));
     rotation.x = 0;
     rotation.y = 0;
     rotation.z = 0;

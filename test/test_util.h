@@ -18,13 +18,13 @@ namespace XRender::Test
       PipelineInitializeData pipeline_data;
       pipeline_data.width = 800;
       pipeline_data.height = 600;
-      TestPipeline* pipeline = new TestPipeline();;
-      InitSetCamera(Camera::MainCamera());
+      pipeline_data.title = target_name;
+      TestPipeline* pipeline = new TestPipeline();
       pipeline_data.pipeline = pipeline;
       pipeline_data.tick_func = tick_func;
-      pipeline_data.render_target = CreateRenderTarget(target_name);
       static XRender render;
       render.Initialize(pipeline_data);
+      InitSetCamera(Camera::MainCamera());
       return render;
     }
 

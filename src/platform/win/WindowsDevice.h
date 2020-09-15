@@ -2,15 +2,15 @@
 #include <windowsx.h>
 #include <tchar.h>
 
-#include "../../RenderTarget.h"
+#include "../../RenderDevice.h"
 
 namespace XRender
 {
-    class WindowsRenderTarget : public RenderTarget
+    class WindowsDevice : public RenderDevice
     {
     public:
-        WindowsRenderTarget(const std::string& name);
-        ~WindowsRenderTarget() override;
+        WindowsDevice(const std::string& name);
+        ~WindowsDevice() override;
         void OnPresent(const RenderContext* context) override;
     private:
         void OnInit() override;

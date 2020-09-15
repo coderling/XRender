@@ -26,12 +26,12 @@ namespace XRender
 
         enum struct EPlane
         {
-            TOP = 0,
-            BOTTOM,
-            LEFT,
-            RIGHT,
-            NEAR,
-            FAR
+            ETOP = 0,
+            EBOTTOM,
+            ELEFT,
+            ERIGHT,
+            ENEAR,
+            EFAR,
         };
 
     public:

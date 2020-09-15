@@ -4,13 +4,17 @@
 #include "Graphics.h"
 #include "GraphicsEnum.h"
 
+static XRender::Pipeline* current_pipeline = nullptr;
+
 static const XRender::Lighting::LightData* use_light = nullptr;
 
 float* depth_buffer = nullptr;
 
+static Matrix light_proj;
+
 void CreateDepthBuffer()
 {
-   if(use_light == nullptr || depth_buffer == nullptr)
+   if(use_light == nullptr || depth_buffer != nullptr)
    {
        return;
    }
@@ -18,12 +22,12 @@ void CreateDepthBuffer()
    depth_buffer =  new float[XRender::ShadowSetting::width * XRender::ShadowSetting::height];
 }
 
-void XRender::ShadowMap::Setup() 
+void PrePare() 
 {
     use_light = nullptr;
-    for(uint32_t index = 0; index < GraphicsGlobalData::light_count; ++index)
+    for(uint32_t index = 0; index < XRender::GraphicsGlobalData::light_count; ++index)
     {
-        auto light = GraphicsGlobalData::lights[index];
+        auto light = XRender::GraphicsGlobalData::lights[index];
         if(use_light == nullptr || (light->intensity > use_light->intensity && light->world_pos.w == 0))
         {
             use_light = light;
@@ -37,14 +41,23 @@ void UpdateViewSpace()
 
 }
 
+void XRender::ShadowMap::Setup(XRender::Pipeline* pipeline) 
+{
+    assert(pipeline != nullptr);
+    current_pipeline = pipeline; 
+}
+
 void XRender::ShadowMap::Render()
 {
     if (!ShadowSetting::enable_shadow)
         return;
-    Setup();
+    PrePare();
+
+    if(use_light == nullptr)
+        return;
+
     UpdateViewSpace();
     Graphics::VirtualGraphic().SetClearFlag(GraphicsEnum::EClearFlag::Clear_Depth);
-    Graphics::VirtualGraphic().SetDepthOnlyMode(true);
     Graphics::VirtualGraphic().Execute();
 }
 

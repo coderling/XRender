@@ -4,6 +4,7 @@
 
 #include "Pipeline.h"
 #include "Camera.h"
+#include "RenderTexture.h"
 
 namespace XRender 
 {
@@ -27,6 +28,7 @@ private:
     void TickCamera() const;
     std::vector<std::function<void()>> ticks;
     bool quit;
+    
     Pipeline *pPipeline;
     std::vector<Camera*> cameras;
 };

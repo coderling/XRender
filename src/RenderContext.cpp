@@ -1,104 +1,57 @@
 #include <cassert>
 #include "RenderContext.h"
+#include "RenderDevice.h"
+
+static std::unique_ptr<XRender::RenderTexture> default_rendertexture = nullptr;
 
 XRender::RenderContext::RenderContext()
 {
-    frame_buffer = nullptr;
-    depth_buffer = nullptr;
 }
 
 XRender::RenderContext::~RenderContext()
 {
-    if(frame_buffer != nullptr)
+    rendertexture = nullptr;
+}
+
+void XRender::RenderContext::ActiveTarget(RenderTexture* rt)
+{
+    rendertexture = rt;
+}
+
+XRender::RenderTexture* XRender::RenderContext::ActivedRenderTexture() const
+{
+    if(rendertexture == nullptr)
     {
-        delete [] frame_buffer;
+        if(default_rendertexture == nullptr)
+        {
+            default_rendertexture = RenderTexture::CreateRenderTarget(RenderDevice::Device()->GetWidth(),
+                                                                     RenderDevice::Device()->GetHeight(),
+                                                                     true, GraphicsEnum::ERenderTargetFormat::Default);
+        }
+        assert(default_rendertexture != nullptr);
+        return default_rendertexture.get();
     }
 
-    if(frame_buffer != nullptr)
-    {
-        delete [] depth_buffer;
-    }
-}
-
-void XRender::RenderContext::Init(const uint32_t& w, const uint32_t& h)
-{
-    width = w;
-    height = h;
-    frame_buffer = new Color[width * height];
-    depth_buffer = new float[width * height];
-}
-
-void XRender::RenderContext::SetPixel(const uint32_t &x, const uint32_t &y, const Color &color)
-{
-    assert(frame_buffer != nullptr);
-    if(x >= width || y >= height)
-        return;
-    
-    uint32_t index = GetIndex(x, y);
-    frame_buffer[index] = color;
-}
-
-const XRender::Color& XRender::RenderContext::ReadPixel(const uint32_t &x, const uint32_t &y) const
-{
-    return frame_buffer[GetIndex(x, y)];
-}
-
-const XRender::Color* XRender::RenderContext::GetBuffer() const
-{
-    return frame_buffer;
-}
-
-void XRender::RenderContext::SetDepthBuffer(const uint32_t &x, const uint32_t &y, const float &v)
-{
-    if(depth_buffer == nullptr || x >= width || y >= height)
-        return;
-
-    uint32_t index = GetIndex(x, y);
-    depth_buffer[index] = v;    
-}
-
-float XRender::RenderContext::GetDepthBuffer(const uint32_t &x, const uint32_t &y)
-{
-    if(depth_buffer == nullptr || x >= width || y >= height)
-        return 0;
-
-    uint32_t index = GetIndex(x, y);
-    return depth_buffer[index];
+    assert(rendertexture != nullptr);
+    return rendertexture;
 }
 
 const uint32_t& XRender::RenderContext::GetWidth() const
 {
-    return width;
+    return ActivedRenderTexture()->Width();
 }
 
 const uint32_t& XRender::RenderContext::GetHeight() const
 {
-    return height;
+    return ActivedRenderTexture()->Height();
 }
 
-uint32_t XRender::RenderContext::GetIndex(const uint32_t& x, const uint32_t& y) const
+void XRender::RenderContext::ClearFrameBuffer()
 {
-    return width * y + x;
+    ClearRenderTargetFrameBuffer(ActivedRenderTexture(), clear_color);
 }
 
-void XRender::RenderContext::ClearFrameBuffer(const XRender::Color& color)
+void XRender::RenderContext::ClearDepthBuffer()
 {
-    for(uint32_t x = 0; x < width; ++x)
-    {
-        for(uint32_t y = 0; y < height; ++y)
-        {
-            frame_buffer[GetIndex(x, y)] = color;
-        }
-    }
-}
-
-void XRender::RenderContext::ClearDepthBuffer(const float& depth)
-{
-    for(uint32_t x = 0; x < width; ++x)
-    {
-        for(uint32_t y = 0; y < height; ++y)
-        {
-            depth_buffer[GetIndex(x, y)] = depth;
-        }
-    }
+    ClearRenderTargetDepthBuffer(ActivedRenderTexture(), clear_depth);
 }

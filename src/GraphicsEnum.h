@@ -22,4 +22,10 @@ namespace XRender::GraphicsEnum
         Clear_Color = 1 << 0,
         Clear_Depth = 1 << 1,
     };
+    
+    enum struct ERenderTargetFormat : uint32_t
+    {
+        Default = 0,
+    };
+
 }

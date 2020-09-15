@@ -8,6 +8,7 @@
 #include "GraphicsGlobalData.h"
 #include "CVVClip.hpp"
 #include "./math/Math.h"
+#include "platform/common/Platform.h"
 
 XRender::Graphics::~Graphics(){}
 
@@ -118,14 +119,13 @@ void XRender::Graphics::Dispose()
 
 bool XRender::Graphics::DepthTest(const uint32_t &x, const uint32_t &y, const float &depth)
 {
-    const auto& cur_depth = render_context.GetDepthBuffer(x, y);
+    const auto& cur_depth = render_context.ActivedRenderTexture()->DepthOf(x, y);
     switch (depth_test_method) 
     {
         default:
         {
             if(depth < cur_depth)
             {
-                render_context.SetDepthBuffer(x, y, depth);
                 return true;
             }
         }
@@ -134,9 +134,10 @@ bool XRender::Graphics::DepthTest(const uint32_t &x, const uint32_t &y, const fl
     return false;
 }
 
-void XRender::Graphics::InitRenderContext(const uint32_t& width, const uint32_t& height)
+void XRender::Graphics::SetupGraphics(const uint32_t& w, const uint32_t& h, const std::string& name)
 {
-    render_context.Init(width, height);
+    RenderDevice::Device()->Setup(name);
+    RenderDevice::Device()->Init(w, h);
 }
 
 uint32_t XRender::Graphics::GetContextWidth() const
@@ -149,9 +150,9 @@ uint32_t XRender::Graphics::GetContextHeight() const
     return render_context.GetHeight();
 }
 
-XRender::RenderContext& XRender::Graphics::GetRenderContext()
+XRender::RenderContext* XRender::Graphics::GetRenderContext()
 {
-    return render_context;
+    return &render_context;
 }
 
 void XRender::Graphics::AddLight(const Lighting::LightData* light)
@@ -179,11 +180,6 @@ void XRender::Graphics::SetClearFlag(const int& flag)
     clear_flag = flag;
 }
 
-void XRender::Graphics::SetDepthOnlyMode(const bool& state)
-{
-    depth_only = state;
-}
-
 void XRender::Graphics::BeginFrame()
 {
     SetupGlobalData();
@@ -192,10 +188,10 @@ void XRender::Graphics::BeginFrame()
 void XRender::Graphics::Execute()
 {
     if((clear_flag & GraphicsEnum::EClearFlag::Clear_Color) != GraphicsEnum::EClearFlag::Clear_None)
-        render_context.ClearFrameBuffer(render_context.clear_color);
+        render_context.ClearFrameBuffer();
 
     if((clear_flag & GraphicsEnum::EClearFlag::Clear_Depth) != GraphicsEnum::EClearFlag::Clear_None)
-        render_context.ClearDepthBuffer(render_context.clear_depth);
+        render_context.ClearDepthBuffer();
 
     for(const auto& vbo_id : active_buffers)
     {
@@ -203,7 +199,6 @@ void XRender::Graphics::Execute()
         SetupObjectData();
         ExecuteVertexShader();
         Rasterizer();
-        ExecuteFragmentShader();
     }
 }
 
@@ -314,12 +309,11 @@ bool XRender::Graphics::IsBackFace(const Vec2f& p1, const Vec2f& p2, const Vec2f
     p2p1.x = p2.x - p1.x;
     p2p1.y = p2.y - p1.y;
     float signed_value_old = p3p1.x * p2p1.y - p2p1.x * p3p1.y;
-    return  signed_value_old > 0;
+    return signed_value_old > 0;
 }
 
 void XRender::Graphics::Rasterizer()
 {
-    cached_frament_in.clear();
     VertexBuffer buffer = buffers[current_execute_vbo_id];
     uint32_t triangle_count = buffer.index_count / 3;
     for(uint32_t index = 0; index < triangle_count; ++index)
@@ -385,49 +379,47 @@ void XRender::Graphics::RasterizerTriangle()
 
 void XRender::Graphics::PropertyBarycentricInterpolation(const Vec2i& point, const Vec3f& barycentric)
 {
-    Shader* shader = shader_map[current_execute_vbo_id];
     float depth = Math::BarycentricInterpolation<float>(cached_triangle[0]->viewDepth, cached_triangle[1]->viewDepth, cached_triangle[2]->viewDepth, barycentric);
     //early depth test
     if(!DepthTest(point.x, point.y, depth)) return;
 
-    // 只渲染深度
-    if(depth_only) return;;
-    
     float viewZ = (barycentric.x / cached_triangle[0]->viewZ + barycentric.y / cached_triangle[1]->viewZ + barycentric.z / cached_triangle[2]->viewZ);
     float A = barycentric.x / (cached_triangle[0]->viewZ * viewZ);
     float B = barycentric.y / (cached_triangle[1]->viewZ * viewZ);
     float G = barycentric.z / (cached_triangle[2]->viewZ * viewZ);
 
-    VertexOutput framgent_in;
-    framgent_in.screen.x = point.x; framgent_in.screen.y = point.y;
-    framgent_in.viewDepth = depth;
-    framgent_in.viewZ = viewZ;
-    BarycentrixInterpolationVertex(framgent_in, cached_triangle, Vec3f(A, B, G));
-    cached_frament_in.emplace_back(framgent_in);
+    fragment_input.screen.x = point.x; fragment_input.screen.y = point.y;
+    fragment_input.viewDepth = depth;
+    fragment_input.viewZ = viewZ;
+    BarycentrixInterpolationVertex(fragment_input, cached_triangle, Vec3f(A, B, G));
+    ExecuteFragmentShader();
 }
 
 void XRender::Graphics::ExecuteFragmentShader()
 {
-    if(depth_only) return;
-
     Shader* shader = shader_map[current_execute_vbo_id];
-    Color color;
-    for(auto framgent_in : cached_frament_in)
-    {
-        shader->Fragment(framgent_in, color);
-        ApplyFragment(framgent_in.screen.x, framgent_in.screen.y, color);
-    }
-    cached_frament_in.clear();
+    static Color color;
+    shader->Fragment(fragment_input, color);
+    ApplyFragment(fragment_input.screen.x, fragment_input.screen.y, color, fragment_input.viewDepth);
 }
 
-void XRender::Graphics::ApplyFragment(const uint32_t& x, const uint32_t& y, const Color& color)
+void XRender::Graphics::ApplyFragment(const uint32_t& x, const uint32_t& y, const Color& color, const float& depth)
 {
-    render_context.SetPixel(x, y, color);
+    render_context.ActivedRenderTexture()->RenderPixel(x, y, color, depth);
 }
 
 void XRender::Graphics::ActiveRender(const uint32_t& vbo_id)
 {
     active_buffers.emplace(vbo_id);
+}
+
+void XRender::Graphics::Present()
+{
+    auto device = RenderDevice::Device();
+    assert(device != nullptr);
+    assert(render_context.GetWidth() == device->GetWidth());
+    assert(render_context.GetHeight() == device->GetHeight());
+    device->OnPresent(&render_context);
 }
 
 XRender::Graphics& XRender::Graphics::VirtualGraphic()

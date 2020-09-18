@@ -73,6 +73,12 @@
 
 {
   "directory": "C:/dev/MyGit/XRender/build",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Transform.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Transform.cpp",
+  "file": "C:/dev/MyGit/XRender/src/Transform.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build",
   "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Object.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Object.cpp",
   "file": "C:/dev/MyGit/XRender/src/Object.cpp"
 },
@@ -87,6 +93,12 @@
   "directory": "C:/dev/MyGit/XRender/build",
   "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\RenderContext.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\RenderContext.cpp",
   "file": "C:/dev/MyGit/XRender/src/RenderContext.cpp"
+},
+
+{
+  "directory": "C:/dev/MyGit/XRender/build",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\RenderTexture.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\RenderTexture.cpp",
+  "file": "C:/dev/MyGit/XRender/src/RenderTexture.cpp"
 },
 
 {
@@ -157,8 +169,8 @@
 
 {
   "directory": "C:/dev/MyGit/XRender/build",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\Time.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\Time.cpp",
-  "file": "C:/dev/MyGit/XRender/src/Time.cpp"
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang-cl.exe  /nologo -TP -DUSE_IMAGE_TARGET -I..\\thirdParty\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   -std:c++17 /Fosrc\\CMakeFiles\\XRenderLib.dir\\XTime.cpp.obj /FdTARGET_COMPILE_PDB -c C:\\dev\\MyGit\\XRender\\src\\XTime.cpp",
+  "file": "C:/dev/MyGit/XRender/src/XTime.cpp"
 },
 
 {

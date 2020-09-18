@@ -16,6 +16,8 @@ namespace XRender
         void SetScale(const Vec3f& scale);
         const Vec3f& GetScale() const;
         const Matrix& WorldMatrix() const;
+        const Vec3f Up() const;
+        const Vec3f Forward() const;
     private:
         void UpdateWorldMatrix();
         Vec3f position;

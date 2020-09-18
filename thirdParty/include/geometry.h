@@ -157,11 +157,15 @@ public:
         assert(idx<DimRows);
         for (size_t i=DimCols; i--; rows[idx][i]=v[i]);
     }
+    
+    static void identity(mat<DimRows,DimCols,T>& ret) {
+        for (size_t i=DimRows; i--; )
+            for (size_t j=DimCols;j--; ret[i][j]=(i==j));
+    }
 
     static mat<DimRows,DimCols,T> identity() {
         mat<DimRows,DimCols,T> ret;
-        for (size_t i=DimRows; i--; )
-            for (size_t j=DimCols;j--; ret[i][j]=(i==j));
+        identity(ret);
         return ret;
     }
 
@@ -237,7 +241,6 @@ typedef vec<3,  float> Vec3f;
 typedef vec<3,  int>   Vec3i;
 typedef vec<4,  float> Vec4f;
 typedef mat<4,4,float> Matrix;
-const float PI = 3.1415926535f;
 
 const Vec2f Vec2f_Zero(0, 0);
 const Vec2i Vec2i_Zero(0, 0);

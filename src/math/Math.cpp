@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <cmath>
+
 #include "Math.h"
 
 std::tuple<float, float, float> XRender::Math::TriangleBarycentric(const Vec2f& point1, const Vec2f& point2, const Vec2f& point3, Vec2f p)
@@ -59,9 +61,42 @@ Matrix XRender::Math::RotateMatrix(Vec3f angle)
     rotateZ[0][1] = -ssz;
     rotateZ[1][0] = ssz;
     rotateZ[1][1] = csz;
-    return rotateZ * rotateY * rotateX;
+    // roll -> pitch -> yaw
+    return  rotateY * rotateX * rotateZ ;
 }
-    
+
+/* 
+CyCz + SySxSz       -CySz + SySxCz      SyCx
+CxSz                CxCz                -Sx
+-SyCz + CySxSz      SySz + CySxCz       CyCx
+
+Sx == 1 CX == 0 Sy == 0 Cy == 1
+Cz -Sz 0
+0 0 -1
+Sz Cz 0
+*/
+Vec3f XRender::Math::RotateToEuler(const Matrix& matrix)
+{
+    Vec3f ret;
+    float sin_x = -matrix[1][2];
+    if(fabs(sin_x) > 0.99999f)
+    {
+        ret.x = PI_OVER2 * sin_x;
+        ret.z = atan2(matrix[2][0], matrix[2][1]);
+        ret.y = 0;
+    }
+    else
+    {
+        ret.x = asin(sin_x);
+        // tan(y) = Sy/Cy = CxSy / CxCy = matrix[0][2] / matrix[2][2] = atan2(Sy, Cy);
+        ret.y = atan2(matrix[0][2], matrix[2][2]);
+        // tan(z) = Sz/Cz = CxSz/CxCz = -matrix[1][0] / matrix[1][1] = atan2(Sz, Cz)
+        ret.z = atan2(matrix[1][0], matrix[1][1]);
+    }
+
+    return ret * PI_TO_DEGREE; 
+}
+
 Matrix XRender::Math::TransposeMatrix(Vec3f trans)
 {
     Matrix transpose = Matrix::identity();

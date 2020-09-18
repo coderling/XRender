@@ -12,6 +12,8 @@ namespace XRender
         void Expand(const Vec3f& point);
         void Expand(const Bounds& bounds);
         void Zero();
+        Vec3f Max() const;
+        Vec3f Min() const;
     public:
         Vec3f center;
         Vec3f extents;

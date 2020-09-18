@@ -10,7 +10,9 @@ namespace XRender::Test
 {
     void InitSetCamera(Camera& camera)
     {
-        camera.SetPerspective(60.f, 0.1f, 500.f);
+        camera.Angle(60.f);
+        camera.Near(0.1f);
+        camera.Far(500.f);
         camera.LookAt(Vec3f_Zero, Vec3f(0, 1, 0), Vec3f(0, 0, -1));
     }
     XRender& OpenSampleModelScene(const std::string& target_name, std::function<void()> tick_func)

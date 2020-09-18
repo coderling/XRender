@@ -72,4 +72,73 @@ namespace XRender
     private:
         friend class Graphics;
     };
+
+
+    class Pass
+    {
+    public:
+        virtual void vert(const VertexInput& in, VertexOutput& out) = 0;
+        virtual void fragment(const VertexOutput& in, Color& out) = 0;
+    };
+
+
+    class ShaderV
+    {
+    public:
+        virtual ShaderV* Instance() = 0;
+        std::unordered_map<std::string, std::any> uniforms;
+        
+        std::vector<Pass> pasies;
+        static std::unordered_map<std::string, Shader*> shaders;
+        friend class Graphics;
+
+    };
+
+
+
+    #define UN(T,name) static T name
+
+    #define BEGIN_PASS(name)\
+        public:\
+        class Pass##name : XRender::Pass\
+        {\
+
+    #define VERT(logic)\
+        void vert(const VertexInput& in, VertexOutput& out) override\
+        {\
+            logic\
+        }
+
+    #define FRAGMENT(logic)\
+        void fragment(const VertexOutput& in, Color& out) override\
+        {\
+            logic\
+        }
+
+    #define END_PASS()\
+        };
+
+    class ShaderTest :ShaderV
+    {
+            UN(Vec3f, t);
+            BEGIN_PASS(t1)
+            VERT(
+                int a = 0;
+                out.point.x = 0;
+                t.x = 0;
+                const Vec3f& t = in.data.Get(SEMANTIC::SV_POSITION);
+                
+            )
+            FRAGMENT()
+            END_PASS()
+        ShaderV* Instance() override{
+            static ShaderTest shader("test");
+            return &shader;
+        }
+        private:
+            ShaderTest(std::string name):ShaderV()
+            {
+            }
+    };
+    
 }

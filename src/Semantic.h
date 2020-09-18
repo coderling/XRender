@@ -36,6 +36,10 @@ namespace XRender
         {
             data.clear();
         }
+        template<class T>
+        const T& Get(const SEMANTIC& semantic) const{}
+        template<class T>
+        void Set(const SEMANTIC& semantic){}
     };
 
     struct VertexInput

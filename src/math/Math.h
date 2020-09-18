@@ -24,6 +24,8 @@ namespace XRender::Math
     Matrix ScaleMatrix(Vec3f scale);
     
     Matrix RotateMatrix(Vec3f angle);
+
+    Vec3f RotateToEuler(const Matrix& matrix);
     
     Matrix TransposeMatrix(Vec3f trans);
     
@@ -37,4 +39,12 @@ namespace XRender::Math
                                const float& near, const float& far);
 
     inline bool FloatEqual(const float& lv, const float& rv);
+
+    Vec3f TransformVector(const Matrix m, const Vec3f& vector);
+    Vec3f TransformPoint(const Matrix m, const Vec3f& point);
+    
+    const float PI = 3.1415926535f;
+    const float PI_OVER2 = PI / 2.0f;
+    const float PI_DEGREE = PI / 180.0f;
+    const float PI_TO_DEGREE = 180.0f / PI;
 }

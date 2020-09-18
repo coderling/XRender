@@ -31,3 +31,8 @@ XRender::Lighting::Light* XRender::Scene::GetLight(const uint32_t& index)
     }
     return nullptr;
 }
+    
+const XRender::Bounds& XRender::Scene::GetSceneBounds()
+{
+    return bounds;
+}

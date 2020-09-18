@@ -27,5 +27,4 @@ namespace XRender::GraphicsEnum
     {
         Default = 0,
     };
-
 }

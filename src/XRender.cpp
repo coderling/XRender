@@ -1,6 +1,6 @@
 #include "XRender.h"
 #include "Graphics.h"
-#include "Time.h"
+#include "XTime.h"
 #include "ShadowMap.h"
 #include "RenderTexture.h"
 #include "GraphicsEnum.h"
@@ -39,9 +39,10 @@ void XRender::XRender::Loop()
 {
     while (!quit)
     {
-        Time::Timer().Update();
+        XTime::Time().Update();
         InnerTick();
         pPipeline->BaseRender(cameras);
+        std::cout << "FPS:" << XTime::Time().Fps() << std::endl;
     }
 }
 

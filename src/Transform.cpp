@@ -3,7 +3,7 @@
 #include "Transform.h"
 #include "math/Math.h"
 
-XRender::Transform::Transform():position(Vec3f_Zero), scale(Vec3f_One), rotation(Vec3f_Zero)
+XRender::Transform::Transform():position(Vec3f_Zero), rotation(Vec3f_Zero), scale(Vec3f_One)
 {
 
 }
@@ -48,4 +48,19 @@ const Matrix& XRender::Transform::WorldMatrix() const
 void XRender::Transform::UpdateWorldMatrix()
 {
     world_matrix = Math::ModelMatrix(position, scale, rotation);
+}
+
+const Vec3f XRender::Transform::Up() const
+{  
+    static Vec4f up(0, 1, 0, 0);
+    up = world_matrix * up;
+    return embed<3>(up);
+}
+
+const Vec3f XRender::Transform::Forward() const
+{
+    static Vec4f forward(0, 0, 1, 0);
+    forward = world_matrix * forward;
+    return embed<3>(forward);
+    return Vec3f();
 }

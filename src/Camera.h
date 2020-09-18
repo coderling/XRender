@@ -5,6 +5,7 @@
 #include "RenderContext.h"
 #include "ViewFrustum.h"
 #include "GraphicsEnum.h"
+#include "Transform.h"
 
 namespace XRender
 {
@@ -15,18 +16,25 @@ public:
 	static Camera& MainCamera();
 public:
     Camera();
-    const Matrix& GetViewMatrix() const;
-    const Matrix& GetProjMatrix() const;
-    void LookAt(const Vec3f& pos, const Vec3f& up, const Vec3f& look);
-    void SetIsPerspective(const bool& isPerProj);
-    void SetFieldOfView(const float& angle);
-    void SetPerspective(const float& angle, const float& near, const float& far);
-    void SetOrthgraphic(const float& near, const float& far);
+    const Matrix& ViewMatrix() const;
+    const Matrix& InvertViewMatrix() const;
+    const Matrix& ProjMatrix() const;
+    void LookAt(const Vec3f& pos, const Vec3f& up, const Vec3f& target);
     void SetViewPort(const float& x, const float& y, const float& w, const float& h);
     void Update();
     void SyncGraphicsCameraData() const;
     void Present();
     const Frustum& GetFrustum() const;
+    const Transform& Transform() const;
+    const float& Near() const;
+    const float& Far() const;
+    const float& Angle() const;
+    void Near(const float& near);
+    void Far(const float& far);
+    void Angle(const float& angle);
+    void IsPerspective(const bool& isPerProj);
+    const bool& IsPerspective();
+    const float& Aspect()const;
 private:
     void ReCaculateProjectMatrix();
     void CaculatePerspective();
@@ -42,5 +50,7 @@ private:
     float far_plane;
     Frustum frustum;
     int clear_flag = GraphicsEnum::EClearFlag::Clear_Depth | GraphicsEnum::EClearFlag::Clear_Color;
+
+    XRender::Transform transform;
 };
 }

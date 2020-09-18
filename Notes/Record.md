@@ -54,3 +54,9 @@
 * ShadowMap
     * [1](https://learnopengl-cn.readthedocs.io/zh/latest/05%20Advanced%20Lighting/03%20Shadows/01%20Shadow%20Mapping/)
     * [2](http://www.opengl-tutorial.org/cn/intermediate-tutorials/tutorial-16-shadow-mapping/)
+
+* 轨道相机控制
+    * https://my.oschina.net/u/4589456/blog/4521247
+
+* 跨平台定时器
+    * https://www.zhihu.com/question/38427301

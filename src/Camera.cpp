@@ -17,29 +17,27 @@ XRender::Camera::Camera()
     far_plane = 1000.f;
 }
 
-const Matrix& XRender::Camera::GetViewMatrix() const
+const Matrix& XRender::Camera::ViewMatrix() const
 {
     return view;
 }
+    
+const Matrix& XRender::Camera::InvertViewMatrix() const
+{
+    return invert_view;
+}
 
-const Matrix& XRender::Camera::GetProjMatrix() const
+const Matrix& XRender::Camera::ProjMatrix() const
 {
     return proj;
 }
 
-void XRender::Camera::LookAt(const Vec3f& pos, const Vec3f& up, const Vec3f& look)
+void XRender::Camera::LookAt(const Vec3f& pos, const Vec3f& up, const Vec3f& target)
 {
-    view = Math::CameraLookAt(pos, up, look);
+    view = Math::CameraLookAt(pos, up, target - pos);
     invert_view = view.invert();
-}
-
-void XRender::Camera::SetIsPerspective(const bool& isPerProj)
-{
-    if (isPerProj != is_perspective)
-    {
-        is_perspective = isPerProj;
-        ReCaculateProjectMatrix();
-    }
+    transform.SetPosition(pos);
+    transform.SetRotation(Math::RotateToEuler(view)); 
 }
 
 void XRender::Camera::ReCaculateProjectMatrix()
@@ -53,36 +51,12 @@ void XRender::Camera::ReCaculateProjectMatrix()
     CaculateOrthgraphic();
 }
 
-void XRender::Camera::SetFieldOfView(const float& angle)
-{
-    if(!is_perspective) return;
-    this->angle = angle;
-    CaculatePerspective();
-}
-
-void XRender::Camera::SetPerspective(const float &angle, const float &near, const float &far)
-{
-    this->angle = angle;
-    this->near_plane = near;
-    this->far_plane = far;
-    is_perspective = true;
-    CaculatePerspective();
-}
-
 void XRender::Camera::CaculatePerspective()
 {
     auto device = RenderDevice::Device();
     assert(device != nullptr);
     this->aspect = device->GetWidth() * 1.0f / device->GetHeight();
     proj = Math::Perspective(angle, aspect, near_plane, far_plane);
-}
-
-void XRender::Camera::SetOrthgraphic(const float &near, const float &far)
-{
-    this->near_plane = near;
-    this->far_plane = far;
-    is_perspective = false;
-    ReCaculateProjectMatrix();
 }
 
 void XRender::Camera::CaculateOrthgraphic()
@@ -107,7 +81,7 @@ void XRender::Camera::SetViewPort(const float &x, const float &y, const float &w
     int ix = (int)(width * x);
     int iy = (int)(height * y);
     int iw = (int)(width * w);
-    int ih = (int)(height * w);
+    int ih = (int)(height * h);
 
     view_port = Matrix::identity();
     view_port[0][3] = ix + iw / 2.0f;
@@ -143,4 +117,61 @@ const XRender::Frustum& XRender::Camera::GetFrustum() const
 void XRender::Camera::Present()
 {
     Graphics::VirtualGraphic().Present();
+}
+
+const XRender::Transform& XRender::Camera::Transform() const
+{
+    return transform;
+}
+    
+const float& XRender::Camera::Near() const
+{
+    return near_plane;
+}
+
+const float& XRender::Camera::Far() const
+{
+    return far_plane;
+}
+
+const float& XRender::Camera::Angle() const
+{
+    return angle;
+}
+
+void XRender::Camera::Near(const float& near)
+{
+    near_plane = near;
+    ReCaculateProjectMatrix();
+}
+
+void XRender::Camera::Far(const float& far)
+{
+    far_plane = far;
+    ReCaculateProjectMatrix();
+}
+
+void XRender::Camera::Angle(const float& angle)
+{
+    this->angle = angle;
+    ReCaculateProjectMatrix();
+}
+
+void XRender::Camera::IsPerspective(const bool& isPerProj)
+{
+    if(this->is_perspective != isPerProj)
+    {
+        this->is_perspective = isPerProj;
+        ReCaculateProjectMatrix();
+    }
+}
+
+const bool& XRender::Camera::IsPerspective()
+{
+    return is_perspective;
+}
+
+const float& XRender::Camera::Aspect()const
+{
+    return aspect;
 }

@@ -69,7 +69,7 @@ namespace XRender
                 {
                     VertexOutput intersect_vertex;
                     LinearInterpolationVertex(intersect_vertex, prev, current, LerpRatio[plane](prev.point, current.point));
-                    GET_DATA_BY_SEMATIC(intersect_vertex.point, intersect_vertex, SEMANTIC::SV_POSITION);
+                    intersect_vertex.point = intersect_vertex.Get<Vec4f>(SEMANTIC::SV_POSITION);
                     out_verteies.emplace_back(intersect_vertex);
                 }
                 out_verteies.emplace_back(current);
@@ -78,7 +78,7 @@ namespace XRender
             {
                 VertexOutput intersect_vertex;
                 LinearInterpolationVertex(intersect_vertex, prev, current, LerpRatio[plane](prev.point, current.point));
-                GET_DATA_BY_SEMATIC(intersect_vertex.point, intersect_vertex, SEMANTIC::SV_POSITION);
+                intersect_vertex.point = intersect_vertex.Get<Vec4f>(SEMANTIC::SV_POSITION);
                 out_verteies.emplace_back(intersect_vertex);
             }
         }

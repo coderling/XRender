@@ -48,7 +48,7 @@ const float& XRender::Color::operator[](const size_t i) const
     }
 }
 
-uint32_t XRender::Color::size() const
+uint32_t XRender::Color::size()
 {
     return 4;
 }

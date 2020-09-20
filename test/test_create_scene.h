@@ -10,7 +10,8 @@ namespace XRender::Test
         data->color = CColor::RED;
         data->intensity = 1;
         data->range = 0;
-        data->world_pos = Vec4f(0, 0, -1, 0);
+        light->SetLightType(Lighting::LightType::Directional);
+        light->Position(Vec3f(0, 0, -1));
         light->Enable();
     }
     

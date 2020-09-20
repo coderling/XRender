@@ -4,8 +4,7 @@
 XRender::Shader::~Shader(){}
 XRender::Shader::Shader()
 {
-    BIND_VERTEXINPUT_SEMANTIC(SEMANTIC::POSITION);
-	BIND_VERTEXOUTPUT_SEMANTIC(SEMANTIC::SV_POSITION, Vec4f);
+    BIND_VERTEX_INPUT(SEMANTIC::POSITION);
 }
 
 bool XRender::Shader::HasVertexInputSemantic(const SEMANTIC& semantic) const
@@ -13,7 +12,10 @@ bool XRender::Shader::HasVertexInputSemantic(const SEMANTIC& semantic) const
     return (vertex_intput_semantic & (1 << static_cast<uint32_t>(semantic))) != 0;
 }
 
-bool XRender::Shader::HasVertexOutputSemantic(const SEMANTIC& semantic) const
+void XRender::Shader::AddPass(const std::string& name, const VertFunctionType& vert, const FragmentFunctionType& frament)
 {
-    return (vertex_output_semantic & (1 << static_cast<uint32_t>(semantic))) != 0;
+    assert(names.count(name) == 0);
+    names.emplace(name);
+    verts.emplace_back(vert);
+    fragments.emplace_back(frament);
 }

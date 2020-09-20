@@ -9,6 +9,7 @@ namespace XRender::Lighting
 {
     class ShadowMap final : NoCopyable 
     {
+    public:
         static void Setup(Pipeline* pipeline);
         static void Render(const Camera* camrea);
         static void Release();

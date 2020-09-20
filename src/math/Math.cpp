@@ -188,3 +188,31 @@ bool XRender::Math::FloatEqual(const float& lv, const float& rv)
 {
     return std::abs(lv - rv) < 1e-4;
 }
+    
+    
+Vec3f XRender::Math::TransformVector(const Matrix m, const Vec3f& vector)
+{
+    static Vec4f v;
+    v.x = vector.x;
+    v.y = vector.y;
+    v.z = vector.z;
+    v.w = 0;
+    v = m * v;
+    v = v / v.w;
+
+    return embed<3>(v);
+}
+
+Vec3f XRender::Math::TransformPoint(const Matrix m, const Vec3f& point)
+{
+    static Vec4f v;
+    v.x = point.x;
+    v.y = point.y;
+    v.z = point.z;
+    v.w = 1;
+
+    v = m * v;
+    v = v / v.w;
+
+    return embed<3>(v);
+}

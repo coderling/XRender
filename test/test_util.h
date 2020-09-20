@@ -15,7 +15,7 @@ namespace XRender::Test
         camera.Far(500.f);
         camera.LookAt(Vec3f_Zero, Vec3f(0, 1, 0), Vec3f(0, 0, -1));
     }
-    XRender& OpenSampleModelScene(const std::string& target_name, std::function<void()> tick_func)
+    XRenderApp& OpenSampleModelScene(const std::string& target_name, std::function<void()> tick_func)
     {
       PipelineInitializeData pipeline_data;
       pipeline_data.width = 800;
@@ -24,7 +24,7 @@ namespace XRender::Test
       TestPipeline* pipeline = new TestPipeline();
       pipeline_data.pipeline = pipeline;
       pipeline_data.tick_func = tick_func;
-      static XRender render;
+      static XRenderApp render;
       render.Initialize(pipeline_data);
       InitSetCamera(Camera::MainCamera());
       return render;

@@ -11,7 +11,7 @@ template <size_t DIM, typename T> struct vec {
     vec() { for (size_t i=DIM; i--; data_[i] = T()); }
           T& operator[](const size_t i)       { assert(i<DIM); return data_[i]; }
     const T& operator[](const size_t i) const { assert(i<DIM); return data_[i]; }
-    uint32_t size() const { return DIM;}
+    static uint32_t size() { return DIM;}
 private:
     T data_[DIM];
 };
@@ -25,7 +25,7 @@ template <typename T> struct vec<2,T> {
           T& operator[](const size_t i)       { assert(i<2); return i<=0 ? x : y; }
     const T& operator[](const size_t i) const { assert(i<2); return i<=0 ? x : y; }
 
-    uint32_t size() const { return 2;}
+    static uint32_t size(){ return 2;}
     T x,y;
 };
 
@@ -39,7 +39,7 @@ template <typename T> struct vec<3,T> {
     const T& operator[](const size_t i) const { assert(i<3); return i<=0 ? x : (1==i ? y : z); }
     float norm() { return std::sqrt(x*x+y*y+z*z); }
     vec<3,T> & normalize(T l=1) { *this = (*this)*(l/norm()); return *this; }
-    uint32_t size() const { return 3;}
+    static uint32_t size(){ return 3;}
 
     T x,y,z;
 };
@@ -52,7 +52,7 @@ template <typename T> struct vec<4,T> {
     template <class U> vec<4,T>(const vec<4,U> &v);
           T& operator[](const size_t i)       { assert(i<4); return i <= 0? x : (i == 1 ? y : (i == 2 ? z : w)); }
     const T& operator[](const size_t i) const { assert(i<4); return i <= 0? x : (i == 1 ? y : (i == 2 ? z : w)); }
-    uint32_t size() const { return 4;}
+    static uint32_t size() { return 4;}
     T x, y, z, w;
 };
 

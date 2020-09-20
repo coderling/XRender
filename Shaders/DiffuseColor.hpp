@@ -9,30 +9,29 @@ namespace XRender::Shaders
         Sampler2D texture;
         void Init() override
         {
-            BIND_VERTEXINPUT_SEMANTIC(SEMANTIC::UV0);
-            BIND_VERTEXOUTPUT_SEMANTIC(SEMANTIC::UV0, Vec2f);
+            BIND_VERTEX_INPUT(SEMANTIC::UV0);
             REGISTER_UNIFORM(Sampler2D, texture);
         }
 
-        VertexOutput Vertex(const VertexInput &in) override
+        SET_PASIES()
+        VERT_HEAD(vert1)
         {
-            VertexOutput out;
-            Vec4f position;
-            GET_DATA_BY_SEMATIC(position, in, SEMANTIC::POSITION);
-            Vec4f view_pos = GraphicsGlobalData::matrix_mvp * position;
-            FILL_SHADER_STRUCT(out, SEMANTIC::SV_POSITION, view_pos);
+            Vec4f pos = in.Get<Vec4f>(SEMANTIC::POSITION);
+            Vec4f clip_pos = GraphicsGlobalData::matrix_mvp * pos;
+            out.Set(SEMANTIC::SV_POSITION, clip_pos);
 
-            Vec2f uv;
-            GET_DATA_BY_SEMATIC(uv, in, SEMANTIC::UV0);
-            FILL_SHADER_STRUCT(out, SEMANTIC::UV0, uv);
-            return out;
-        }
-
-        void Fragment(const VertexOutput &in, Color &color) override
+            Vec2f uv = in.Get<Vec2f>(SEMANTIC::UV0);
+            out.Set(SEMANTIC::UV0, uv);
+        };
+        
+        FRAGMENT_HEAD(frag1)
         {
-            Vec2f uv; 
-            GET_DATA_BY_SEMATIC(uv, in, SEMANTIC::UV0);
-            color = texture.Point(uv.x, uv.y);
-        }
+            Vec2f uv = in.Get<Vec2f>(SEMANTIC::UV0);
+            out = texture.Point(uv.x, uv.y);
+        };
+
+        AddPass("default", vert1, frag1);
+
+        END_SET_PASIES()
     };
 }

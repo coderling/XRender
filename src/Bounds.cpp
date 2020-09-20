@@ -67,3 +67,14 @@ Vec2f XRender::Bounds::ExpandAxis(const float& distance, const float& extent_axi
 
     return ret;
 }
+        
+        
+Vec3f XRender::Bounds::Max() const
+{
+    return center + extents;
+}
+
+Vec3f XRender::Bounds::Min() const
+{
+    return center - extents;
+}

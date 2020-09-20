@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
-#include <XTime.h>
 #include <math.h>
 #include "tgaimage.h"
 

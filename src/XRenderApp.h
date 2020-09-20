@@ -9,11 +9,11 @@
 namespace XRender 
 {
 
-class XRender final
+class XRenderApp final
 {
 public:
-    XRender();
-    ~XRender();
+    XRenderApp();
+    ~XRenderApp();
     void Initialize(PipelineInitializeData& pipeline_data);
     void Loop();
     void Exit();

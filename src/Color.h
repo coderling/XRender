@@ -16,7 +16,7 @@ namespace XRender
         float a;
         float& operator[](const size_t i);
         const float& operator[](const size_t i) const ;
-         uint32_t size() const;
+        static uint32_t size();
     };
 
     Color operator*(const Color& lcolor, const float& v);

@@ -85,6 +85,7 @@ private:
     VertexOutput* cached_triangle[3];
     Vec4f cached_triangle_points[3];
     uint32_t current_execute_vbo_id;
+    uint32_t current_pass_index;
     
     std::unordered_set<uint32_t> active_buffers;
     std::map<uint32_t, VertexBuffer> buffers;

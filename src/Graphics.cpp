@@ -197,8 +197,13 @@ void XRender::Graphics::Execute()
     {
         current_execute_vbo_id = vbo_id;
         SetupObjectData();
-        ExecuteVertexShader();
-        Rasterizer();
+        Shader* shader = shader_map[current_execute_vbo_id];
+        for(uint32_t pass_index = 0; pass_index < shader->names.size(); ++pass_index)
+        {
+            current_pass_index = pass_index;
+            ExecuteVertexShader();
+            Rasterizer();
+        }
     }
 }
 
@@ -250,19 +255,19 @@ void XRender::Graphics::FillSemanticToVertexInput(const uint32_t& index, const S
     switch (st) 
     {
         case SEMANTIC::POSITION: 
-            FILL_SHADER_STRUCT(bind_vertex_input, st, embed<4>(vertex.pos));
+            bind_vertex_input.Set<Vec4f>(st,  embed<4>(vertex.pos));
         break;
         case SEMANTIC::COLOR:
-            FILL_SHADER_STRUCT(bind_vertex_input, st, vertex.color);
+            bind_vertex_input.Set(st, vertex.color);
         break;
         case SEMANTIC::NORMAL:
-            FILL_SHADER_STRUCT(bind_vertex_input, st, vertex.normal);
+            bind_vertex_input.Set(st, vertex.normal);
         break;
         case SEMANTIC::UV0:
-            FILL_SHADER_STRUCT(bind_vertex_input, st, vertex.uv);
+            bind_vertex_input.Set(st, vertex.uv);
         break;
         case SEMANTIC::UV1:
-            FILL_SHADER_STRUCT(bind_vertex_input, st, vertex.uv2);
+            bind_vertex_input.Set(st, vertex.uv2);
         break;
         default:
         break;
@@ -278,15 +283,15 @@ void XRender::Graphics::ExecuteVertexShader()
     for(uint32_t index = 0; index < buffer.vertex_count; ++index)
     {
 		BindVertexInput(index);
-		VertexOutput out = shader->Vertex(bind_vertex_input);
+		VertexOutput out;
+        shader->verts[current_pass_index](bind_vertex_input, out);
 	    cached_vertex_out.emplace_back(out);
     }
 }
 
 void XRender::Graphics::PerspectiveDivideAndViewPort(VertexOutput& out)
 {
-		Vec4f v;
-		GET_DATA_BY_SEMATIC(v, out, SEMANTIC::SV_POSITION);
+		Vec4f v = out.Get<Vec4f>(SEMANTIC::SV_POSITION);
         float w = v.w;
         v.x /= w; v.y /= w; v.z /= w; v.w = 1;
         auto screen_pos = GraphicsGlobalData::matrix_viewport * v;
@@ -296,7 +301,7 @@ void XRender::Graphics::PerspectiveDivideAndViewPort(VertexOutput& out)
         out.viewDepth = v.z * 0.5f + 0.5f;
         out.viewZ = w;
         v.w = w;
-        FILL_SHADER_STRUCT(out, SEMANTIC::SV_POSITION, v);
+        out.Set(SEMANTIC::SV_POSITION, v);
 }
 
 bool XRender::Graphics::IsBackFace(const Vec2f& p1, const Vec2f& p2, const Vec2f& p3) const
@@ -330,7 +335,7 @@ void XRender::Graphics::DrawTriangle(const uint32_t& index)
     {
 		uint32_t t_index = buffer.index_buffer[index * 3 + sub_index];
         cached_triangle[sub_index] = &cached_vertex_out[t_index];
-        GET_DATA_BY_SEMATIC(cached_triangle[sub_index]->point, cached_vertex_out[t_index], SEMANTIC::SV_POSITION);
+        cached_triangle[sub_index]->point = cached_vertex_out[t_index].Get<Vec4f>(SEMANTIC::SV_POSITION);
     }
     
     
@@ -399,7 +404,7 @@ void XRender::Graphics::ExecuteFragmentShader()
 {
     Shader* shader = shader_map[current_execute_vbo_id];
     static Color color;
-    shader->Fragment(fragment_input, color);
+    shader->fragments[current_pass_index](fragment_input, color);
     ApplyFragment(fragment_input.screen.x, fragment_input.screen.y, color, fragment_input.viewDepth);
 }
 

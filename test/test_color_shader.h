@@ -12,13 +12,13 @@ namespace XRender::Test
     {
         void Init() override
         {
-            BIND_VERTEXINPUT_SEMANTIC(SEMANTIC::COLOR);
-            BIND_VERTEXOUTPUT_SEMANTIC(SEMANTIC::COLOR, Color);
+            BIND_VERTEX_INPUT(SEMANTIC::COLOR);
         }
 
-        VertexOutput Vertex(const VertexInput& in) override
-        {
-            VertexOutput out;
+        SET_PASIES()
+
+        END_SET_PASIES()
+        /*    VertexOutput out;
             Vec4f position;
             GET_DATA_BY_SEMATIC(position, in, SEMANTIC::POSITION);
             Vec4f view_pos = GraphicsGlobalData::matrix_mv * position;
@@ -33,6 +33,6 @@ namespace XRender::Test
         void Fragment(const VertexOutput& in, Color& color) override
         {
             GET_DATA_BY_SEMATIC(color, in, SEMANTIC::COLOR);
-        }
+        }*/
     };
 }

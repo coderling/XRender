@@ -3,7 +3,7 @@
 #include "../src/Global.h"
 #include "../src/Pipeline.h"
 #include "../src/GraphicsGlobalData.h"
-#include "../src/XRender.h"
+#include "../src/XRenderApp.h"
 #include "../src/Cull.h"
 #include "../src/Color.h"
 #include "../src/Camera.h"

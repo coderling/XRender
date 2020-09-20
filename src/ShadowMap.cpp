@@ -27,8 +27,7 @@ void CreateDepthBuffer()
        return;
    }
 
-   auto buffer =  new float[XRender::ShadowSetting::width * XRender::ShadowSetting::height];
-   depth_buffer.reset(buffer);
+   //depth_buffer.reset(buffer);
 }
 
 void GetCameraBounds(const XRender::Camera* camera)
@@ -46,33 +45,33 @@ void GetCameraBounds(const XRender::Camera* camera)
     float f_h = fdn * n_h;
     float f_w = fdn * n_w;
 
-    Vec3f n_topright(near, n_h, n_w);
-    n_topright = n_topright * camera->InvertViewMatrix();
-    Vec3f n_topleft(near, n_h, -n_w);
-    n_topleft = n_topleft * camera->InvertViewMatrix();
-    Vec3f n_bottomright(near, -n_h, n_w);
-    n_bottomright = n_bottomright * camera->InvertViewMatrix();
-    Vec3f n_bottomleft(near, -n_h, -n_w);
-    n_bottomleft = n_bottomleft * camera->InvertViewMatrix();
+    Vec4f n_topright(near, n_h, n_w, 1);
+    n_topright =  camera->InvertViewMatrix() * n_topright;
+    Vec4f n_topleft(near, n_h, -n_w, 1);
+    n_topleft = camera->InvertViewMatrix() * n_topleft ;
+    Vec4f n_bottomright(near, -n_h, n_w, 1);
+    n_bottomright =  camera->InvertViewMatrix() * n_bottomright ;
+    Vec4f n_bottomleft(near, -n_h, -n_w, 1);
+    n_bottomleft =  camera->InvertViewMatrix() * n_bottomleft ;
     
-    Vec3f f_topright(far, f_h, f_w);
-    f_topright = f_topright * camera->InvertViewMatrix();
-    Vec3f f_topleft(far, f_h, -f_w);
-    f_topleft = f_topleft * camera->InvertViewMatrix();
-    Vec3f f_bottomright(far, -f_h, f_w);
-    f_bottomright = f_bottomright * camera->InvertViewMatrix();
-    Vec3f f_bottomleft(far, -f_h, -f_w);
-    f_bottomleft = f_bottomleft * camera->InvertViewMatrix();
+    Vec4f f_topright(far, f_h, f_w, 1);
+    f_topright = camera->InvertViewMatrix() * f_topright ;
+    Vec4f f_topleft(far, f_h, -f_w, 1);
+    f_topleft = camera->InvertViewMatrix() * f_topleft ;
+    Vec4f f_bottomright(far, -f_h, f_w, 1);
+    f_bottomright =  camera->InvertViewMatrix() *f_bottomright  ;
+    Vec4f f_bottomleft(far, -f_h, -f_w, 1);
+    f_bottomleft = camera->InvertViewMatrix() * f_bottomleft ;
 
-    camera_bounds.center = n_topright;
+    camera_bounds.center = embed<3>(n_topright / n_topright.w);
     camera_bounds.extents = Vec3f_Zero;
-    camera_bounds.Expand(n_topleft);
-    camera_bounds.Expand(n_bottomright);
-    camera_bounds.Expand(n_bottomleft);
-    camera_bounds.Expand(f_topright);
-    camera_bounds.Expand(f_topleft);
-    camera_bounds.Expand(f_bottomright);
-    camera_bounds.Expand(f_bottomleft);
+    camera_bounds.Expand(embed<3>(n_topleft/ n_topleft.w));
+    camera_bounds.Expand(embed<3>(n_bottomright/ n_bottomright.w));
+    camera_bounds.Expand(embed<3>(n_bottomleft/ n_bottomleft.w));
+    camera_bounds.Expand(embed<3>(f_topright/ f_topright.w));
+    camera_bounds.Expand(embed<3>(f_topleft/ f_topleft.w));
+    camera_bounds.Expand(embed<3>(f_bottomright/ f_bottomright.w));
+    camera_bounds.Expand(embed<3>(f_bottomleft/ f_bottomleft.w));
 }
 
 void SetViewPort()
@@ -81,7 +80,7 @@ void SetViewPort()
     int ix = 0;
     int iy = 0;
     int iw = XRender::ShadowSetting::width;
-    int ih = (XRender::ShadowSetting::height;
+    int ih = XRender::ShadowSetting::height;
 
     Matrix::identity(light_viewport);
     light_viewport[0][3] = ix + iw / 2.0f;

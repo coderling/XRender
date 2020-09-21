@@ -8,26 +8,24 @@ namespace XRender::Shaders
     {
         void Init() override
         {
-            BIND_VERTEXINPUT_SEMANTIC(SEMANTIC::COLOR);
-            BIND_VERTEXOUTPUT_SEMANTIC(SEMANTIC::COLOR, Color);
+            BIND_VERTEX_INPUT(SEMANTIC::COLOR);
         }
 
-        VertexOutput Vertex(const VertexInput& in) override
-        {
-            VertexOutput out;
-            Vec4f position;
-            GET_DATA_BY_SEMATIC(position, in, SEMANTIC::POSITION);
-            Vec4f view_pos = GraphicsGlobalData::matrix_mvp * position;
-            FILL_SHADER_STRUCT(out, SEMANTIC::SV_POSITION, view_pos);
-            Color color;
-            GET_DATA_BY_SEMATIC(color, in, SEMANTIC::COLOR);
-            FILL_SHADER_STRUCT(out, SEMANTIC::COLOR, color);
-            return out;
-        }
+        SET_PASIES()
 
-        void Fragment(const VertexOutput& in, Color& color) override
+        VERT_HEAD(vert)
         {
-            GET_DATA_BY_SEMATIC(color, in, SEMANTIC::COLOR);
-        }
+            const Vec4f& position = in.Get<Vec4f>(SEMANTIC::POSITION);
+            Vec4f clip_pos = GraphicsGlobalData::matrix_mvp * position;
+            out.Set(SEMANTIC::SV_POSITION, clip_pos);
+            const Color& color  = in.Get<Color>(SEMANTIC::COLOR);
+            out.Set(SEMANTIC::COLOR, color);
+        };
+
+        FRAGMENT_HEAD(frag)
+        {
+            out = in.Get<Color>(SEMANTIC::COLOR);
+        };
+        END_SET_PASIES()
     };
 }

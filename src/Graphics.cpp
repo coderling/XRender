@@ -185,8 +185,9 @@ void XRender::Graphics::BeginFrame()
     SetupGlobalData();
 }
 
-void XRender::Graphics::Execute()
+void XRender::Graphics::Execute(const bool& shadow_cast)
 {
+    on_shadow_pass = shadow_cast;
     if((clear_flag & GraphicsEnum::EClearFlag::Clear_Color) != GraphicsEnum::EClearFlag::Clear_None)
         render_context.ClearFrameBuffer();
 
@@ -198,6 +199,18 @@ void XRender::Graphics::Execute()
         current_execute_vbo_id = vbo_id;
         SetupObjectData();
         Shader* shader = shader_map[current_execute_vbo_id];
+        if(on_shadow_pass)
+        {
+            if(shader->shadow_vert.has_value()
+            && shader->shadow_fragment.has_value())
+            {
+                ExecuteVertexShader();
+                Rasterizer();
+            }
+            
+            continue;
+        }
+
         for(uint32_t pass_index = 0; pass_index < shader->names.size(); ++pass_index)
         {
             current_pass_index = pass_index;
@@ -279,12 +292,21 @@ void XRender::Graphics::ExecuteVertexShader()
     cached_vertex_out.clear();
     VertexBuffer buffer = buffers[current_execute_vbo_id];
     Shader* shader = shader_map[current_execute_vbo_id];
-    assert(shader->HasVertexInputSemantic(SEMANTIC::POSITION));
+    std::optional<VertFunctionType> vert_func = std::nullopt;
+    if(on_shadow_pass)
+    {
+        vert_func = shader->shadow_vert;
+    }
+    else
+    {
+        vert_func = shader->verts[current_pass_index];
+    }
+    assert(vert_func.has_value() && shader->HasVertexInputSemantic(SEMANTIC::POSITION));
     for(uint32_t index = 0; index < buffer.vertex_count; ++index)
     {
 		BindVertexInput(index);
 		VertexOutput out;
-        shader->verts[current_pass_index](bind_vertex_input, out);
+        vert_func.value()(bind_vertex_input, out);
 	    cached_vertex_out.emplace_back(out);
     }
 }
@@ -404,7 +426,17 @@ void XRender::Graphics::ExecuteFragmentShader()
 {
     Shader* shader = shader_map[current_execute_vbo_id];
     static Color color;
-    shader->fragments[current_pass_index](fragment_input, color);
+    static std::optional<FragmentFunctionType> frag_func = std::nullopt;
+    if(on_shadow_pass)
+    {
+        frag_func = shader->shadow_fragment;
+    }
+    else
+    {
+        frag_func = shader->fragments[current_pass_index];
+    }
+    assert(frag_func.has_value());
+    frag_func.value()(fragment_input, color);
     ApplyFragment(fragment_input.screen.x, fragment_input.screen.y, color, fragment_input.viewDepth);
 }
 

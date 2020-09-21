@@ -6,10 +6,8 @@ namespace XRender::Test
     void ConfigSceneLight(Scene* scene)
     {
         const auto light = scene->GetLight(0);
-        auto data = light->GetData();
-        data->color = CColor::RED;
-        data->intensity = 1;
-        data->range = 0;
+        light->LightColor(CColor::RED);
+        light->Intensity(1);
         light->SetLightType(Lighting::LightType::Directional);
         light->Position(Vec3f(0, 0, -1));
         light->Enable();

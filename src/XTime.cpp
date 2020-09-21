@@ -8,7 +8,7 @@
 
 uint64_t CurrentMillisecs()
 {
-#ifdef _MSC_VER1
+#ifdef _MSC_VER
     _timeb timebuffer;
     _ftime_s(&timebuffer);
     return timebuffer.time * 1000 + timebuffer.millitm;

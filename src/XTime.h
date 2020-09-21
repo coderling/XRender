@@ -19,7 +19,7 @@ namespace XRender
         uint64_t framecount;
         float time;
         float interval;
-        int32_t fps;
+        float fps;
         uint64_t millisecs;
         uint64_t prev_millisecs;
     };

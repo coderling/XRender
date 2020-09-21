@@ -1,21 +1,22 @@
 #pragma once
 #include <algorithm>
 
-#include "../../src/GraphicsGlobalData.h"
-#include "../../src/Lighting.h"
-#include "../../src/Color.h"
+#include "../src/GraphicsGlobalData.h"
+#include "../src/Lighting.h"
+#include "../src/Color.h"
+#include "../src/math/Math.h"
 
 const float light_atten_factor1 = 4;
 const float light_atten_factor2 = 4;
 
 inline float LightAttenaution(const XRender::Lighting::LightData& light, const Vec3f& world_pos)
 {
-    if(light.world_pos.w < 1e-2)
+    if(XRender::Lighting::LightType::Directional == light.light_type)
     {
         return 1;
     }
 
-    Vec3f dir = embed<3>(light.world_pos) - world_pos;
+    Vec3f dir = light.position - world_pos;
     float dd = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
     float d = std::sqrt(dd);
  
@@ -26,7 +27,11 @@ inline float LightAttenaution(const XRender::Lighting::LightData& light, const V
 
 inline Vec3f LightDir(const XRender::Lighting::LightData& light, const Vec3f& world_pos)
 {
-    return embed<3>(light.world_pos) - world_pos * light.world_pos.w;
+    if(XRender::Lighting::LightType::Directional == light.light_type)
+    {
+        return light.forward;
+    }
+    return light.position - world_pos;
 }
 
 inline XRender::Color LightingLambert(const XRender::Lighting::LightData& light, const Vec3f& world_pos, const Vec3f& normal)

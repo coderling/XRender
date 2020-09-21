@@ -1,18 +1,22 @@
 #include <memory>
+#include <algorithm>
 
 #include "ShadowMap.h"
 #include "GraphicsGlobalData.h"
 #include "ShadowSetting.h"
 #include "Graphics.h"
+#include "GraphicsUtils.h"
 #include "GraphicsEnum.h"
 #include "math/Math.h"
 #include "RenderTexture.h"
+#include "math/Math.h"
 
 static XRender::Pipeline* current_pipeline = nullptr;
 
 static const XRender::Lighting::LightData* use_light = nullptr;
 
-std::unique_ptr<XRender::RenderTexture> depth_buffer = nullptr;
+float* depth_buffer = nullptr;
+static uint32_t depth_buffer_size = 0;
 
 static Matrix light_proj;
 static Matrix light_view;
@@ -26,8 +30,8 @@ void CreateDepthBuffer()
    {
        return;
    }
-
-   //depth_buffer.reset(buffer);
+    depth_buffer_size = XRender::Graphics::VirtualGraphic().GetContextWidth() * XRender::Graphics::VirtualGraphic().GetContextHeight();
+    depth_buffer = new float[depth_buffer_size];
 }
 
 void GetCameraBounds(const XRender::Camera* camera)
@@ -95,11 +99,16 @@ void SetViewPort()
 void XRender::Lighting::ShadowMap::UpdateViewSpace(const XRender::Camera* camera)
 {
     //const auto& scene_bounds = current_pipeline->scene->GetSceneBounds();
-    light_view = XRender::Math::CameraLookAt(embed<3>(use_light->position), use_light->up, use_light->forward);
+    GetCameraBounds(camera);
+
+    const Vec3f& position = camera_bounds.center - use_light->forward * camera_bounds.extents.norm();
+
+    light_view = XRender::Math::CameraLookAt(embed<3>(position), use_light->up, use_light->forward);
     
-    const Vec3f& min = Math::TransformPoint(light_view, camera_bounds.Min());
-    const Vec3f& max = Math::TransformPoint(light_view, camera_bounds.Max());
-    light_proj = XRender::Math::CaculateOrthgraphic(min.x, max.x, max.y, min.x, min.z, max.z);
+    const auto& center = Math::TransformPoint(light_view, camera_bounds.center);
+    const Vec3f& min = center - camera_bounds.extents;
+    const Vec3f& max = center + camera_bounds.extents;
+    light_proj = XRender::Math::CaculateOrthgraphic(min.x, max.x, max.y, min.y, min.z, max.z);
 
     SetViewPort();
 
@@ -123,7 +132,7 @@ void XRender::Lighting::ShadowMap::PrePare()
     for(uint32_t index = 0; index < XRender::GraphicsGlobalData::light_count; ++index)
     {
         auto light = XRender::GraphicsGlobalData::lights[index];
-        if(use_light == nullptr || (light->intensity > use_light->intensity && light->world_pos.w == 0))
+        if(use_light == nullptr || (light->intensity > use_light->intensity && light->light_type == Lighting::LightType::Directional))
         {
             use_light = light;
         }
@@ -143,11 +152,15 @@ void XRender::Lighting::ShadowMap::Render(const Camera* camera)
 
     UpdateViewSpace(camera);
     Graphics::VirtualGraphic().SetClearFlag(GraphicsEnum::EClearFlag::Clear_Depth);
-    Graphics::VirtualGraphic().Execute();
+    Graphics::VirtualGraphic().Execute(true);
+    CopyDepth(depth_buffer, depth_buffer_size);
 }
 
 void XRender::Lighting::ShadowMap::Release()
 {
     use_light = nullptr;
-    depth_buffer = nullptr;
+    if(depth_buffer != nullptr)
+    {
+        delete [] depth_buffer;
+    }
 }

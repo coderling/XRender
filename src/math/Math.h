@@ -38,7 +38,7 @@ namespace XRender::Math
     Matrix CaculateOrthgraphic(const float& left, const float& right, const float& top, const float& bottom,
                                const float& near, const float& far);
 
-    inline bool FloatEqual(const float& lv, const float& rv);
+    bool FloatEqual(const float& lv, const float& rv);
 
     Vec3f TransformVector(const Matrix m, const Vec3f& vector);
     Vec3f TransformPoint(const Matrix m, const Vec3f& point);

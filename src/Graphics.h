@@ -51,7 +51,7 @@ public:
     void ReleaseVBOANDVIO(const uint32_t& buffer_id);
     void Dispose();
     void BeginFrame();
-    void Execute();
+    void Execute(const bool& shadow_cast = false);
     void EndFrame();
     void SetupGraphics(const uint32_t& w, const uint32_t& h, const std::string& name);
     uint32_t GetContextWidth() const;
@@ -98,5 +98,7 @@ private:
     std::unordered_set<const Lighting::LightData*> lights;
     const Lighting::LightData* shadow_light = nullptr;
     int clear_flag = GraphicsEnum::EClearFlag::Clear_Depth | GraphicsEnum::EClearFlag::Clear_Color;
+
+    bool on_shadow_pass;
 };
 }

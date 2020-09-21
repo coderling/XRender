@@ -25,7 +25,6 @@ public:
     void SyncGraphicsCameraData() const;
     void Present();
     const Frustum& GetFrustum() const;
-    const Transform& Transform() const;
     const float& Near() const;
     const float& Far() const;
     const float& Angle() const;
@@ -35,6 +34,9 @@ public:
     void IsPerspective(const bool& isPerProj);
     const bool& IsPerspective();
     const float& Aspect()const;
+    const Transform& Transform() const;
+    void Position(const Vec3f& position);
+    void Rotation(const Vec3f& rotation);
 private:
     void ReCaculateProjectMatrix();
     void CaculatePerspective();

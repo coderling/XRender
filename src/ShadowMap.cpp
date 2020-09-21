@@ -1,6 +1,8 @@
 #include <memory>
 #include <algorithm>
 
+#include <tgaimage.h>
+
 #include "ShadowMap.h"
 #include "GraphicsGlobalData.h"
 #include "ShadowSetting.h"
@@ -10,6 +12,10 @@
 #include "math/Math.h"
 #include "RenderTexture.h"
 #include "math/Math.h"
+
+static bool debug = true;
+
+static std::unique_ptr<TGAImage> debug_out = nullptr;
 
 static XRender::Pipeline* current_pipeline = nullptr;
 
@@ -30,8 +36,35 @@ void CreateDepthBuffer()
    {
        return;
    }
-    depth_buffer_size = XRender::Graphics::VirtualGraphic().GetContextWidth() * XRender::Graphics::VirtualGraphic().GetContextHeight();
+    depth_buffer_size = XRender::ShadowSetting::width * XRender::ShadowSetting::height;
     depth_buffer = new float[depth_buffer_size];
+    if(debug && debug_out == nullptr)
+    {
+        debug_out = std::make_unique<TGAImage>(XRender::ShadowSetting::width, XRender::ShadowSetting::height, TGAImage::RGB);
+    }
+}
+
+void DebugPresentLightDepth()
+{
+    if(debug_out == nullptr)
+        return;
+
+    TGAColor color;
+    uint32_t width = XRender::ShadowSetting::width;
+    uint32_t height = XRender::ShadowSetting::height;
+    unsigned char depth;
+    for(uint32_t y = 0; y < height; ++y)
+    {
+        uint32_t cy = height - y - 1;
+        for(uint32_t x = 0; x < width; ++x)
+        {
+            depth = static_cast<unsigned char>(std::round(depth_buffer[y * width + x] * 255));
+            color[0] = color[1] = color[2] = color[3] = depth;
+            debug_out->set(x, cy, color);
+        }
+    }
+
+    debug_out->write_tga_file("ImageOut/debug_shadowmap.tga");
 }
 
 void GetCameraBounds(const XRender::Camera* camera)
@@ -43,29 +76,29 @@ void GetCameraBounds(const XRender::Camera* camera)
         return;
 
     float fov = camera->Angle() / 2;
-    float n_h = near * tan(fov);
+    float n_h = near * tan(fov * XRender::Math::PI_DEGREE);
     float n_w = n_h * camera->Aspect();
     float fdn = far / near;
     float f_h = fdn * n_h;
     float f_w = fdn * n_w;
 
-    Vec4f n_topright(near, n_h, n_w, 1);
-    n_topright =  camera->InvertViewMatrix() * n_topright;
-    Vec4f n_topleft(near, n_h, -n_w, 1);
-    n_topleft = camera->InvertViewMatrix() * n_topleft ;
-    Vec4f n_bottomright(near, -n_h, n_w, 1);
-    n_bottomright =  camera->InvertViewMatrix() * n_bottomright ;
-    Vec4f n_bottomleft(near, -n_h, -n_w, 1);
-    n_bottomleft =  camera->InvertViewMatrix() * n_bottomleft ;
+    Vec4f n_topright(n_w, n_h, near, 1);
+    n_topright =  camera->ViewMatrix() * n_topright;
+    Vec4f n_topleft(-n_w, n_h, near, 1);
+    n_topleft = camera->ViewMatrix() * n_topleft ;
+    Vec4f n_bottomright(n_w, -n_h, near, 1);
+    n_bottomright =  camera->ViewMatrix() * n_bottomright ;
+    Vec4f n_bottomleft(-n_w, -n_h, near, 1);
+    n_bottomleft =  camera->ViewMatrix() * n_bottomleft ;
     
-    Vec4f f_topright(far, f_h, f_w, 1);
-    f_topright = camera->InvertViewMatrix() * f_topright ;
-    Vec4f f_topleft(far, f_h, -f_w, 1);
-    f_topleft = camera->InvertViewMatrix() * f_topleft ;
-    Vec4f f_bottomright(far, -f_h, f_w, 1);
-    f_bottomright =  camera->InvertViewMatrix() *f_bottomright  ;
-    Vec4f f_bottomleft(far, -f_h, -f_w, 1);
-    f_bottomleft = camera->InvertViewMatrix() * f_bottomleft ;
+    Vec4f f_topright(f_w, f_h, far, 1);
+    f_topright = camera->ViewMatrix() * f_topright ;
+    Vec4f f_topleft(-f_w, f_h, far, 1);
+    f_topleft = camera->ViewMatrix() * f_topleft ;
+    Vec4f f_bottomright(f_w, -f_h, far, 1);
+    f_bottomright =  camera->ViewMatrix() *f_bottomright  ;
+    Vec4f f_bottomleft(-f_w, -f_h, far, 1);
+    f_bottomleft = camera->ViewMatrix() * f_bottomleft ;
 
     camera_bounds.center = embed<3>(n_topright / n_topright.w);
     camera_bounds.extents = Vec3f_Zero;
@@ -152,8 +185,9 @@ void XRender::Lighting::ShadowMap::Render(const Camera* camera)
 
     UpdateViewSpace(camera);
     Graphics::VirtualGraphic().SetClearFlag(GraphicsEnum::EClearFlag::Clear_Depth);
-    Graphics::VirtualGraphic().Execute(true);
+    Graphics::VirtualGraphic().Execute();
     CopyDepth(depth_buffer, depth_buffer_size);
+    DebugPresentLightDepth();
 }
 
 void XRender::Lighting::ShadowMap::Release()

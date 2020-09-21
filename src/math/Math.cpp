@@ -116,8 +116,8 @@ Matrix XRender::Math::ModelMatrix(Vec3f pos, Vec3f scale, Vec3f angle)
 Matrix XRender::Math::CameraLookAt(const Vec3f& pos, const Vec3f& up, const Vec3f& look)
 {
     Matrix view = Matrix::identity();
-    Vec3f lcp = cross(look, up);
-    Vec3f t_up = cross(lcp, look);
+    Vec3f lcp = cross(up,  look);
+    Vec3f t_up = cross(look, lcp);
     lcp.normalize();
     t_up.normalize();
     Vec3f lk = look;

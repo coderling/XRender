@@ -24,7 +24,6 @@ void XRender::ImageDevice::Save()
 void XRender::ImageDevice::OnPresent(const RenderContext* context)
 {
     auto rendertexture = context->ActivedRenderTexture();
-    uint32_t buffer_index = 0;
     TGAColor color;
     Color scolor;
     for(uint32_t y = 0; y < height; ++y)
@@ -32,10 +31,9 @@ void XRender::ImageDevice::OnPresent(const RenderContext* context)
         uint32_t cy = height - y - 1;
         for(uint32_t x = 0; x < width; ++x)
         {
-            buffer_index = cy * width + x;
             rendertexture->ReadPixel(x, y, scolor);
             ColorToTGAColor(scolor, color);
-            pRtImage->set(x, y, color);
+            pRtImage->set(x, cy, color);
         }
     }
     Save();

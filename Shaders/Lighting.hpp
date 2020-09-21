@@ -38,6 +38,7 @@ inline XRender::Color LightingLambert(const XRender::Lighting::LightData& light,
 {
     Vec3f light_dir = LightDir(light, world_pos) * -1;
     light_dir.normalize();
+    float dot = normal * light_dir;
     float diffuse = std::max(0.f, normal * light_dir);
     return light.color * diffuse * LightAttenaution(light, world_pos) * light.intensity;
 }

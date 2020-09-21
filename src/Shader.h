@@ -73,13 +73,13 @@ namespace XRender
         bool HasVertexInputSemantic(const SEMANTIC& semantic) const;
         const std::string shadow_pass_name = "ShadowCaster";
         uint32_t vertex_intput_semantic;
+        std::unordered_map<std::string, std::any> uniform_address;
+    private:
         std::unordered_set<std::string> names;
         std::vector<VertFunctionType> verts;
         std::vector<FragmentFunctionType> fragments;
         std::optional<VertFunctionType> shadow_vert;
         std::optional<FragmentFunctionType> shadow_fragment;
-        std::unordered_map<std::string, std::any> uniform_address;
-    private:
         friend class Graphics;
     };
 

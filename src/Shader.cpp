@@ -14,6 +14,13 @@ bool XRender::Shader::HasVertexInputSemantic(const SEMANTIC& semantic) const
 
 void XRender::Shader::AddPass(const std::string& name, const VertFunctionType& vert, const FragmentFunctionType& frament)
 {
+    if(name == shadow_pass_name)
+    {
+        shadow_vert = vert;
+        shadow_fragment = frament;
+        return;
+    }
+    
     assert(names.count(name) == 0);
     names.emplace(name);
     verts.emplace_back(vert);

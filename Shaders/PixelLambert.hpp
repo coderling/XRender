@@ -50,6 +50,20 @@ namespace XRender::Shaders
         };
 
         AddPass("default", vert, frag);
+
+        VERT_HEAD(shadow_vert)
+        {
+            const Vec4f& position = in.Get<Vec4f>(SEMANTIC::POSITION);
+            const Vec4f& clip_pos = GraphicsGlobalData::matrix_mvp * position;
+            out.Set(SEMANTIC::SV_POSITION, clip_pos);
+        };
+
+        FRAGMENT_HEAD(shadow_frag)
+        {
+            out = CColor::BLACK; 
+        };
+
+        AddPass(shadow_pass_name, shadow_vert, shadow_frag);
         END_SET_PASIES()
     };
 }

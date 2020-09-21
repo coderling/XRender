@@ -4,12 +4,9 @@
 
 #include "../../RenderDevice.h"
 
-#ifdef USE_IMAGE_TARGET 
 #include "../image/ImageDevice.h"
-#elif WIN32
+#ifdef WIN32
 #include "../win/WindowsDevice.h"
-#else
-#include "../image/ImageDevice.h"
 #endif
 
 namespace XRender

@@ -47,10 +47,10 @@ ${CMAKE_CURRENT_SOURCE_DIR}/PostProcess/PostProcessContext.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/PostProcess/PostProcessEffect.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/platform/common/Platform.cpp)
 
-if(USE_IMAGE_TARGET)
-add_definitions(-DUSE_IMAGE_TARGET)
 target_sources(XRenderLib PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/platform/image/ImageDevice.cpp)
+if(USE_IMAGE_TARGET)
+add_definitions(-DUSE_IMAGE_TARGET)
 elseif(WIN32)
 target_sources(XRenderLib PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/platform/win/WindowsDevice.cpp)

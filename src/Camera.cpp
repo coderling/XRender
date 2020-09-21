@@ -65,8 +65,8 @@ void XRender::Camera::CaculateOrthgraphic()
     assert(device != nullptr);
     int width = device->GetWidth();
     int height = device->GetHeight();
-    float left = width * 1.f / 2;
-    float right = -left;
+    float right = width * 1.f / 2;
+    float left = -right;
     float top = height * 1.f / 2;
     float bottom = -top;
     proj = Math::CaculateOrthgraphic(left, right, top, bottom, near_plane, far_plane);
@@ -174,4 +174,18 @@ const bool& XRender::Camera::IsPerspective()
 const float& XRender::Camera::Aspect()const
 {
     return aspect;
+}
+
+void XRender::Camera::Position(const Vec3f& position)
+{
+    transform.SetPosition(position);
+    view = Math::CameraLookAt(transform.GetPosition(), transform.Up(), transform.Forward());
+    invert_view = view.invert();
+}
+
+void XRender::Camera::Rotation(const Vec3f& rotation)
+{
+    transform.SetRotation(rotation);
+    view = Math::CameraLookAt(transform.GetPosition(), transform.Up(), transform.Forward());
+    invert_view = view.invert();
 }

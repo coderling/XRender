@@ -22,13 +22,20 @@ void XRender::RenderTexture::CreateBuffer()
 {
     switch (format) 
     {
+        case GraphicsEnum::ERenderTargetFormat::ShadowMap:
+            num_bytes = 0;
+            this->depth = true;
+            break;
         default:
             num_bytes = 4; // 4 rgba + depth
             break;
     }
 
-    uint8_t* bytes = new uint8_t[width * height * num_bytes];
-    buffer.reset(bytes);
+    if(num_bytes > 0)
+    {
+        uint8_t* bytes = new uint8_t[width * height * num_bytes];
+        buffer.reset(bytes);
+    }
     if(this->depth)
     {
         float* dbuffer = new float[width * height];
@@ -80,10 +87,12 @@ RenderDelegate default_render = [](XRender::RenderTexture* target, const uint32_
     float* depth_buffer = target->DepthBuffer();
     depth_buffer[index] = t_depth;
     
+    uint8_t* buffer = target->Buffer();
+    if(buffer == nullptr)
+        return;
     static XRender::Color32 color32;
     ColorToColor32(color, color32);
     index = index * target->Bytes();
-    uint8_t* buffer = target->Buffer();
     buffer[index] = color32.r;
     buffer[index + 1] = color32.g;
     buffer[index + 2] = color32.b;
@@ -92,6 +101,7 @@ RenderDelegate default_render = [](XRender::RenderTexture* target, const uint32_
 
 static std::unordered_map<XRender::GraphicsEnum::ERenderTargetFormat, RenderDelegate> render_functions {
     {XRender::GraphicsEnum::ERenderTargetFormat::Default, default_render},
+    {XRender::GraphicsEnum::ERenderTargetFormat::ShadowMap, default_render},
 };
 
 void XRender::RenderTexture::RenderPixel(const uint32_t& x, const uint32_t& y, const Color& color, const float& depth)
@@ -100,30 +110,6 @@ void XRender::RenderTexture::RenderPixel(const uint32_t& x, const uint32_t& y, c
     assert(x < width && y < height);
     render_functions[format](this, x, y, color, depth);
 }
-
-typedef std::function<void(const XRender::RenderTexture* target, const uint32_t& x, const uint32_t& y, XRender::Color& color)> ReadColorDelegate;
-
-ReadColorDelegate default_read_color = [](const XRender::RenderTexture* target, const uint32_t& x, const uint32_t& y, XRender::Color& color)
-{
-    uint8_t* buffer = target->Buffer();
-    uint32_t index = (y * target->Width() + x) * target->Bytes();
-    color.r = buffer[index] * 1.0f / 255.0f;
-    color.g = buffer[index + 1] * 1.0f / 255.0f;
-    color.b = buffer[index + 2] * 1.0f / 255.0f;
-    color.a = buffer[index + 3] * 1.0f / 255.0f;
-};
-
-static std::unordered_map<XRender::GraphicsEnum::ERenderTargetFormat, ReadColorDelegate> read_color_functions
-{
-    {XRender::GraphicsEnum::ERenderTargetFormat::Default, default_read_color},
-};
- 
- void XRender::RenderTexture::ReadPixel(const uint32_t& x, const uint32_t& y, Color& color)
- {
-    assert(read_color_functions.count(format) == 1);
-    assert(x < width && y < height);
-    read_color_functions[format](this, x, y, color);
- }
 
 typedef std::function<void(const XRender::RenderTexture* target, const uint32_t& x, const uint32_t& y, XRender::Color32& color)> ReadColor32Delegate;
 
@@ -148,6 +134,13 @@ static std::unordered_map<XRender::GraphicsEnum::ERenderTargetFormat, ReadColor3
     assert(x < width && y < height);
     read_color32_functions[format](this, x, y, color);
  }
+ 
+ void XRender::RenderTexture::ReadPixel(const uint32_t& x, const uint32_t& y, Color& color)
+ {
+    static Color32 color32;
+    ReadPixel(x, y, color32);
+    Color32ToColor(color32, color);
+ }
 
 
 typedef std::function<float(const XRender::RenderTexture* target, const uint32_t& x, const uint32_t& y)> ReadDepthDelegate;
@@ -161,6 +154,7 @@ ReadDepthDelegate default_read_depth = [](const XRender::RenderTexture* target, 
 static std::unordered_map<XRender::GraphicsEnum::ERenderTargetFormat, ReadDepthDelegate> read_depth_functions
 {
     {XRender::GraphicsEnum::ERenderTargetFormat::Default, default_read_depth},
+    {XRender::GraphicsEnum::ERenderTargetFormat::ShadowMap, default_read_depth},
 };
 
 
@@ -200,24 +194,25 @@ static std::unordered_map<XRender::GraphicsEnum::ERenderTargetFormat, ClearBuffe
     {XRender::GraphicsEnum::ERenderTargetFormat::Default, default_clear_color32},
 };
 
-void XRender::ClearRenderTargetFrameBuffer(RenderTexture* target, const Color& color)
-{
-    assert(clear_color32_functions.count(target->Format()) == 1);
-    static XRender::Color32 color32;
-    ColorToColor32(color, color32);
-    clear_color32_functions[target->Format()](target, color32);
-}
 
 void XRender::ClearRenderTargetFrameBuffer(RenderTexture* target, const Color32& color)
 {
     assert(clear_color32_functions.count(target->Format()) == 1);
-
     clear_color32_functions[target->Format()](target, color);
+}
+
+void XRender::ClearRenderTargetFrameBuffer(RenderTexture* target, const Color& color)
+{
+    static XRender::Color32 color32;
+    ColorToColor32(color, color32);
+    ClearRenderTargetFrameBuffer(target, color32);
 }
 
 void XRender::ClearRenderTargetDepthBuffer(RenderTexture* target, const float& depth)
 {
-    uint8_t udepth = static_cast<uint8_t>(std::round(std::clamp(depth, 0.0f, 1.0f)* 255));
+    if(!target->Depth())
+        return;
+
     const auto& size = target->Width() * target->Height();
     auto depth_buffer = target->DepthBuffer();
     for(uint32_t index = 0; index < size; ++index)

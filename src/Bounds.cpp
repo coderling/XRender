@@ -2,13 +2,14 @@
 
 #include "Bounds.h"
 
+
 XRender::Bounds::Bounds()
 {
     center = Vec3f_Zero;
     extents = Vec3f_Zero;
 }
 
-XRender::Bounds::Bounds(const Vec3f min, const Vec3f max)
+void XRender::Bounds::SetWithMinMax(const Vec3f& min, const Vec3f& max)
 {
     center = (min + max) / 2;
     extents = (max - min) / 2;
@@ -18,20 +19,24 @@ XRender::Bounds::Bounds(const Vec3f min, const Vec3f max)
     if(extents.z < 0) extents.z = 0;
 }
 
+XRender::Bounds::Bounds(const Vec3f& min, const Vec3f& max)
+{
+    SetWithMinMax(min, max);
+}
+
 void XRender::Bounds::Expand(const Vec3f& point)
 {
-    Vec3f distance = point - center;
-    Vec2f ex = ExpandAxis(distance.x, extents.x);
-    center.x += ex.x;
-    extents.x += ex.y;
+    Vec3f& min = Min();
+    Vec3f& max = Max();
+    min.x = std::min(min.x, point.x);
+    min.y = std::min(min.y, point.y);
+    min.z = std::min(min.z, point.z);
     
-    ex = ExpandAxis(distance.y, extents.y);
-    center.y += ex.x;
-    extents.y += ex.y;
+    max.x = std::max(max.x, point.x);
+    max.y = std::max(max.y, point.y);
+    max.z = std::max(max.z, point.z);
     
-    ex = ExpandAxis(distance.z, extents.z);
-    center.z += ex.x;
-    extents.z += ex.y;
+    SetWithMinMax(min, max);
 }
        
 void XRender::Bounds::Expand(const Bounds& bounds)
@@ -49,26 +54,6 @@ void XRender::Bounds::Zero()
     extents = Vec3f_Zero;
 }
 
-Vec2f XRender::Bounds::ExpandAxis(const float& distance, const float& extent_axis)
-{
-    Vec2f ret;
-    if(distance > extent_axis)
-    {
-        float extent = (distance - extent_axis) / 2;
-        ret.x = extent;
-        ret.y = extent;
-    }
-    else if(distance < extent_axis)
-    {
-        float extent = (distance - extent_axis) / 2;
-        ret.x = extent;
-        ret.y = -extent;
-    }
-
-    return ret;
-}
-        
-        
 Vec3f XRender::Bounds::Max() const
 {
     return center + extents;

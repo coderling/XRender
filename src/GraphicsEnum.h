@@ -26,5 +26,6 @@ namespace XRender::GraphicsEnum
     enum struct ERenderTargetFormat : uint32_t
     {
         Default = 0,
+        ShadowMap,
     };
 }

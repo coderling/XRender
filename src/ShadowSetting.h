@@ -11,5 +11,6 @@ namespace XRender
         static float shadow_distance;
         static uint32_t width;
         static uint32_t height;
+        static uint32_t shadow_strength;
     };
 }

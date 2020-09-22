@@ -8,16 +8,15 @@ namespace XRender
     {
     public:
         Bounds();
-        Bounds(const Vec3f min, const Vec3f max);
+        Bounds(const Vec3f& min, const Vec3f& max);
         void Expand(const Vec3f& point);
         void Expand(const Bounds& bounds);
         void Zero();
         Vec3f Max() const;
         Vec3f Min() const;
+        void SetWithMinMax(const Vec3f& min, const Vec3f& max);
     public:
         Vec3f center;
         Vec3f extents;
-    private:
-        Vec2f ExpandAxis(const float& distance, const float& extent_axis);
     };
 }

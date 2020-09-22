@@ -13,6 +13,7 @@ namespace XRender::GraphicsGlobalData
     Matrix matrix_vp;
     Matrix matrix_mv;
     Matrix matrix_viewport;
+    Matrix matrix_shadow_light_vp;
     const Lighting::LightData* lights[Lighting::max_light_num]; 
     uint32_t light_count;
 }

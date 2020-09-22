@@ -16,12 +16,15 @@
 static bool debug = true;
 
 static std::unique_ptr<TGAImage> debug_out = nullptr;
+static bool debug_out_depth = false;
+static int clear_flag = debug_out_depth ? XRender::GraphicsEnum::EClearFlag::Clear_Depth : (XRender::GraphicsEnum::EClearFlag::Clear_Depth | XRender::GraphicsEnum::EClearFlag::Clear_Color);
+static XRender::GraphicsEnum::ERenderTargetFormat shadow_map_format = debug_out_depth ? XRender::GraphicsEnum::ERenderTargetFormat::ShadowMap : XRender::GraphicsEnum::ERenderTargetFormat::Default;
 
 static XRender::Pipeline* current_pipeline = nullptr;
 
 static const XRender::Lighting::LightData* use_light = nullptr;
 
-float* depth_buffer = nullptr;
+static std::unique_ptr<XRender::RenderTexture> depth_buffer = nullptr;
 static uint32_t depth_buffer_size = 0;
 
 static Matrix light_proj;
@@ -37,7 +40,7 @@ void CreateDepthBuffer()
        return;
    }
     depth_buffer_size = XRender::ShadowSetting::width * XRender::ShadowSetting::height;
-    depth_buffer = new float[depth_buffer_size];
+    depth_buffer = XRender::RenderTexture::CreateRenderTarget(XRender::ShadowSetting::width, XRender::ShadowSetting::height, true, shadow_map_format);
     if(debug && debug_out == nullptr)
     {
         debug_out = std::make_unique<TGAImage>(XRender::ShadowSetting::width, XRender::ShadowSetting::height, TGAImage::RGB);
@@ -50,6 +53,7 @@ void DebugPresentLightDepth()
         return;
 
     TGAColor color;
+    XRender::Color32 color32;
     uint32_t width = XRender::ShadowSetting::width;
     uint32_t height = XRender::ShadowSetting::height;
     unsigned char depth;
@@ -58,8 +62,19 @@ void DebugPresentLightDepth()
         uint32_t cy = height - y - 1;
         for(uint32_t x = 0; x < width; ++x)
         {
-            depth = static_cast<unsigned char>(std::round(depth_buffer[y * width + x] * 255));
-            color[0] = color[1] = color[2] = color[3] = depth;
+            if (debug_out_depth)
+            {
+                depth = static_cast<unsigned char>(std::round(depth_buffer->DepthOf(x, cy) * 255));
+                color[0] = color[1] = color[2] = depth; color[3] = 255;
+            }
+            else
+            {
+                depth_buffer->ReadPixel(x, cy, color32);
+                color[2] = color32.r;
+                color[1] = color32.g;
+                color[0] = color32.b;
+                color[3] = color32.a;
+            }
             debug_out->set(x, cy, color);
         }
     }
@@ -81,24 +96,25 @@ void GetCameraBounds(const XRender::Camera* camera)
     float fdn = far / near;
     float f_h = fdn * n_h;
     float f_w = fdn * n_w;
-
-    Vec4f n_topright(n_w, n_h, near, 1);
-    n_topright =  camera->ViewMatrix() * n_topright;
-    Vec4f n_topleft(-n_w, n_h, near, 1);
-    n_topleft = camera->ViewMatrix() * n_topleft ;
-    Vec4f n_bottomright(n_w, -n_h, near, 1);
-    n_bottomright =  camera->ViewMatrix() * n_bottomright ;
-    Vec4f n_bottomleft(-n_w, -n_h, near, 1);
-    n_bottomleft =  camera->ViewMatrix() * n_bottomleft ;
     
-    Vec4f f_topright(f_w, f_h, far, 1);
-    f_topright = camera->ViewMatrix() * f_topright ;
-    Vec4f f_topleft(-f_w, f_h, far, 1);
-    f_topleft = camera->ViewMatrix() * f_topleft ;
-    Vec4f f_bottomright(f_w, -f_h, far, 1);
-    f_bottomright =  camera->ViewMatrix() *f_bottomright  ;
-    Vec4f f_bottomleft(-f_w, -f_h, far, 1);
-    f_bottomleft = camera->ViewMatrix() * f_bottomleft ;
+    const Matrix& invertView = camera->InvertViewMatrix();
+    Vec4f n_topright(n_w, n_h, -near, 1);
+    n_topright =  invertView * n_topright;
+    Vec4f n_topleft(-n_w, n_h, -near, 1);
+    n_topleft = invertView * n_topleft ;
+    Vec4f n_bottomright(n_w, -n_h, -near, 1);
+    n_bottomright =  invertView * n_bottomright ;
+    Vec4f n_bottomleft(-n_w, -n_h, -near, 1);
+    n_bottomleft =  invertView * n_bottomleft ;
+    
+    Vec4f f_topright(f_w, f_h, -far, 1);
+    f_topright = invertView * f_topright ;
+    Vec4f f_topleft(-f_w, f_h, -far, 1);
+    f_topleft = invertView * f_topleft ;
+    Vec4f f_bottomright(f_w, -f_h, -far, 1);
+    f_bottomright =  invertView *f_bottomright  ;
+    Vec4f f_bottomleft(-f_w, -f_h, -far, 1);
+    f_bottomleft = invertView * f_bottomleft ;
 
     camera_bounds.center = embed<3>(n_topright / n_topright.w);
     camera_bounds.extents = Vec3f_Zero;
@@ -136,11 +152,23 @@ void XRender::Lighting::ShadowMap::UpdateViewSpace(const XRender::Camera* camera
 
     const Vec3f& position = camera_bounds.center - use_light->forward * camera_bounds.extents.norm();
 
-    light_view = XRender::Math::CameraLookAt(embed<3>(position), use_light->up, use_light->forward);
+    light_view = XRender::Math::CameraLookAt(embed<3>(position), use_light->up, Vec3f_Zero - use_light->forward);
     
     const auto& center = Math::TransformPoint(light_view, camera_bounds.center);
-    const Vec3f& min = center - camera_bounds.extents;
-    const Vec3f& max = center + camera_bounds.extents;
+    const Vec3f& m1 = center - camera_bounds.extents;
+    const Vec3f& m2 = center + camera_bounds.extents;
+    
+    static Vec3f min;
+    static Vec3f max;
+
+    min.x = std::min(m1.x, m2.x);
+    min.y = std::min(m1.y, m2.y);
+    min.z = -std::max(m1.z, m2.z);
+    max.x = std::max(m1.x, m2.x);
+    max.y = std::max(m1.y, m2.y);
+    max.z = -std::min(m1.z, m2.z);
+    
+
     light_proj = XRender::Math::CaculateOrthgraphic(min.x, max.x, max.y, min.y, min.z, max.z);
 
     SetViewPort();
@@ -151,6 +179,7 @@ void XRender::Lighting::ShadowMap::UpdateViewSpace(const XRender::Camera* camera
     GraphicsGlobalData::matrix_p = light_proj;
     GraphicsGlobalData::matrix_vp = light_proj * light_view;
     GraphicsGlobalData::matrix_viewport = light_viewport;
+    GraphicsGlobalData::matrix_shadow_light_vp= GraphicsGlobalData::matrix_vp;
 }
 
 void XRender::Lighting::ShadowMap::Setup(XRender::Pipeline* pipeline) 
@@ -184,17 +213,23 @@ void XRender::Lighting::ShadowMap::Render(const Camera* camera)
         return;
 
     UpdateViewSpace(camera);
-    Graphics::VirtualGraphic().SetClearFlag(GraphicsEnum::EClearFlag::Clear_Depth);
-    Graphics::VirtualGraphic().Execute();
-    CopyDepth(depth_buffer, depth_buffer_size);
+    Graphics::VirtualGraphic().GetRenderContext()->ActiveTarget(depth_buffer.get());
+    Graphics::VirtualGraphic().SetClearFlag(clear_flag);
+    Graphics::VirtualGraphic().Execute(!(debug && debug_out != nullptr));
     DebugPresentLightDepth();
+    Graphics::VirtualGraphic().GetRenderContext()->ActiveTarget(nullptr);
 }
 
 void XRender::Lighting::ShadowMap::Release()
 {
     use_light = nullptr;
-    if(depth_buffer != nullptr)
-    {
-        delete [] depth_buffer;
-    }
+    depth_buffer = nullptr;
+}
+        
+float XRender::Lighting::ShadowMap::SampleShadowMap(const float& u, const float& v)
+{
+    const auto& x = (ShadowSetting::width -1) * u;
+    const auto& y = (ShadowSetting::height -1)* v;
+    assert(x < ShadowSetting::width && y < ShadowSetting::height);
+    return depth_buffer->DepthOf(x, y);
 }

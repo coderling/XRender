@@ -13,6 +13,7 @@ namespace XRender::Lighting
         static void Setup(Pipeline* pipeline);
         static void Render(const Camera* camrea);
         static void Release();
+        static float SampleShadowMap(const float& u, const float& v);
     private:
         static void PrePare();
         static void UpdateViewSpace(const XRender::Camera* camera);

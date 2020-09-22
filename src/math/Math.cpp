@@ -141,50 +141,93 @@ Matrix XRender::Math::CameraLookAt(const Vec3f& pos, const Vec3f& up, const Vec3
 
     return view;
 }
-   
+
+/*
+    // 挤压到正交的视锥体, 再进行正交投影
+2/(right-left)      0                   0       -(left+right)/(right-left)
+0              2/(top-bottom)           0       -(bottom+top)/(top-bottom)
+0                   0                -2/(f-n)    -(f+n)/(f-n)
+0                   0                   0           1
+
+x
+
+n                   0                   0           0
+0                   n                   0           0
+0                   0                  n+f         n*f
+0                   0                   -1           0
+
+2n/(r-l)            0                   0           0
+0                  2n/(t-b)             0           0
+0                   0               -(f+n)/(f-n)    2(n*f)/(f-n)
+0                   0                   -1           0
+*/
 Matrix XRender::Math::Perspective(const float& fov, const float& aspect, const float& near, const float& far)
 {
     float top = near * tan(fov* PI / 2.0f / 180.0f);
     float bottom = -top;
     float right = top * aspect;
     float left = -right;
-    // 挤压到正交的视锥体, 再进行正交投影
+    Matrix p = Matrix::identity();
+
+    p[0][0] = 2 * near / (right - left);
+    p[1][1] = 2 * near / (top - bottom);
+    p[2][2] = -(far + near) / (far - near);
+    p[2][3] = -2 * (near * far) / (far - near);
+    p[3][2] = -1;
+    p[3][3] = 0;
+
     Matrix persToOrthMatrix = Matrix::identity();
     persToOrthMatrix[0][0] = near;
     persToOrthMatrix[1][1] = near;
-    persToOrthMatrix[2][2] = near+ far;
-    persToOrthMatrix[2][3] = -near * far;
-	persToOrthMatrix[3][2] = 1;
+    persToOrthMatrix[2][2] = near + far;
+    persToOrthMatrix[2][3] = near * far;
+	persToOrthMatrix[3][2] = -1;
 	persToOrthMatrix[3][3] = 0;
 
     const Matrix& orth = CaculateOrthgraphic(left, right, top, bottom, near, far);
-
+    Matrix t = orth * persToOrthMatrix;
+    return p;
     return orth * persToOrthMatrix;
 }
 
+/*
+Orth = Mr * Mt
+
+2/(right-left)      0                   0           0
+0               2/(top - bottom)        0           0 
+0                   0               -2/(f-n)        0 
+0                   0                   0           1
+
+1                   0                   0        -(left+right)/2
+0                   1                   0        -(bottom+top)/2
+0                   0                   1        (n+f)/2
+0                   0                   0           1
+
+
+2/(right-left)      0                   0       -(left+right)/(right-left)
+0              2/(top-bottom)           0       -(bottom+top)/(top-bottom)
+0                   0                -2/(f-n)    -(f+n)/(f-n)
+0                   0                   0           1
+
+*/
 Matrix XRender::Math::CaculateOrthgraphic(const float& left, const float& right, const float& top, const float& bottom,
                                const float& near, const float& far)
 {
     assert(far > near && near > 0);
-    float n = -near;
-    float f = -far;
     // 先平移---》缩放到[-1, 1]的立方体内
-    Matrix transpose = Matrix::identity();
-    transpose[0][3] = -(left + right) / 2;
-    transpose[1][3] = -(bottom + top) / 2;
-    transpose[2][3] = -(n + f) / 2;
+    Matrix orth = Matrix::identity();
+    float width = right - left;
+    float height = top - bottom;
+    float depth = far - near;
 
-    float xscale = 2 / (right - left);
-    float yscale = 2 / (top - bottom);
-    float zscale = 2 / (n - f);
-    assert(xscale > 0 && yscale > 0 && zscale > 0);
-    
-    Matrix scaleMatrix = Matrix::identity();
-    scaleMatrix[0][0] = xscale;
-    scaleMatrix[1][1] = yscale;
-    scaleMatrix[2][2] = zscale;
+    orth[0][0] = 2 / width;
+    orth[1][1] = 2 / height;
+    orth[2][2] = -2 / depth;
 
-    return scaleMatrix * transpose;
+    orth[0][3] = -(left + right) / width;
+    orth[1][3] = -(bottom + top) / height;
+    orth[2][3] = -(far + near) / (far - near);
+    return orth;
 }
 
 bool XRender::Math::FloatEqual(const float& lv, const float& rv)

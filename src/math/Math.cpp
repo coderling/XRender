@@ -116,27 +116,28 @@ Matrix XRender::Math::ModelMatrix(Vec3f pos, Vec3f scale, Vec3f angle)
 Matrix XRender::Math::CameraLookAt(const Vec3f& pos, const Vec3f& up, const Vec3f& look)
 {
     Matrix view = Matrix::identity();
-    Vec3f lcp = cross(up,  look);
-    Vec3f t_up = cross(look, lcp);
-    lcp.normalize();
-    t_up.normalize();
-    Vec3f lk = look;
-    lk.normalize();
+    Vec3f x_axis = cross(up,  look);
+    Vec3f y_axis = cross(look, x_axis);
+    x_axis.normalize();
+    y_axis.normalize();
+    Vec3f z_axis = look;
+    z_axis.normalize();
 
-    view[0][0] = lcp.x;
-    view[0][1] = lcp.y;
-    view[0][2] = lcp.z;
-    view[0][3] = lcp.x * -pos.x + lcp.y * -pos.y + lcp.z * -pos.z;
+    view[0][0] = x_axis.x;
+    view[0][1] = x_axis.y;
+    view[0][2] = x_axis.z;
 
-    view[1][0] = t_up.x;
-    view[1][1] = t_up.y;
-    view[1][2] = t_up.z;
-    view[1][3] = t_up.x * -pos.x + t_up.y * -pos.y + t_up.z * -pos.z;
-    
-    view[2][0] = lk.x;
-    view[2][1] = lk.y;
-    view[2][2] = lk.z;
-    view[2][3] = lk.x * -pos.x + lk.y * -pos.y + lk.z * -pos.z;
+    view[1][0] = y_axis.x;
+    view[1][1] = y_axis.y;
+    view[1][2] = y_axis.z;
+
+    view[2][0] = z_axis.x;
+    view[2][1] = z_axis.y;
+    view[2][2] = z_axis.z;
+
+    view[0][3] = -(x_axis * pos);
+    view[1][3] = -(y_axis * pos);
+    view[2][3] = -(z_axis * pos);
 
     return view;
 }
@@ -165,15 +166,17 @@ Matrix XRender::Math::CaculateOrthgraphic(const float& left, const float& right,
                                const float& near, const float& far)
 {
     assert(far > near && near > 0);
+    float n = -near;
+    float f = -far;
     // 先平移---》缩放到[-1, 1]的立方体内
     Matrix transpose = Matrix::identity();
     transpose[0][3] = -(left + right) / 2;
     transpose[1][3] = -(bottom + top) / 2;
-    transpose[2][3] = -(near + far) / 2;
+    transpose[2][3] = -(n + f) / 2;
 
     float xscale = 2 / (right - left);
     float yscale = 2 / (top - bottom);
-    float zscale = 2 / (far - near);
+    float zscale = 2 / (n - f);
     assert(xscale > 0 && yscale > 0 && zscale > 0);
     
     Matrix scaleMatrix = Matrix::identity();

@@ -16,23 +16,24 @@ namespace XRender::Test
         }
 
         SET_PASIES()
-
-        END_SET_PASIES()
-        /*    VertexOutput out;
-            Vec4f position;
-            GET_DATA_BY_SEMATIC(position, in, SEMANTIC::POSITION);
+        
+        VERT_HEAD(vert)
+        {
+            Vec4f position = in.Get<Vec4f>(SEMANTIC::POSITION);
             Vec4f view_pos = GraphicsGlobalData::matrix_mv * position;
             Vec4f clip_pos = GraphicsGlobalData::matrix_p * view_pos;
-            FILL_SHADER_STRUCT(out, SEMANTIC::SV_POSITION, clip_pos);
-            Color color;
-            GET_DATA_BY_SEMATIC(color, in, SEMANTIC::COLOR);
-            FILL_SHADER_STRUCT(out, SEMANTIC::COLOR, color);
-            return out;
-        }
+            out.Set(SEMANTIC::SV_POSITION, clip_pos);
+            Color color = in.Get<Color>(SEMANTIC::COLOR);
+            out.Set(SEMANTIC::COLOR, color);
 
-        void Fragment(const VertexOutput& in, Color& color) override
+        };
+
+        FRAGMENT_HEAD(frag) 
         {
-            GET_DATA_BY_SEMATIC(color, in, SEMANTIC::COLOR);
-        }*/
+            out = in.Get<Color>(SEMANTIC::COLOR); 
+        };    
+
+        AddPass("default", vert, frag);
+        END_SET_PASIES()
     };
 }

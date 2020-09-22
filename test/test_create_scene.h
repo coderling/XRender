@@ -29,7 +29,7 @@ namespace XRender::Test
             Color(0, 0, 1, 1),
             Color(0, 1, 1, 1),
         };
-        std::vector<uint32_t> indeies = {0, 1, 2};
+        std::vector<uint32_t> indeies = {2, 1, 0};
 
         mesh->SetPositions(points);
         mesh->SetColors(colors);

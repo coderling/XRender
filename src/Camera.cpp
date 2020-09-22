@@ -34,7 +34,7 @@ const Matrix& XRender::Camera::ProjMatrix() const
 
 void XRender::Camera::LookAt(const Vec3f& pos, const Vec3f& up, const Vec3f& target)
 {
-    view = Math::CameraLookAt(pos, up, target - pos);
+    view = Math::CameraLookAt(pos, up, pos - target);
     invert_view = view.invert();
     transform.SetPosition(pos);
     transform.SetRotation(Math::RotateToEuler(view)); 

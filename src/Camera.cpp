@@ -63,13 +63,14 @@ void XRender::Camera::CaculateOrthgraphic()
 {
     auto device = RenderDevice::Device();
     assert(device != nullptr);
-    int width = device->GetWidth();
-    int height = device->GetHeight();
+    this->aspect = device->GetWidth() * 1.0f / device->GetHeight();
+    float height = 11.f;
+    float width = height * this->aspect;
     float right = width * 1.f / 2;
     float left = -right;
     float top = height * 1.f / 2;
     float bottom = -top;
-    proj = Math::CaculateOrthgraphic(left, right, top, bottom, near_plane, far_plane);
+    proj = Math::CaculateOrthgraphic(left, right, bottom, top, near_plane, far_plane);//(-15.396, 15.396, -11.547, 11.547, 11.715, 31.615);
 }
 
 void XRender::Camera::SetViewPort(const float &x, const float &y, const float &w, const float &h)

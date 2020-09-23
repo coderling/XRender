@@ -46,7 +46,7 @@ namespace XRender::Shaders
             }
 
             const Vec2f& uv = in.Get<Vec2f>(SEMANTIC::UV0);
-            out = out * ComputeShadow(world_pos) * texture.Point(uv.x, uv.y);
+            out = out * ComputeShadow(world_pos, normal) * texture.Point(uv.x, uv.y);
         };
 
         AddPass("default", vert, frag);

@@ -35,7 +35,7 @@ namespace XRender::Math
 
     Matrix Perspective(const float& fov, const float& aspect, const float& near, const float& far);
     
-    Matrix CaculateOrthgraphic(const float& left, const float& right, const float& top, const float& bottom,
+    Matrix CaculateOrthgraphic(const float& left, const float& right, const float& bottom, const float& top,
                                const float& near, const float& far);
 
     bool FloatEqual(const float& lv, const float& rv);

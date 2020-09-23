@@ -1,5 +1,6 @@
 #include <memory>
 #include <algorithm>
+#include <iostream>
 
 #include <tgaimage.h>
 
@@ -16,7 +17,7 @@
 static bool debug = true;
 
 static std::unique_ptr<TGAImage> debug_out = nullptr;
-static bool debug_out_depth = false;
+static bool debug_out_depth = true;
 static int clear_flag = debug_out_depth ? XRender::GraphicsEnum::EClearFlag::Clear_Depth : (XRender::GraphicsEnum::EClearFlag::Clear_Depth | XRender::GraphicsEnum::EClearFlag::Clear_Color);
 static XRender::GraphicsEnum::ERenderTargetFormat shadow_map_format = debug_out_depth ? XRender::GraphicsEnum::ERenderTargetFormat::ShadowMap : XRender::GraphicsEnum::ERenderTargetFormat::Default;
 
@@ -75,7 +76,7 @@ void DebugPresentLightDepth()
                 color[0] = color32.b;
                 color[3] = color32.a;
             }
-            debug_out->set(x, cy, color);
+            debug_out->set(x, y, color);
         }
     }
 
@@ -169,7 +170,7 @@ void XRender::Lighting::ShadowMap::UpdateViewSpace(const XRender::Camera* camera
     max.z = -std::min(m1.z, m2.z);
     
 
-    light_proj = XRender::Math::CaculateOrthgraphic(min.x, max.x, max.y, min.y, min.z, max.z);
+    light_proj = XRender::Math::CaculateOrthgraphic(min.x, max.x, min.y, max.y, min.z, max.z);
 
     SetViewPort();
 
@@ -197,6 +198,7 @@ void XRender::Lighting::ShadowMap::PrePare()
         if(use_light == nullptr || (light->intensity > use_light->intensity && light->light_type == Lighting::LightType::Directional))
         {
             use_light = light;
+            XRender::GraphicsGlobalData::shadow_light_index = index;
         }
     }
     CreateDepthBuffer();
@@ -215,7 +217,7 @@ void XRender::Lighting::ShadowMap::Render(const Camera* camera)
     UpdateViewSpace(camera);
     Graphics::VirtualGraphic().GetRenderContext()->ActiveTarget(depth_buffer.get());
     Graphics::VirtualGraphic().SetClearFlag(clear_flag);
-    Graphics::VirtualGraphic().Execute(!(debug && debug_out != nullptr));
+    Graphics::VirtualGraphic().Execute(!debug || debug_out_depth);
     DebugPresentLightDepth();
     Graphics::VirtualGraphic().GetRenderContext()->ActiveTarget(nullptr);
 }

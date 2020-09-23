@@ -184,7 +184,7 @@ Matrix XRender::Math::Perspective(const float& fov, const float& aspect, const f
 	persToOrthMatrix[3][2] = -1;
 	persToOrthMatrix[3][3] = 0;
 
-    const Matrix& orth = CaculateOrthgraphic(left, right, top, bottom, near, far);
+    const Matrix& orth = CaculateOrthgraphic(left, right, bottom, top, near, far);
     Matrix t = orth * persToOrthMatrix;
     return p;
     return orth * persToOrthMatrix;
@@ -210,7 +210,7 @@ Orth = Mr * Mt
 0                   0                   0           1
 
 */
-Matrix XRender::Math::CaculateOrthgraphic(const float& left, const float& right, const float& top, const float& bottom,
+Matrix XRender::Math::CaculateOrthgraphic(const float& left, const float& right, const float& bottom, const float& top,
                                const float& near, const float& far)
 {
     assert(far > near && near > 0);

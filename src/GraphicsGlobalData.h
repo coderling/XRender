@@ -15,6 +15,7 @@ namespace XRender::GraphicsGlobalData
     extern Matrix matrix_mv;
     extern Matrix matrix_viewport;
     extern Matrix matrix_shadow_light_vp;
+    extern uint32_t shadow_light_index;
     extern const Lighting::LightData* lights[Lighting::max_light_num]; 
     extern uint32_t light_count;
     extern Bounds scene_bounds;

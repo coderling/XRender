@@ -54,9 +54,30 @@
 * ShadowMap
     * [1](https://learnopengl-cn.readthedocs.io/zh/latest/05%20Advanced%20Lighting/03%20Shadows/01%20Shadow%20Mapping/)
     * [2](http://www.opengl-tutorial.org/cn/intermediate-tutorials/tutorial-16-shadow-mapping/)
+    * [3](https://docs.microsoft.com/zh-cn/windows/win32/dxtecharts/common-techniques-to-improve-shadow-depth-maps?redirectedfrom=MSDN)
+    * [4](https://www.sunandblackcat.com/improvements-for-shadow-mapping-in-opengl-and-glsl/)
+    * [5](http://wiki.ogre3d.org/Depth+Shadow+Mapping)
 
 * 轨道相机控制
     * https://my.oschina.net/u/4589456/blog/4521247
 
 * 跨平台定时器
     * https://www.zhihu.com/question/38427301
+
+
+
+
+0.136364 0 0 -0
+0 0.181818 0 -0
+0 0 -0.0040008 -1.0004
+0 0 0 1
+-----------------------------
+0.0649519 0 0 -0
+0 0.0866025 0 -0
+0 0 -0.100503 -2.17739
+0 0 0 1
+---------------
+0.0649519 0 0 -0
+0 0.0866026 0 -0
+0 0 -0.100503 -2.17739
+0 0 0 1

@@ -45,14 +45,14 @@ namespace XRender
         }
 
         template<class T>
-        const T& Get(const SEMANTIC& semantic) const{
+        const T Get(const SEMANTIC& semantic) const{
             //static_assert(SEMANTIC::SV_POSITION != semantic || std::is_same_v<T, Vec4f>);
             static_assert(std::is_same_v<std::decay<T>::type, Vec4f>
                   ||std::is_same_v<std::decay<T>::type, Vec3f>
                   || std::is_same_v<std::decay<T>::type, Vec2f>
                   || std::is_same_v<std::decay<T>::type, float>
                   || std::is_same_v<std::decay<T>::type, Color>);
-            static T ret;
+            T ret;
             const auto& it = data.find(semantic);
             if(it != data.end())
             {
@@ -94,7 +94,7 @@ namespace XRender
     {
     public:
         template<class T>
-        const T& Get(const SEMANTIC& semantic) const
+        const T Get(const SEMANTIC& semantic) const
         {
             return data.Get<T>(semantic);
         }
@@ -117,7 +117,7 @@ namespace XRender
         VertexData data;
         
         template<class T>
-        const T& Get(const SEMANTIC& semantic) const{
+        const T Get(const SEMANTIC& semantic) const{
             return data.Get<T>(semantic);
         }
         template<class T>

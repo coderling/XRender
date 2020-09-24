@@ -23,10 +23,19 @@ float ComputeShadow(const Vec3f& world_pos, const Vec3f& normal)
     // to [0, 1]
     light_clip_pos = (light_clip_pos + Vec3f_One) * 0.5f;
     const auto& invert_size = XRender::ShadowSetting::InvertSize();
-    const auto& s_depth = XRender::SampleShadowMap(light_clip_pos.x, light_clip_pos.y);
-    const auto& light_dir = XRender::GraphicsGlobalData::lights[XRender::GraphicsGlobalData::shadow_light_index]->forward;
-    static float bias = std::max(shadow_bias, 0.05f * (1.0f - normal * light_dir));
-    if(light_clip_pos.z - bias > s_depth)
+    
+    const auto& current_depth = XRender::SampleShadowMap(light_clip_pos.x, light_clip_pos.y);
+    Vec2f min_depth;
+    min_depth.x = XRender::SampleShadowMap(light_clip_pos.x - invert_size.x, light_clip_pos.y);
+    min_depth.y = XRender::SampleShadowMap(light_clip_pos.x, light_clip_pos.y - invert_size.y);
+    Vec2f max_depth;
+    max_depth.x = XRender::SampleShadowMap(light_clip_pos.x + invert_size.x, light_clip_pos.y);
+    max_depth.y = XRender::SampleShadowMap(light_clip_pos.x, light_clip_pos.y + invert_size.y);
+    //diff
+    const Vec2f& diff = max_depth - min_depth;
+    float gradient = std::min(XRender::ShadowSetting::gradient_diff_min, std::max(fabs(diff.x), fabs(diff.y)));
+    float bias = gradient * XRender::ShadowSetting::gradient_scale_bias + XRender::ShadowSetting::const_bias * current_depth;
+    if(light_clip_pos.z > current_depth + bias)
     {
         return 0;
     }

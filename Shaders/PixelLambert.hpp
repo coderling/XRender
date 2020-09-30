@@ -7,11 +7,13 @@ namespace XRender::Shaders
     class PixelLambert : public Shader
     {
         Sampler2D texture;
+        Color color = CColor::GREY;
         void Init() override
         {
             BIND_VERTEX_INPUT(SEMANTIC::UV0);
             BIND_VERTEX_INPUT(SEMANTIC::NORMAL);
             REGISTER_UNIFORM(Sampler2D, texture);
+            REGISTER_UNIFORM(Color, color);
         }
 
         SET_PASIES()
@@ -46,7 +48,7 @@ namespace XRender::Shaders
             }
 
             const Vec2f& uv = in.Get<Vec2f>(SEMANTIC::UV0);
-            out = out * ComputeShadow(world_pos, normal) * texture.Point(uv.x, uv.y);
+            out = color * out * ComputeShadow(world_pos, normal) * texture.Point(uv.x, uv.y);
         };
 
         AddPass("default", vert, frag);

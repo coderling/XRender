@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-XRender::Scene::Scene():renderers()
+XRender::Scene::Scene():mesh_count(0), renderers()
 {}
 
 const std::vector<XRender::Renderer*>& XRender::Scene::GetActiveRenderers() const
@@ -15,7 +15,12 @@ void XRender::Scene::AddObject(std::unique_ptr<Object> object)
     {
         if(object->renderer->mesh != nullptr)
         {
-            bounds.Expand(object->renderer->mesh->bounds);
+            if(mesh_count == 0)
+                bounds = object->renderer->mesh->bounds;
+            else
+                bounds.Expand(object->renderer->mesh->bounds);
+            
+            ++mesh_count;
         }
         renderers.emplace_back(object->renderer.get());
     }

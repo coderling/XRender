@@ -18,8 +18,10 @@ namespace XRender
     typedef std::function<void(const XRender::VertexOutput& in, XRender::Color& out)> FragmentFunctionType;
     
     #define REGISTER_UNIFORM(T, field_name)\
+    {\
         auto field_address = static_cast<T Shader::*>(&std::remove_pointer<decltype(this)>::type::field_name);\
-        uniform_address.insert_or_assign(#field_name, field_address)\
+        uniform_address.insert_or_assign(#field_name, field_address);\
+    }
 
     class Shader
     {
@@ -39,7 +41,7 @@ namespace XRender
             const auto &iter = uniform_address.find(field_name);
             if (iter != uniform_address.end()) 
             {
-              this->*(std::any_cast<T Shader::*>(iter->second)) = std::forward<T>(value);
+              this->*(std::any_cast<std::decay_t<T> Shader::*>(iter->second)) = value;
             }
         }
         

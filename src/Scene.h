@@ -18,6 +18,7 @@ public:
     const Bounds& GetSceneBounds();
 private:
     Bounds bounds;
+    uint32_t mesh_count;
     std::vector<Renderer*> renderers;
     std::vector<std::unique_ptr<Object>> objects;
     Lighting::Light lights[Lighting::max_light_num];

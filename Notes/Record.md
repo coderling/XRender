@@ -57,6 +57,7 @@
     * [3](https://docs.microsoft.com/zh-cn/windows/win32/dxtecharts/common-techniques-to-improve-shadow-depth-maps?redirectedfrom=MSDN)
     * [4](https://www.sunandblackcat.com/improvements-for-shadow-mapping-in-opengl-and-glsl/)
     * [5](http://wiki.ogre3d.org/Depth+Shadow+Mapping)
+    * [6 PCF](https://developer.nvidia.com/gpugems/gpugems/part-ii-lighting-and-shadows/chapter-11-shadow-map-antialiasing)
 
 * 轨道相机控制
     * https://my.oschina.net/u/4589456/blog/4521247
@@ -81,3 +82,15 @@
 0 0.0866026 0 -0
 0 0 -0.100503 -2.17739
 0 0 0 1
+
+------------------
+ offset = (float)(frac(position.xy * 0.5) > 0.25);  // mod offset.y += offset.x;  // y ^= x in floating point 
+
+   if (offset.y > 1.1) 
+     offset.y = 0; 
+     shadowCoeff = (
+        offset_lookup(shadowmap, sCoord, offset + float2(-1.5, 0.5))
+      + offset_lookup(shadowmap, sCoord, offset + float2(0.5, 0.5)) 
+      + offset_lookup(shadowmap, sCoord, offset + float2(-1.5, -1.5))
+      + offset_lookup(shadowmap, sCoord, offset + float2(0.5, -1.5))
+      ) * 0.25; 

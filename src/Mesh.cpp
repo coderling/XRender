@@ -127,8 +127,10 @@ void XRender::Mesh::SetWitchShapeData(const XRender::Shapes::ShapeData& data)
 {
     vertex_count = data.vertex_count;
     positions.clear();
+    bounds.Zero();
     for(uint32_t index = 0; index < vertex_count; ++index)
     {
+        bounds.Expand(*(data.verteices + index));
         positions.emplace_back(*(data.verteices + index));
     }
     

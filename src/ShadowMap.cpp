@@ -98,34 +98,26 @@ void GetCameraBounds(const XRender::Camera* camera)
     float f_h = fdn * n_h;
     float f_w = fdn * n_w;
     
-    const Matrix& invertView = camera->InvertViewMatrix();
-    Vec4f n_topright(n_w, n_h, -near, 1);
-    n_topright =  invertView * n_topright;
-    Vec4f n_topleft(-n_w, n_h, -near, 1);
-    n_topleft = invertView * n_topleft ;
-    Vec4f n_bottomright(n_w, -n_h, -near, 1);
-    n_bottomright =  invertView * n_bottomright ;
-    Vec4f n_bottomleft(-n_w, -n_h, -near, 1);
-    n_bottomleft =  invertView * n_bottomleft ;
+    const Matrix& invertView = light_view * camera->InvertViewMatrix();
+    const auto& n_topright = XRender::Math::TransformPoint(invertView, Vec3f(n_w, n_h, -near));
+    const auto& n_topleft = XRender::Math::TransformPoint(invertView, Vec3f(-n_w, n_h, -near));
+    const auto& n_bottomright = XRender::Math::TransformPoint(invertView, Vec3f(n_w, -n_h, -near));
+    const auto& n_bottomleft = XRender::Math::TransformPoint(invertView, Vec3f(-n_w, -n_h, -near));
     
-    Vec4f f_topright(f_w, f_h, -far, 1);
-    f_topright = invertView * f_topright ;
-    Vec4f f_topleft(-f_w, f_h, -far, 1);
-    f_topleft = invertView * f_topleft ;
-    Vec4f f_bottomright(f_w, -f_h, -far, 1);
-    f_bottomright =  invertView *f_bottomright  ;
-    Vec4f f_bottomleft(-f_w, -f_h, -far, 1);
-    f_bottomleft = invertView * f_bottomleft ;
-
-    camera_bounds.center = embed<3>(n_topright / n_topright.w);
+    const auto& f_topright = XRender::Math::TransformPoint(invertView, Vec3f(f_w, f_h, -far));
+    const auto& f_topleft = XRender::Math::TransformPoint(invertView, Vec3f(-f_w, f_h, -far));
+    const auto& f_bottomright = XRender::Math::TransformPoint(invertView, Vec3f(f_w, -f_h, -far));
+    const auto& f_bottomleft = XRender::Math::TransformPoint(invertView, Vec3f(-f_w, -f_h, -far));
+    
+    camera_bounds.center = n_topright;
     camera_bounds.extents = Vec3f_Zero;
-    camera_bounds.Expand(embed<3>(n_topleft/ n_topleft.w));
-    camera_bounds.Expand(embed<3>(n_bottomright/ n_bottomright.w));
-    camera_bounds.Expand(embed<3>(n_bottomleft/ n_bottomleft.w));
-    camera_bounds.Expand(embed<3>(f_topright/ f_topright.w));
-    camera_bounds.Expand(embed<3>(f_topleft/ f_topleft.w));
-    camera_bounds.Expand(embed<3>(f_bottomright/ f_bottomright.w));
-    camera_bounds.Expand(embed<3>(f_bottomleft/ f_bottomleft.w));
+    camera_bounds.Expand(n_topleft);
+    camera_bounds.Expand(n_bottomright);
+    camera_bounds.Expand(n_bottomleft);
+    camera_bounds.Expand(f_topright);
+    camera_bounds.Expand(f_topleft);
+    camera_bounds.Expand(f_bottomright);
+    camera_bounds.Expand(f_bottomleft);
 }
 
 void SetViewPort()
@@ -148,27 +140,29 @@ void SetViewPort()
 
 void XRender::Lighting::ShadowMap::UpdateViewSpace(const XRender::Camera* camera)
 {
-    //const auto& scene_bounds = current_pipeline->scene->GetSceneBounds();
-    GetCameraBounds(camera);
 
-    const Vec3f& position = camera_bounds.center - use_light->forward * camera_bounds.extents.norm();
-
+    const Vec3f& position = camera->Transform().GetPosition() - use_light->forward * 9999999;
     light_view = XRender::Math::CameraLookAt(embed<3>(position), use_light->up, Vec3f_Zero - use_light->forward);
+    GetCameraBounds(camera);
     
-    const auto& center = Math::TransformPoint(light_view, camera_bounds.center);
-    const Vec3f& m1 = center - camera_bounds.extents;
-    const Vec3f& m2 = center + camera_bounds.extents;
+    const Vec3f& c_min = camera_bounds.Min();
+    const Vec3f& c_max = camera_bounds.Max();
     
     static Vec3f min;
     static Vec3f max;
 
-    min.x = std::min(m1.x, m2.x);
-    min.y = std::min(m1.y, m2.y);
-    min.z = -std::max(m1.z, m2.z);
-    max.x = std::max(m1.x, m2.x);
-    max.y = std::max(m1.y, m2.y);
-    max.z = -std::min(m1.z, m2.z);
+    min.x = std::min(c_min.x, c_max.x);
+    min.y = std::min(c_min.y, c_max.y);
+    max.x = std::max(c_min.x, c_max.x);
+    max.y = std::max(c_min.y, c_max.y);
     
+    const auto& scene_bounds = current_pipeline->scene->GetSceneBounds();
+    const auto& scene_center = Math::TransformPoint(light_view, scene_bounds.center);
+    const Vec3f& sm1 =  Math::TransformPoint(light_view, scene_bounds.Min());
+    const Vec3f& sm2 =  Math::TransformPoint(light_view, scene_bounds.Max());
+    min.z = -std::max(sm1.z, sm2.z);
+    max.z = -std::min(sm1.z, sm2.z);
+
 
     light_proj = XRender::Math::CaculateOrthgraphic(min.x, max.x, min.y, max.y, min.z, max.z);
 

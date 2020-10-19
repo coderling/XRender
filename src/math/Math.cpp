@@ -262,3 +262,17 @@ Vec3f XRender::Math::TransformPoint(const Matrix m, const Vec3f& point)
 
     return embed<3>(v);
 }
+
+void XRender::Math::TransformPoint(const Matrix m, const Vec3f& point, Vec3f& out)
+{
+    static Vec4f v;
+    v.x = point.x;
+    v.y = point.y;
+    v.z = point.z;
+    v.w = 1;
+
+    v = m * v;
+    out.x = v.x / v.w;
+    out.y = v.y / v.w;
+    out.z = v.z / v.w;
+}

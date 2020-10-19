@@ -14,8 +14,8 @@ namespace XRender
     #ifdef USE_IMAGE_TARGET 
     typedef ImageDevice DeviceType;
     #elif WIN32
-    typedef ImageDevice DeviceType;
-    //typedef WindowsDevice DeviceType;
+    //typedef ImageDevice DeviceType;
+    typedef WindowsDevice DeviceType;
     #else
     typedef ImageDevice DeviceType;
     #endif

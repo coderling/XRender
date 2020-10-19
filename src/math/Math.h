@@ -42,6 +42,7 @@ namespace XRender::Math
 
     Vec3f TransformVector(const Matrix m, const Vec3f& vector);
     Vec3f TransformPoint(const Matrix m, const Vec3f& point);
+    void TransformPoint(const Matrix m, const Vec3f& point, Vec3f& out);
     
     const float PI = 3.1415926535f;
     const float PI_OVER2 = PI / 2.0f;

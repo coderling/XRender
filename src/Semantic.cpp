@@ -11,10 +11,10 @@ void XRender::BarycentrixInterpolationVertex(XRender::VertexOutput& out, XRender
         if((triangle[0]->data.semantics & (1 << st)) == 0)
             continue;
         static Vec4f property;
-        const auto& property1 = (*(triangle[0])).data.data[static_cast<XRender::SEMANTIC>(st)];
-        const auto& property2 = (*(triangle[1])).data.data[static_cast<XRender::SEMANTIC>(st)];
-        const auto& property3 = (*(triangle[2])).data.data[static_cast<XRender::SEMANTIC>(st)];
-        const uint32_t& size = property1.size();
+        const auto& property1 = (*(triangle[0])).data.data[st];
+        const auto& property2 = (*(triangle[1])).data.data[st]; 
+        const auto& property3 = (*(triangle[2])).data.data[st];
+        const auto& size = (*(triangle[0])).data.Size(static_cast<XRender::SEMANTIC>(st));
         for(uint32_t index = 0; index < size; ++index)
         {
             property[index] = XRender::Math::BarycentricInterpolation(property1[index], property2[index], property3[index], barycentric);
@@ -31,8 +31,8 @@ void XRender::LinearInterpolationVertex(XRender::VertexOutput& out, XRender::Ver
         if((v1.data.semantics & (1 << st)) == 0)
             continue;
         Vec4f property;
-        const auto& property1 = v1.data.data[static_cast<XRender::SEMANTIC>(st)];
-        const auto& property2 = v2.data.data[static_cast<XRender::SEMANTIC>(st)];
+        const auto& property1 = v1.data.data[st];
+        const auto& property2 = v2.data.data[st];
         const uint32_t& size = property1.size();
         for(uint32_t index = 0; index < size; ++index)
         {

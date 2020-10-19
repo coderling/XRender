@@ -19,7 +19,8 @@ inline float Linear01Depth(const float &depth)
 const float shadow_bias = 0.005;
 float ComputeShadow(const Vec3f& world_pos, const Vec3f& normal)
 {
-    Vec3f light_clip_pos = XRender::Math::TransformPoint(XRender::GraphicsGlobalData::matrix_shadow_light_vp, world_pos);
+    static Vec3f light_clip_pos;
+    XRender::Math::TransformPoint(XRender::GraphicsGlobalData::matrix_shadow_light_vp, world_pos, light_clip_pos);
     // to [0, 1]
     light_clip_pos = (light_clip_pos + Vec3f_One) * 0.5f;
     if (light_clip_pos.x < 0 || light_clip_pos.y < 0)

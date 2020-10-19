@@ -1,15 +1,23 @@
 #pragma once
 
 #include <memory>
+#include <functional>
 
 #include "GraphicsEnum.h"
 #include "Color.h"
 
 namespace XRender
 {
+    class RenderTexture;
+    typedef std::function<void(XRender::RenderTexture*, const uint32_t& x, const uint32_t& y, const XRender::Color& color, const float& depth)> RenderDelegate;
+	typedef std::function<void(const XRender::RenderTexture* target, const uint32_t& x, const uint32_t& y, XRender::Color32& color)> ReadColor32Delegate;
+	typedef std::function<float(const XRender::RenderTexture* target, const uint32_t& x, const uint32_t& y)> ReadDepthDelegate;
+	typedef std::function<void(XRender::RenderTexture* target, const XRender::Color32& color)> ClearBuffer32Delegate;
+
     class RenderTexture final
     {
     public:
+
         static std::unique_ptr<RenderTexture> CreateRenderTarget(const uint32_t& w, const uint32_t& h,
                                                                 const bool& depth, const GraphicsEnum::ERenderTargetFormat& format);
         ~RenderTexture();
@@ -34,9 +42,13 @@ namespace XRender
         std::unique_ptr<uint8_t> buffer = nullptr;
         std::unique_ptr<float> depth_buffer = nullptr;
         uint32_t num_bytes;
+        RenderDelegate render_func;
+        ReadColor32Delegate read_color32_func;
+        ReadDepthDelegate read_depth_func;
     };
-
+	
     void ClearRenderTargetFrameBuffer(RenderTexture* target, const Color& color);
     void ClearRenderTargetFrameBuffer(RenderTexture* target, const Color32& color);
     void ClearRenderTargetDepthBuffer(RenderTexture* target, const float& depth);
+    
 }

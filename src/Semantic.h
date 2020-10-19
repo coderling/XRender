@@ -37,11 +37,24 @@ namespace XRender
     {
     public:
         uint32_t semantics = 0;
-        std::unordered_map<SEMANTIC, Vec4f> data;
+        Vec4f data[static_cast<uint32_t>(SEMANTIC::MAX)];
+
+        const uint8_t& Size(SEMANTIC semantic)
+        {
+            return sizes[static_cast<uint32_t>(semantic)];
+        }
+    private:
+        uint8_t sizes[static_cast<uint32_t>(SEMANTIC::MAX)];
     public:
+        VertexData()
+        {
+            memset(sizes, 0, sizeof(uint8_t) * static_cast<uint32_t>(SEMANTIC::MAX));
+        }
+
         void clear()
         {
-            data.clear();
+            semantics = 0;
+            memset(sizes, 0, sizeof(uint8_t) * static_cast<uint32_t>(SEMANTIC::MAX));
         }
 
         template<class T>
@@ -53,14 +66,14 @@ namespace XRender
                   || std::is_same_v<std::decay<T>::type, float>
                   || std::is_same_v<std::decay<T>::type, Color>);
             T ret;
-            const auto& it = data.find(semantic);
-            if(it != data.end())
+            //if()
             {
                 uint32_t size = std::is_same_v<T, float> ? 1 : std::decay<T>::type::size();
-                assert(size <= it->second.size());
+                auto& va = data[static_cast<uint32_t>(semantic)];
+                assert(size <= 4);
                 for(uint32_t index = 0; index < size; ++index)
                 {
-                    ret[index] = it->second[index];
+                    ret[index] = va[index];
                 }
             }
 
@@ -76,16 +89,13 @@ namespace XRender
                   || std::is_same_v<std::decay<T>::type, float>
                   || std::is_same_v<std::decay<T>::type, Color>);
             uint32_t size = std::is_same_v<T, float> ? 1 : std::decay<T>::type::size();
-	    	auto iter = data.find(semantic);
-	    	if (iter == data.end())
-	    	{
-	    	    auto ret = data.emplace(semantic, Vec4f());
-	    	    iter = ret.first;
-	    	}
+            auto& va = data[static_cast<uint32_t>(semantic)];
+
 	    	for (uint32_t index = 0; index < size; ++index)
 	    	{
-	    	    iter->second[index] = value[index];
+	    	    va[index] = value[index];
 	    	}
+            sizes[static_cast<uint32_t>(semantic)] = size;
             semantics |= 1 << static_cast<uint32_t>(semantic);
            }
     };

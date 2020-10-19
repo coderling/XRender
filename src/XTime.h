@@ -13,7 +13,7 @@ namespace XRender
         const uint64_t& FrameCount() const;
         const float& Now() const;
         const float& Interval() const;
-        const uint32_t& Fps() const;
+        const uint32_t Fps() const;
         const uint64_t& Millisecs() const;
     private:
         uint64_t framecount;

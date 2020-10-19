@@ -1,4 +1,5 @@
 #include "XTime.h"
+#include <iostream>
 
 #ifdef _MSC_VER
 #include <sys/timeb.h>
@@ -54,9 +55,9 @@ const float& XRender::XTime::Interval() const
     return interval;
 }
 
-const uint32_t& XRender::XTime::Fps() const
+const uint32_t XRender::XTime::Fps() const
 {
-    return fps;
+    return static_cast<uint32_t>(fps);
 }
 
 const uint64_t& XRender::XTime::Millisecs() const

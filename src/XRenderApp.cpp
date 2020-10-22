@@ -82,7 +82,7 @@ void XRender::XRenderApp::UnRegisterCamera(Camera* camera)
 
 void XRender::XRenderApp::RegistrTickFunc(std::function<void()> tick)
 {
-    for(const auto& t : ticks)
+    for(auto& t : ticks)
     {
         if(t.target<void()>() == tick.target<void()>())
         {
@@ -109,7 +109,7 @@ void XRender::XRenderApp::InnerTick()
 {
     RenderDevice::Device()->OnUpdate();
     TickCamera();
-    for(const auto& tick : ticks)
+    for(auto& tick : ticks)
     {
         tick();
     }

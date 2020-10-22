@@ -60,12 +60,13 @@ namespace XRender
         template<class T>
         const T Get(const SEMANTIC& semantic) const{
             //static_assert(SEMANTIC::SV_POSITION != semantic || std::is_same_v<T, Vec4f>);
-            static_assert(std::is_same_v<std::decay<T>::type, Vec4f>
-                  ||std::is_same_v<std::decay<T>::type, Vec3f>
-                  || std::is_same_v<std::decay<T>::type, Vec2f>
-                  || std::is_same_v<std::decay<T>::type, float>
-                  || std::is_same_v<std::decay<T>::type, Color>);
+            static_assert(std::is_same_v<std::decay_t<T>, Vec4f>
+                  ||std::is_same_v<std::decay_t<T>, Vec3f>
+                  || std::is_same_v<std::decay_t<T>, Vec2f>
+                  || std::is_same_v<std::decay_t<T>, float>
+                  || std::is_same_v<std::decay_t<T>, Color>);
             T ret;
+            
             //if()
             {
                 uint32_t size = std::is_same_v<T, float> ? 1 : std::decay<T>::type::size();
@@ -83,11 +84,11 @@ namespace XRender
         template<class T>
         void Set(const SEMANTIC& semantic, T&& value){
             //static_assert(SEMANTIC::SV_POSITION != semantic || std::is_same_v<T, Vec4f>);
-            static_assert(std::is_same_v<std::decay<T>::type, Vec4f>
-                  ||std::is_same_v<std::decay<T>::type, Vec3f>
-                  || std::is_same_v<std::decay<T>::type, Vec2f>
-                  || std::is_same_v<std::decay<T>::type, float>
-                  || std::is_same_v<std::decay<T>::type, Color>);
+            static_assert(std::is_same_v<std::decay_t<T>, Vec4f>
+                  ||std::is_same_v<std::decay_t<T>, Vec3f>
+                  || std::is_same_v<std::decay_t<T>, Vec2f>
+                  || std::is_same_v<std::decay_t<T>, float>
+                  || std::is_same_v<std::decay_t<T>, Color>);
             uint32_t size = std::is_same_v<T, float> ? 1 : std::decay<T>::type::size();
             auto& va = data[static_cast<uint32_t>(semantic)];
 

@@ -26,8 +26,8 @@ XRender::Bounds::Bounds(const Vec3f& min, const Vec3f& max)
 
 void XRender::Bounds::Expand(const Vec3f& point)
 {
-    Vec3f& min = Min();
-    Vec3f& max = Max();
+    Vec3f min = Min();
+    Vec3f max = Max();
     min.x = std::min(min.x, point.x);
     min.y = std::min(min.y, point.y);
     min.z = std::min(min.z, point.z);

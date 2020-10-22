@@ -28,4 +28,4 @@ target_sources(TestShadow PRIVATE ${ommon_source})
 target_include_directories(TestShadow PRIVATE ../include PRIVATE ../Shaders PRIVATE ../PostProcessing)
 target_link_libraries(TestShadow XRenderLib)
 
-install(TARGETS XRenderTest LambertLight DESTINATION ${CMAKE_SOURCE_DIR}/bin)
+install(TARGETS XRenderTest LambertLight TestShadow DESTINATION ${CMAKE_SOURCE_DIR}/bin)

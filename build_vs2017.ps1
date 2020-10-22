@@ -1,5 +1,14 @@
 $isrebuild = $args[0] -eq "-r"
 
+$build_type = "Debug"
+
+if($args[1] -eq "-release")
+{
+    $build_type = "Release"
+}
+
+
+
 Write-Output $isrebuild
 
 if($isrebuild)
@@ -23,6 +32,6 @@ if(-not (Test-Path .\build\win))
 
 Set-Location -Path .\build\win
 cmake -G "Visual Studio 16 2019" ../../
-# devenv XTiny.sln /Build Debug /Project ALL_BUILD /ProjectConfig Debug
-# devenv XTiny.sln /Build Debug /Project INSTALL /ProjectConfig Debug
+# devenv XTiny.sln /Build Debug /Project ALL_BUILD /ProjectConfig $build_type
+# devenv XTiny.sln /Build Debug /Project INSTALL /ProjectConfig D$build_type
 Set-Location -Path ..\..\
